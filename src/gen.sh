@@ -14,4 +14,4 @@ sed  -e 's/real\*4/real*8/' \
      -e 's/_real4/_real8/' \
      easync.real4.inc > easync.real8.inc
 
-gfortran -cpp -E EasyNC.main.f90 | grep '^[^#]' > ../EasyNC.f90
+gfortran -cpp -E EasyNC.main.f90 | grep '^[^#]' > ../EasyNC.F90

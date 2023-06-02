@@ -42,7 +42,7 @@
 
 
 
-  Subroutine easyO_logical_1d(fname, vname, val, type_info)
+  Subroutine easyO_logical_1d(fname, vname, val, type_info, type_ele_alone)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
@@ -50,11 +50,16 @@
     character(*),intent(in) :: fname, vname
     integer :: b(size(val)), i
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     b = 0
     where(val) b = 1
     if (present(type_info)) then
-      call easyO_int4_1d(fname, vname, b, type_info)
+      if (present(type_ele_alone)) then
+        call easyO_int4_1d(fname, vname, b, type_info, type_ele_alone)
+      else
+        call easyO_int4_1d(fname, vname, b, type_info)
+      end if
     else
       call easyO_int4_1d(fname, vname, b)
     end if
@@ -85,7 +90,7 @@
 
 
 
-  Subroutine easyO_logical_2d(fname, vname, val, type_info)
+  Subroutine easyO_logical_2d(fname, vname, val, type_info, type_ele_alone)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
@@ -93,11 +98,16 @@
     character(*),intent(in) :: fname, vname
     integer :: b(size(val(:, 1)), size(val(1, :))), i
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     b = 0
     where(val) b = 1
     if (present(type_info)) then
-      call easyO_int4_2d(fname, vname, b, type_info)
+      if (present(type_ele_alone)) then
+        call easyO_int4_2d(fname, vname, b, type_info, type_ele_alone)
+      else
+        call easyO_int4_2d(fname, vname, b, type_info)
+      end if
     else
       call easyO_int4_2d(fname, vname, b)
     end if
@@ -128,7 +138,7 @@
 
 
 
-  Subroutine easyO_logical_3d(fname, vname, val, type_info)
+  Subroutine easyO_logical_3d(fname, vname, val, type_info, type_ele_alone)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
@@ -136,11 +146,16 @@
     character(*),intent(in) :: fname, vname
     integer :: b(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), i
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     b = 0
     where(val) b = 1
     if (present(type_info)) then
-      call easyO_int4_3d(fname, vname, b, type_info)
+      if (present(type_ele_alone)) then
+        call easyO_int4_3d(fname, vname, b, type_info, type_ele_alone)
+      else
+        call easyO_int4_3d(fname, vname, b, type_info)
+      end if
     else
       call easyO_int4_3d(fname, vname, b)
     end if
@@ -171,7 +186,7 @@
 
 
 
-  Subroutine easyO_logical_4d(fname, vname, val, type_info)
+  Subroutine easyO_logical_4d(fname, vname, val, type_info, type_ele_alone)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
@@ -179,11 +194,16 @@
     character(*),intent(in) :: fname, vname
     integer :: b(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), i
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     b = 0
     where(val) b = 1
     if (present(type_info)) then
-      call easyO_int4_4d(fname, vname, b, type_info)
+      if (present(type_ele_alone)) then
+        call easyO_int4_4d(fname, vname, b, type_info, type_ele_alone)
+      else
+        call easyO_int4_4d(fname, vname, b, type_info)
+      end if
     else
       call easyO_int4_4d(fname, vname, b)
     end if

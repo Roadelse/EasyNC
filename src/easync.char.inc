@@ -1,60 +1,84 @@
   
-  Subroutine easyO_char_1d(fname, vname, data, type_info)
+  Subroutine easyO_char_1d(fname, vname, data, type_info, type_ele_alone)
     character(*),intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      if (present(type_ele_alone)) then
+        call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
+      else
+        call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      end if
     else
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine
 
-  Subroutine easyO_char_2d(fname, vname, data, type_info)
+  Subroutine easyO_char_2d(fname, vname, data, type_info, type_ele_alone)
     character(*),intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      if (present(type_ele_alone)) then
+        call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
+      else
+        call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      end if
     else
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine
 
-  Subroutine easyO_char_3d(fname, vname, data, type_info)
+  Subroutine easyO_char_3d(fname, vname, data, type_info, type_ele_alone)
     character(*),intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      if (present(type_ele_alone)) then
+        call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
+      else
+        call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      end if
     else
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine
 
-  Subroutine easyO_char_4d(fname, vname, data, type_info)
+  Subroutine easyO_char_4d(fname, vname, data, type_info, type_ele_alone)
     character(*),intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      if (present(type_ele_alone)) then
+        call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
+      else
+        call easyO_char_nd(fname, vname, data, shape(data), type_info)
+      end if
     else
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine
 
-  Subroutine easyO_char_nd(fname, vname, data, dims_data, type_info)
+  Subroutine easyO_char_nd(fname, vname, data, dims_data, type_info, type_ele_alone)
+    ! vname : name, or name%name
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     character(*),intent(in) :: data(*)
     character(*),intent(in) :: fname, vname
     integer, intent(in) :: dims_data(:)
     integer, intent(in), optional :: type_info(:, :) ! 2 x n, 0 : type array size, 1 : type position
+    integer, intent(in), optional :: type_ele_alone
     
+    character(80) :: ovname, strT, posSuffix
+
     integer,allocatable :: dims(:)
     integer :: ncid, vid, ierr
     integer :: ndims
@@ -74,15 +98,23 @@
     ! ================== get dims for both base and type-var mode
     ndims_data = size(dims_data)
     if (present(type_info)) then
-      ndims_type = size(type_info(1, :))
-      ndims = ndims_data + ndims_type
-      allocate(dims(ndims), STAT=ierr)
-      call check_enc(ierr, 'allocate')
-      dims = len(data)
-      dims(2:ndims_data+1) = dims_data
-      do i = ndims_data + 2, ndims+1
-        dims(i) = type_info(1,ndims_type - (i-1-ndims_data) + 1)
-      end do
+      if (present(type_ele_alone)) then   ! save type-element, 1 variable for 1 position
+        ndims = ndims_data
+        allocate(dims(ndims+1), STAT=ierr)
+        call check_enc(ierr, 'allocate')
+        dims(1) = len(data)
+        dims(2:) = dims_data
+      else
+        ndims_type = size(type_info(1, :))
+        ndims = ndims_data + ndims_type
+        allocate(dims(ndims+1), STAT=ierr)
+        call check_enc(ierr, 'allocate')
+        dims = len(data)
+        dims(2:ndims_data+1) = dims_data
+        do i = ndims_data + 2, ndims+1
+          dims(i) = type_info(1,ndims_type - (i-1-ndims_data) + 1)
+        end do
+      end if
     else
       ndims = ndims_data
       allocate(dims(ndims+1), STAT=ierr)  ! add length-dim
@@ -92,14 +124,27 @@
 
     end if
 
+    ovname = vname
     ! ================== get tname and tvname for type-var
     if (present(type_info)) then
-      i = scan(vname, '.')
+      i = scan(vname, '%')
       if (i .eq. 0) then
-        stop 1
+        stop "please use % to link type and type-var"
       end if
       tname = vname(:i-1)
       tvname = vname(i+1:)
+      if (present(type_ele_alone)) then
+        posSuffix = '('
+        do j = 1, size(type_info(1,:))
+          write(strT, '(I0)') type_info(2,j)
+          ! print *, 'strT=',strT
+          posSuffix = trim(posSuffix)//trim(strT)
+          if (j .lt. size(type_info(1,:))) posSuffix = posSuffix//','
+        end do
+        posSuffix = trim(posSuffix)//')'
+        ovname = trim(tname)//trim(posSuffix)//'%'//trim(tvname)
+        ! print *, 'ovname = ',ovname
+      end if
     end if
 
     allocate(dimnames(ndims+1), STAT = ierr)
@@ -137,18 +182,25 @@
     ! ================== set dimension names
     if (present(type_info)) then
       dimnames(1)=trim(vname)//"_L"
-      do i = 2, ndims_data+1
-        write(dimnames(i), '("'//trim(tvname)//'", "_d", I1)') ndims_data-i-1+1
-      end do
-      do i = ndims_data + 2, ndims+1
-        write(dimnames(i), '("'//trim(tname)//'", "_d", I1)') (i-1 - ndims_data)
-      end do
+      if (.not. present(type_ele_alone)) then
+        do i = 2, ndims_data+1
+          write(dimnames(i), '(A, "_d", I1)') trim(tvname), ndims_data-i+2
+        end do
+        do i = ndims_data + 2, ndims+1
+          write(dimnames(i), '(A, "_d", I1)') trim(tname), i-1-ndims_data
+        end do
+      else
+        do i = 2, ndims+1
+          write(dimnames(i), '(A, A, "%", A, "_d", I1)') trim(tname), trim(posSuffix), trim(tvname), ndims_data-i+2
+        end do
+      end if
     else
       dimnames(1)=trim(vname)//"_L"
       do i = 2, ndims+1
-        write(dimnames(i), '("'//trim(vname)//'", "_d", I1)') ndims_data-i+1
+        write(dimnames(i), '(A, "_d", I1)') trim(vname), ndims_data-i+2
       end do
     end if
+    ! print *, 'dimnames = ', dimnames
 
     ! =========================== netcdf-relative
     inquire(file = fname, exist = isExist)
@@ -161,7 +213,7 @@
       call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "nf90_create")
     end if
     ! ~~~~~~~~~~~~ get or define dimension
-    print *, 'dimnames = ', dimnames
+    ! print *, 'dimnames = ', dimnames
     do i = 1, ndims+1
       if (isExist) then
         if (nf90_inq_dimid(ncid, dimnames(i), dids(i)) .ne. nf90_noerr) then
@@ -172,22 +224,23 @@
       end if
     end do
     ! ~~~~~~~~~~~~ define variable, or error
-    if (nf90_inq_varid(ncid, vname, vid) .eq. nf90_noerr) then
+    if (nf90_inq_varid(ncid, ovname, vid) .eq. nf90_noerr) then
       if (.not. present(type_info)) then
         write(*,*) 'Error! variable already exists!'
         call check_enc( nf90_close(ncid) , "nf90_close")
         stop 1
       end if
     else
-      call check_enc( nf90_def_var(ncid, vname, NF90_CHAR, dids, vid) , "nf90_def_var")
+      call check_enc( nf90_def_var(ncid, ovname, NF90_CHAR, dids, vid) , "nf90_def_var")
     end if
 
     call check_enc( nf90_enddef(ncid) , "nf90_enddef")
     ! ~~~~~~~~~~~~ write data
-    print *, 'start_index = ',start_index
-    print *, 'count_lens = ',count_lens
-    print *, 'dims = ', dims
-    call check_enc( nf90_put_var(ncid, vid, data(1:data_size), start=start_index, count=count_lens) , "nf90_put_var")
+    ! print *, 'start_index = ',start_index
+    ! print *, 'count_lens = ',count_lens
+    ! print *, 'dims = ', dims
+    call check_enc( nf90_put_var(ncid, vid, data(1:data_size), start=start_index, count=count_lens) , &
+      "In easyO_char_nd, nf90_put_var, "//ovname)
 
     call check_enc( nf90_close(ncid) , "nf90_close")
     
@@ -228,7 +281,7 @@
       dims(2:) = type_info(1, :)
 
     ! ================== get tname and tvname for type-var
-      i = scan(vname, '.')
+      i = scan(vname, '%')
       if (i .eq. 0) then
         stop 1
       end if
@@ -302,8 +355,6 @@
 
 
     ! ~~~~~~~~~~~~ write val
-    print *, size(start_index)
-    print *, ndims_type
     if (present(type_info)) then
       call check_enc( nf90_put_var(ncid, vid, val, start=start_index) , "nf90_put_var")
     else
@@ -374,6 +425,9 @@
     integer, intent(in) :: dims_data(:)
     integer, intent(in), optional :: type_info(:, :) ! 2 x n, 0 : type array size, 1 : type position
     
+    character(80) :: ivname, strT, posSuffix, tname, tvname
+    integer :: type_ele_alone
+
     integer,allocatable :: dims(:)
     integer :: ncid, vid, ierr
     integer :: ndims
@@ -389,16 +443,46 @@
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> body
     ! ================== get dims for both base and type-var mode
     ndims_data = size(dims_data)
+    ivname = vname
     if (present(type_info)) then
-      ndims_type = size(type_info(1, :))
-      ndims = ndims_data + ndims_type
-      allocate(dims(ndims+1), STAT=ierr)
-      call check_enc(ierr, 'allocate')
-      dims(1) = len(data)
-      dims(2:ndims_data+1) = dims_data
-      do i = ndims_data + 2, ndims+1
-        dims(i) = type_info(1,ndims_type - (i-1-ndims_data) + 1)
-      end do
+      i = scan(vname, '%')
+      if (i .eq. 0) then
+        stop 1
+      end if
+      tname = vname(:i-1)
+      tvname = vname(i+1:)
+      if (hasVar(fname, vname) .eq. 1) then
+        type_ele_alone = 0
+      else
+        type_ele_alone = 1
+        posSuffix = '('
+        do j = 1, size(type_info(1,:))
+          write(strT, '(I0)') type_info(2,j)
+          ! print *, 'strT=',strT
+          posSuffix = trim(posSuffix)//trim(strT)
+          if (j .lt. size(type_info(1,:))) posSuffix = posSuffix//','
+        end do
+        posSuffix = trim(posSuffix)//')'
+        ivname = trim(tname)//trim(posSuffix)//'%'//trim(tvname)
+        ! print *, 'ovname = ',ovname
+      end if
+
+      if (type_ele_alone .eq. 1) then
+        ndims = ndims_data
+        allocate(dims(ndims+1), STAT=ierr)
+        call check_enc(ierr, 'allocate')
+        dims = dims_data
+      else
+        ndims_type = size(type_info(1, :))
+        ndims = ndims_data + ndims_type
+        allocate(dims(ndims+1), STAT=ierr)
+        call check_enc(ierr, 'allocate')
+        dims(1) = len(data)
+        dims(2:ndims_data+1) = dims_data
+        do i = ndims_data + 2, ndims+1
+          dims(i) = type_info(1,ndims_type - (i-1-ndims_data) + 1)
+        end do
+      end if
     else
       ndims = ndims_data
       allocate(dims(ndims+1), STAT=ierr)
@@ -408,22 +492,28 @@
     end if
 
     ! ================== get tname and tvname for type-var
-    
     allocate(start_index(ndims+1), STAT=ierr)
     call check_enc(ierr, 'allocate start_index')
     start_index = 1
     if (present(type_info)) then
     ! print *, 'type_info=',type_info(1,:), type_info(2,:)
-      do i = ndims_data + 2, ndims+1
-        start_index(i) = type_info(2, ndims_type - (i-1-ndims_data) + 1)
-      end do
+      if (type_ele_alone .eq. 0) then
+        do i = ndims_data + 2, ndims+1
+          start_index(i) = type_info(2, ndims_type - (i-1-ndims_data) + 1)
+        end do
+      end if
     end if
 
     allocate(count_lens(ndims+1), STAT=ierr)
     if (present(type_info)) then
-      count_lens(1) = len(data)
-      count_lens(2:ndims_data+1) = dims_data
-      count_lens(ndims_data+2:) = 1
+      if (type_ele_alone .eq. 0) then
+        count_lens(1) = len(data)
+        count_lens(2:ndims_data+1) = dims_data
+        count_lens(ndims_data+2:) = 1
+      else
+        count_lens(1) = len(data)
+        count_lens(2:) = dims_data
+      end if
     else
       count_lens(1) = len(data)
       count_lens(2:) = dims_data
@@ -443,20 +533,20 @@
     end if
 
     ! ~~~~~~~~~~~~ inquire variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    call check_enc(nf90_inq_varid(ncid, ivname, vid), &
+      'in easyI_char_nd, nf90_inq_varid for '//trim(ivname))
 
     ! ~~~~~~~~~~~~ read data
     ! print *, 'start_index = ',start_index
     ! print *, 'count_lens = ',count_lens
-    call check_enc( nf90_get_var(ncid, vid, data(1:data_size), start=start_index, count=count_lens) , "nf90_get_var")
+    call check_enc( nf90_get_var(ncid, vid, data(1:data_size), start=start_index, count=count_lens), &
+      "in easyI_char_nd, nf90_get_var, "//ivname)
 
     call check_enc( nf90_close(ncid) , "nf90_close")
     
     return
   end subroutine easyI_char_nd
   
-
-
 
 
   Subroutine easyI_char(fname, vname, val, type_info)
@@ -513,9 +603,9 @@
 
     ! ~~~~~~~~~~~~ get val
     if (present(type_info)) then
-      call check_enc( nf90_get_var(ncid, vid, val, start=start_index) , "nf90_put_var")
+      call check_enc( nf90_get_var(ncid, vid, val, start=start_index) , "in nf90_get_var, "//vname)
     else
-      call check_enc( nf90_get_var(ncid, vid, val) , "nf90_put_var")
+      call check_enc( nf90_get_var(ncid, vid, val) , "in nf90_get_var, "//vname)
     end if
 
     call check_enc( nf90_close(ncid) , "nf90_close")

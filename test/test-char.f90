@@ -50,10 +50,10 @@ end do
 ! print *, s5(2)
 
 ! test 2-dimensional character array
-! call easyO('testC.nc', 's6', s6)
-! call easyI('testC.nc', 's6', s6I)
-! print *, s6(1, :)
-! print *, s6(2, :)
+ call easyO('testC.nc', 's6', s6)
+ call easyI('testC.nc', 's6', s6I)
+ print *, s6(1, :)
+ print *, s6(2, :)
 
 
 ! >>>>>>>>>>>>>>>>>> test in type
@@ -64,8 +64,8 @@ end do
 ! call easyI('testC.nc', 't2i.s1', s4I, reshape([2, 1], [2, 1], order=[2,1]))
 ! print *, s4I
 
-call easyO('testC.nc', 't2i.s2', t2i(1)%s2, reshape([2, 1], [2, 1], order=[2,1]))
-call easyI('testC.nc', 't2i.s2', s5I, reshape([2, 1], [2, 1], order=[2,1]))
+call easyO('testC.nc', 't2i%s2', t2i(1)%s2, reshape([2, 1], [2, 1], order=[2,1]))
+call easyI('testC.nc', 't2i%s2', s5I, reshape([2, 1], [2, 1], order=[2,1]))
 print *, s5I
 
 end program writeTest

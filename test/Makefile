@@ -24,6 +24,10 @@ runT : testT.x
 testT.x : ../EasyNC.f90 test-type.f90
 	$(FC) -o $@ -g $^ $(INC) $(FFLAGS)
 
+testTA.x : ../EasyNC.f90 test-type-allocatable.f90
+	$(FC) -o $@ -g $^ $(INC) $(FFLAGS)
+runTA : testTA.x
+	./$<
 
 testC.x : ../EasyNC.f90 test-char.f90
 	$(FC) -o $@ -g $^ $(INC) $(FFLAGS)
