@@ -1,0 +1,140 @@
+Module EasyNC
+
+  use netcdf
+
+  implicit none
+
+  integer,allocatable :: dimsT_enc(:), dimsT2_enc(:,:)
+  integer :: enc_i, enc_j, enc_k
+  character(80) :: varname_enc, strT_enc
+
+  interface easyO
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyO_real4_{{ nd }}d
+!#jj2 endfor
+    module procedure easyO_real4_scalar
+  
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyO_real8_{{ nd }}d
+!#jj2 endfor
+    module procedure easyO_real8_scalar
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyO_int4_{{ nd }}d
+!#jj2 endfor
+    module procedure easyO_int4_scalar
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyO_logical_{{ nd }}d
+!#jj2 endfor
+    module procedure easyO_logical_scalar
+
+!#jj2 for nd in [1,2,3,4,5,6]:
+    module procedure easyO_char_{{ nd }}d
+!#jj2 endfor
+    module procedure easyO_char
+  end interface
+
+  interface easyI
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyI_real4_{{ nd }}d
+!#jj2 endfor
+    module procedure easyI_real4_scalar
+  
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyI_real8_{{ nd }}d
+!#jj2 endfor
+    module procedure easyI_real8_scalar
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyI_int4_{{ nd }}d
+!#jj2 endfor
+    module procedure easyI_int4_scalar
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyI_logical_{{ nd }}d
+!#jj2 endfor
+    module procedure easyI_logical_scalar
+
+!#jj2 for nd in [1,2,3,4,5,6]:
+    module procedure easyI_char_{{ nd }}d
+!#jj2 endfor
+    module procedure easyI_char
+  end interface
+
+
+  interface easyOA
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyOA_real4_{{ nd }}d
+!#jj2 endfor
+  
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyOA_real8_{{ nd }}d
+!#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyOA_int4_{{ nd }}d
+!#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyOA_logical_{{ nd }}d
+!#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6]:
+    module procedure easyOA_char_{{ nd }}d
+!#jj2 endfor
+  end interface
+
+  interface easyIA
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyIA_real4_{{ nd }}d
+!#jj2 endfor
+  
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyIA_real8_{{ nd }}d
+!#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyIA_int4_{{ nd }}d
+!#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyIA_logical_{{ nd }}d
+!#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6]:
+    module procedure easyIA_char_{{ nd }}d
+!#jj2 endfor
+  end interface
+
+
+
+  Contains
+
+
+#include "easync.real4.inc"
+
+#include "easync.real8.inc"
+
+#include "easync.int4.inc"
+
+#include "easync.logical.inc"
+
+#include "easync.char.inc"
+
+#include "easync.funcs.inc"
+
+
+  subroutine check_enc(status, errInfo)
+    integer, intent ( in) :: status
+    character(*), intent(in) :: errInfo
+    
+    if(status /= 0) then 
+      print *, trim(nf90_strerror(status))
+      print *, errInfo
+      stop "Stopped"
+    end if
+  end subroutine
+
+    
+END MODULE

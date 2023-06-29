@@ -1,5 +1,5 @@
 program writeTest
-use netcdf
+! use netcdf
 use EasyNC
 
 implicit none
@@ -28,45 +28,48 @@ t2i(2)%s2(1) = "1nc8"
 t2i(2)%s2(2) = ",mdfy"
 
 
-
-
-
-
 do i = 1, 3
 do j = 1, 2
     s6(i, j) = "5132"
 end do
 end do
 
-! call easyO('testC.nc', 's4', s4)
-! call easyI('testC.nc', 's4', s4I)
+call easyO('testC.nc', 's4', s4)
+call easyI('testC.nc', 's4', s4I)
 ! print *, s4
 ! print *, s4I
+if (s4 .ne. s4I) stop 1
 
 ! test 1-dimensional character array
-! call easyO('testC.nc', 's5', s5)
-! call easyI('testC.nc', 's5', s5I)
+call easyO('testC.nc', 's5', s5)
+call easyI('testC.nc', 's5', s5I)
 ! print *, s5(1)
 ! print *, s5(2)
+if (any(s5 .ne. s5I)) stop 2
 
 ! test 2-dimensional character array
  call easyO('testC.nc', 's6', s6)
  call easyI('testC.nc', 's6', s6I)
- print *, s6(1, :)
- print *, s6(2, :)
+!  print *, s6(1, :)
+!  print *, s6(2, :)
+ if (any(s6 .ne. s6I)) stop 3
 
 
 ! >>>>>>>>>>>>>>>>>> test in type
-! call easyO('testC.nc', 't1i.s1', t1i%s2)
-! call easyI('testC.nc', 't1i.s1', s5I)
+call easyO('testC.nc', 't1i%s1', t1i%s2)
+call easyI('testC.nc', 't1i%s1', s5I)
+if (any(t1i%s2 .ne. s5I)) stop 4
 
-! call easyO('testC.nc', 't2i.s1', t2i(2)%s1, reshape([2, 1], [2, 1], order=[2,1]))
-! call easyI('testC.nc', 't2i.s1', s4I, reshape([2, 1], [2, 1], order=[2,1]))
+
+call easyO('testC.nc', 't2i%s1', t2i(2)%s1, reshape([2, 1], [2, 1], order=[2,1]))
+call easyI('testC.nc', 't2i%s1', s4I, reshape([2, 1], [2, 1], order=[2,1]))
 ! print *, s4I
+if (t2i(2)%s1 .ne. s4I) stop 1
 
 call easyO('testC.nc', 't2i%s2', t2i(1)%s2, reshape([2, 1], [2, 1], order=[2,1]))
 call easyI('testC.nc', 't2i%s2', s5I, reshape([2, 1], [2, 1], order=[2,1]))
-print *, s5I
+! print *, s5I
+if (any(t2i(1)%s2 .ne. s5I)) stop 4
 
 end program writeTest
 

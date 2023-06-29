@@ -1,0 +1,12 @@
+
+*.lnk
+*.o
+*.a
+*.mod
+*.smod
+*.x
+*.out
+/cbuild
+/build
+__pycache__/
+.vscode

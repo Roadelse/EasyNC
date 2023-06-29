@@ -1,5 +1,6 @@
 program writeTest
-use netcdf
+! use netcdf
+! use rdee_fortran
 use EasyNC
 
 implicit none
@@ -29,16 +30,6 @@ do i = 1, NX
 end do
 end do
 
-! print *, valInt1
-! call easyO_int(valInt1)
-! call easyO_int("test.nc", "valInt1", valInt1, shape(valInt1), (/"abc", "def"/))
-! call easyO_real4("test.nc", "valReal1", valReal1, shape(valReal1), (/"abc2", "def2"/))
-! call easyO_real8("test.nc", "valDble1", valDble1, shape(valDble1),  [Character(len=10) :: "abc", "def2"])
-! call easyO_real8("test_double.nc", "valDble1", valDble1, shape(valDble1), (/"abc", "def"/))
-! call easyO_real4_scalar("test.nc", "val1", 2.0)
-! call easyO_real8_scalar("test.nc", "val2", 4.0d0)
-! call easyO_int4_scalar("test.nc", "val3", 3)
-
 call easyO("test.nc", "arr1", valInt1)
 call easyO("test.nc", "arr2", valReal1)
 call easyO("test.nc", "arr3", valDble1)
@@ -54,12 +45,18 @@ call easyI('test.nc', 'arr3', valDble2)
 call easyI('test.nc', 'val1', r1)
 call easyI('test.nc', 'val2', d2)
 call easyI('test.nc', 'val3', i)
-print *, valInt2
-print *, valReal2
-print *, valDble2
-print *, r1
-print *, d2
-print *, i
 
+! print *, valInt2
+! print *, valReal2
+! print *, valDble2
+! print *, r1
+! print *, d2
+! print *, i
+if (any(valInt2 .ne. valInt1)) stop 4
+if (any(valReal2 .ne. valReal1)) stop 5
+if (any(valDble2 .ne. valDble1)) stop 6
+if (i .ne. 4) stop 1
+if (d2 .ne. 3d0) stop 2
+if (r1 .ne. 2.0) stop 3
 
 end program writeTest

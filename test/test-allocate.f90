@@ -1,5 +1,5 @@
 program writeTest
-use netcdf
+! use netcdf
 use EasyNC
 
 implicit none
@@ -40,12 +40,12 @@ print *, allocated(iarr2)
 
 call easyO('testA.nc', 'iarr1', iarr1)
 call easyO('testA.nc', 'valInt1', valInt1)
-print *, getDims_enc('testA.nc', 'iarr1')
-print *, getDims_enc('testA.nc', 'valInt1')
-allocate(iarr2(4,3))
-call easyI('testA.nc', 'valInt1', iarr2)
+! print *, getDims_enc('testA.nc', 'iarr1')
+! print *, getDims_enc('testA.nc', 'valInt1')
+! allocate(iarr2(4,3))
+call easyIA('testA.nc', 'valInt1', iarr2)
 
-print *, iarr2
+if (any(iarr2 .ne. valInt1)) stop 1
 
 
 end program writeTest
