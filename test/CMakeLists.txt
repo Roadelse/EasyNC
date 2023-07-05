@@ -31,6 +31,10 @@ add_executable(test-allocatable-bounds test-allocatable-bounds.F90 )
 set_target_properties(test-allocatable-bounds PROPERTIES OUTPUT_NAME test-allocatable-bounds.x)
 target_link_libraries(test-allocatable-bounds EasyNC netcdff)
 
+add_executable(test-complex test-complex.F90 )
+set_target_properties(test-complex PROPERTIES OUTPUT_NAME test-complex.x)
+target_link_libraries(test-complex EasyNC netcdff)
+
 
 add_test(NAME test-basic
     COMMAND $<TARGET_FILE:test-basic>)
@@ -46,8 +50,8 @@ add_test(NAME test-allocate
         COMMAND $<TARGET_FILE:test-allocate>)
 add_test(NAME test-allocatable-bounds
     COMMAND $<TARGET_FILE:test-allocatable-bounds>)
+add_test(NAME test-complex
+    COMMAND $<TARGET_FILE:test-complex>)
 
 
-
-
-set_tests_properties(test-basic test-char test-logical test-type test-type-allocatable test-allocate test-allocatable-bounds PROPERTIES FIXTURES_REQUIRED setup)
+set_tests_properties(test-basic test-char test-logical test-type test-type-allocatable test-allocate test-allocatable-bounds test-complex PROPERTIES FIXTURES_REQUIRED setup)

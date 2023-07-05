@@ -67,15 +67,14 @@
     return
   end subroutine easyO_logical_{{ nd }}d
 
-  Subroutine easyOA_logical_{{ nd }}d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_{{ nd }}d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val{{ get_rank_from_nd(nd) }}
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b{{ get_rank_from_nd(nd) }}, i
+    integer,allocatable :: b{{ get_rank_from_nd(nd) }}
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
 
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b{{ get_b_shape(nd) }})
@@ -83,14 +82,11 @@
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_{{ nd }}d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_{{ nd }}d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_{{ nd }}d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_{{ nd }}d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_{{ nd }}d
@@ -101,7 +97,7 @@
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,intent(out) :: val{{ get_rank_from_nd(nd) }}
     character(*),intent(in) :: fname, vname
-    integer :: b{{ get_b_shape(nd) }}, i
+    integer :: b{{ get_b_shape(nd) }}
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then
@@ -122,7 +118,7 @@
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val{{ get_rank_from_nd(nd) }}
     character(*),intent(in) :: fname, vname
-    integer :: b{{ get_b_shape(nd) }}, i
+    integer,allocatable :: b{{ get_rank_from_nd(nd) }}
     integer,intent(in),optional :: type_info(:, :)
 
 
@@ -132,11 +128,15 @@
         allocate(dimsT2_enc(2, size(dimsT_enc)))
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val({{ get_dimsT2_enc_arrayBound(nd) }}))
+        allocate(b({{ get_dimsT2_enc_arrayBound(nd) }}))
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val({{ get_dimsT_enc_arrayShape(nd) }}))
+        allocate(b({{ get_dimsT_enc_arrayShape(nd) }}))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b{{ get_b_shape(nd) }})
     end if
 
     if (present(type_info)) then
@@ -147,6 +147,8 @@
 
     val = .false.
     where(b .eq. 1) val = .true.
+
+    deallocate(b)
 
     return
   end subroutine easyIA_logical_{{ nd }}d

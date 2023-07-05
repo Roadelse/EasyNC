@@ -45,6 +45,23 @@ Module EasyNC
     module procedure easyO_char_5d
     module procedure easyO_char_6d
     module procedure easyO_char
+    module procedure easyO_complex4_1d
+    module procedure easyO_complex4_2d
+    module procedure easyO_complex4_3d
+    module procedure easyO_complex4_4d
+    module procedure easyO_complex4_5d
+    module procedure easyO_complex4_6d
+    module procedure easyO_complex4_7d
+    module procedure easyO_complex4_scalar
+    
+    module procedure easyO_complex8_1d
+    module procedure easyO_complex8_2d
+    module procedure easyO_complex8_3d
+    module procedure easyO_complex8_4d
+    module procedure easyO_complex8_5d
+    module procedure easyO_complex8_6d
+    module procedure easyO_complex8_7d
+    module procedure easyO_complex8_scalar
   end interface
   interface easyI
     module procedure easyI_real4_1d
@@ -87,6 +104,23 @@ Module EasyNC
     module procedure easyI_char_5d
     module procedure easyI_char_6d
     module procedure easyI_char
+    module procedure easyI_complex4_1d
+    module procedure easyI_complex4_2d
+    module procedure easyI_complex4_3d
+    module procedure easyI_complex4_4d
+    module procedure easyI_complex4_5d
+    module procedure easyI_complex4_6d
+    module procedure easyI_complex4_7d
+    module procedure easyI_complex4_scalar
+    
+    module procedure easyI_complex8_1d
+    module procedure easyI_complex8_2d
+    module procedure easyI_complex8_3d
+    module procedure easyI_complex8_4d
+    module procedure easyI_complex8_5d
+    module procedure easyI_complex8_6d
+    module procedure easyI_complex8_7d
+    module procedure easyI_complex8_scalar
   end interface
   interface easyOA
     module procedure easyOA_real4_1d
@@ -123,6 +157,20 @@ Module EasyNC
     module procedure easyOA_char_4d
     module procedure easyOA_char_5d
     module procedure easyOA_char_6d
+    module procedure easyOA_complex4_1d
+    module procedure easyOA_complex4_2d
+    module procedure easyOA_complex4_3d
+    module procedure easyOA_complex4_4d
+    module procedure easyOA_complex4_5d
+    module procedure easyOA_complex4_6d
+    module procedure easyOA_complex4_7d
+    module procedure easyOA_complex8_1d
+    module procedure easyOA_complex8_2d
+    module procedure easyOA_complex8_3d
+    module procedure easyOA_complex8_4d
+    module procedure easyOA_complex8_5d
+    module procedure easyOA_complex8_6d
+    module procedure easyOA_complex8_7d
   end interface
   interface easyIA
     module procedure easyIA_real4_1d
@@ -159,6 +207,20 @@ Module EasyNC
     module procedure easyIA_char_4d
     module procedure easyIA_char_5d
     module procedure easyIA_char_6d
+    module procedure easyIA_complex4_1d
+    module procedure easyIA_complex4_2d
+    module procedure easyIA_complex4_3d
+    module procedure easyIA_complex4_4d
+    module procedure easyIA_complex4_5d
+    module procedure easyIA_complex4_6d
+    module procedure easyIA_complex4_7d
+    module procedure easyIA_complex8_1d
+    module procedure easyIA_complex8_2d
+    module procedure easyIA_complex8_3d
+    module procedure easyIA_complex8_4d
+    module procedure easyIA_complex8_5d
+    module procedure easyIA_complex8_6d
+    module procedure easyIA_complex8_7d
   end interface
   Contains
   Subroutine easyO_real4_1d(fname, vname, data, type_info, type_ele_alone)
@@ -177,20 +239,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real4_1d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real4_1d(fname, vname, data, type_info)
     real(kind=4),allocatable,intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real4(fname, vname, data, shape(data))
       end if
@@ -245,20 +302,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real4_2d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real4_2d(fname, vname, data, type_info)
     real(kind=4),allocatable,intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real4(fname, vname, data, shape(data))
       end if
@@ -313,20 +365,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real4_3d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real4_3d(fname, vname, data, type_info)
     real(kind=4),allocatable,intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real4(fname, vname, data, shape(data))
       end if
@@ -381,20 +428,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real4_4d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real4_4d(fname, vname, data, type_info)
     real(kind=4),allocatable,intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real4(fname, vname, data, shape(data))
       end if
@@ -450,20 +492,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real4_5d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real4_5d(fname, vname, data, type_info)
     real(kind=4),allocatable,intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real4(fname, vname, data, shape(data))
       end if
@@ -519,20 +556,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real4_6d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real4_6d(fname, vname, data, type_info)
     real(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real4(fname, vname, data, shape(data))
       end if
@@ -588,20 +620,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real4_7d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real4_7d(fname, vname, data, type_info)
     real(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real4(fname, vname, data, shape(data))
       end if
@@ -1087,20 +1114,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real8_1d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real8_1d(fname, vname, data, type_info)
     real(kind=8),allocatable,intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real8(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real8(fname, vname, data, shape(data))
       end if
@@ -1155,20 +1177,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real8_2d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real8_2d(fname, vname, data, type_info)
     real(kind=8),allocatable,intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real8(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real8(fname, vname, data, shape(data))
       end if
@@ -1223,20 +1240,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real8_3d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real8_3d(fname, vname, data, type_info)
     real(kind=8),allocatable,intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real8(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real8(fname, vname, data, shape(data))
       end if
@@ -1291,20 +1303,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real8_4d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real8_4d(fname, vname, data, type_info)
     real(kind=8),allocatable,intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real8(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real8(fname, vname, data, shape(data))
       end if
@@ -1360,20 +1367,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real8_5d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real8_5d(fname, vname, data, type_info)
     real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real8(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real8(fname, vname, data, shape(data))
       end if
@@ -1429,20 +1431,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real8_6d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real8_6d(fname, vname, data, type_info)
     real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real8(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real8(fname, vname, data, shape(data))
       end if
@@ -1498,20 +1495,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_real8_7d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_real8_7d(fname, vname, data, type_info)
     real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_real8(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_real8(fname, vname, data, shape(data))
       end if
@@ -1981,6 +1973,1658 @@ Module EasyNC
     
     return
   end subroutine easyI_real8_scalar
+Subroutine easyO_complex4_scalar(fname, vname, val, type_info)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    Complex(kind=4),intent(in) :: val
+    character(*),intent(in) :: fname, vname
+    real(kind=4) :: val_re, val_im
+    integer,intent(in),optional :: type_info(:, :)
+    val_re = val%re
+    val_im = val%im
+    if (present(type_info)) then
+      call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im, type_info)
+    else
+      call easyO_real4_scalar(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im)
+    end if
+    return
+end subroutine easyO_complex4_scalar
+Subroutine easyI_complex4_scalar(fname, vname, val, type_info)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    Complex(kind=4),intent(out) :: val
+    character(*),intent(in) :: fname, vname
+    real(kind=4) :: val_re, val_im
+    integer,intent(in),optional :: type_info(:, :)
+    val_re = val%re
+    val_im = val%im
+    if (present(type_info)) then
+      call easyI_real4_scalar(fname, trim(vname)//'.real', val_re, type_info)
+      call easyI_real4_scalar(fname, trim(vname)//'.imag', val_im, type_info)
+    else
+      call easyI_real4_scalar(fname, trim(vname)//'.real', val_re)
+      call easyI_real4_scalar(fname, trim(vname)//'.imag', val_im)
+    end if
+    val%re = val_re
+    val%im = val_im
+    return
+end subroutine easyI_complex4_scalar
+Subroutine easyO_complex8_scalar(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  Complex(kind=8),intent(in) :: val
+  character(*),intent(in) :: fname, vname
+  real(kind=8) :: val_re, val_im
+  integer,intent(in),optional :: type_info(:, :)
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    call easyO_real8_scalar(fname, trim(vname)//'.real', val_re, type_info)
+    call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyO_real8_scalar(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_scalar
+Subroutine easyI_complex8_scalar(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  Complex(kind=8),intent(out) :: val
+  character(*),intent(in) :: fname, vname
+  real(kind=8) :: val_re, val_im
+  integer,intent(in),optional :: type_info(:, :)
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    call easyI_real8_scalar(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_scalar(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_scalar(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_scalar(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_scalar
+Subroutine easyO_complex4_1d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(in) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=4) :: val_re(size(val)), val_im(size(val))
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real4_1d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real4_1d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real4_1d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_1d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real4_1d(fname, trim(vname)//'.real', val_re)
+    call easyO_real4_1d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex4_1d
+Subroutine easyOA_complex4_1d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(in) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:), val_re(:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real4_1d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real4_1d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real4_1d(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_1d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_re)
+    deallocate(val_im)
+  end if
+  return
+end subroutine easyOA_complex4_1d
+Subroutine easyI_complex4_1d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(out) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4) :: val_re(size(val)), val_im(size(val))
+  if (present(type_info)) then
+    call easyI_real4_1d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_1d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_1d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_1d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex4_1d
+Subroutine easyIA_complex4_1d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(inout) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:), val_re(:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1)))
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1)))
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1)))
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1)))
+      allocate(val_re(dimsT_enc(1)))
+      allocate(val_im(dimsT_enc(1)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source = real(val))
+    allocate(val_im, source = aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real4_1d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_1d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_1d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_1d(fname, trim(vname)//'.imag', val_im)
+  end if
+  deallocate(val_re)
+  deallocate(val_im)
+  return
+end subroutine easyIA_complex4_1d
+Subroutine easyO_complex4_2d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(in) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=4) :: val_re(size(val(:,1)), size(val(1,:))), val_im(size(val(:,1)), size(val(1,:)))
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real4_2d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real4_2d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real4_2d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_2d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real4_2d(fname, trim(vname)//'.real', val_re)
+    call easyO_real4_2d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex4_2d
+Subroutine easyOA_complex4_2d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(in) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:), val_re(:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real4_2d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real4_2d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real4_2d(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_2d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_re)
+    deallocate(val_im)
+  end if
+  return
+end subroutine easyOA_complex4_2d
+Subroutine easyI_complex4_2d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(out) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4) :: val_re(size(val(:,1)), size(val(1,:))), val_im(size(val(:,1)), size(val(1,:)))
+  if (present(type_info)) then
+    call easyI_real4_2d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_2d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_2d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_2d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex4_2d
+Subroutine easyIA_complex4_2d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(inout) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:), val_re(:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source = real(val))
+    allocate(val_im, source = aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real4_2d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_2d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_2d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_2d(fname, trim(vname)//'.imag', val_im)
+  end if
+  deallocate(val_re)
+  deallocate(val_im)
+  return
+end subroutine easyIA_complex4_2d
+Subroutine easyO_complex4_3d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(in) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=4) :: val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), val_im(size(val(:,1,1)), size(val(1,:,1)), size( &
+    val(1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real4_3d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real4_3d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real4_3d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_3d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real4_3d(fname, trim(vname)//'.real', val_re)
+    call easyO_real4_3d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex4_3d
+Subroutine easyOA_complex4_3d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(in) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:), val_re(:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real4_3d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real4_3d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real4_3d(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_3d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_re)
+    deallocate(val_im)
+  end if
+  return
+end subroutine easyOA_complex4_3d
+Subroutine easyI_complex4_3d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(out) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4) :: val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), val_im(size(val(:,1,1)), size(val(1,:,1)), size( &
+    val(1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real4_3d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_3d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_3d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_3d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex4_3d
+Subroutine easyIA_complex4_3d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(inout) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:), val_re(:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source = real(val))
+    allocate(val_im, source = aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real4_3d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_3d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_3d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_3d(fname, trim(vname)//'.imag', val_im)
+  end if
+  deallocate(val_re)
+  deallocate(val_im)
+  return
+end subroutine easyIA_complex4_3d
+Subroutine easyO_complex4_4d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(in) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=4) :: val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), val_im(size(val(:,1,1, &
+    1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real4_4d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real4_4d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real4_4d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_4d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real4_4d(fname, trim(vname)//'.real', val_re)
+    call easyO_real4_4d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex4_4d
+Subroutine easyOA_complex4_4d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(in) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:), val_re(:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real4_4d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real4_4d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real4_4d(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_4d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_re)
+    deallocate(val_im)
+  end if
+  return
+end subroutine easyOA_complex4_4d
+Subroutine easyI_complex4_4d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(out) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4) :: val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), val_im(size(val(:,1,1, &
+    1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real4_4d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_4d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_4d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_4d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex4_4d
+Subroutine easyIA_complex4_4d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(inout) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:), val_re(:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source = real(val))
+    allocate(val_im, source = aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real4_4d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_4d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_4d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_4d(fname, trim(vname)//'.imag', val_im)
+  end if
+  deallocate(val_re)
+  deallocate(val_im)
+  return
+end subroutine easyIA_complex4_4d
+Subroutine easyO_complex4_5d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(in) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=4) :: val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1, &
+    1,:))), val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real4_5d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real4_5d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real4_5d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_5d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real4_5d(fname, trim(vname)//'.real', val_re)
+    call easyO_real4_5d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex4_5d
+Subroutine easyOA_complex4_5d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(in) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:,:), val_re(:,:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real4_5d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real4_5d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real4_5d(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_5d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_re)
+    deallocate(val_im)
+  end if
+  return
+end subroutine easyOA_complex4_5d
+Subroutine easyI_complex4_5d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(out) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4) :: val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1, &
+    1,:))), val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real4_5d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_5d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_5d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_5d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex4_5d
+Subroutine easyIA_complex4_5d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(inout) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:,:), val_re(:,:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source = real(val))
+    allocate(val_im, source = aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real4_5d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_5d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_5d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_5d(fname, trim(vname)//'.imag', val_im)
+  end if
+  deallocate(val_re)
+  deallocate(val_im)
+  return
+end subroutine easyIA_complex4_5d
+Subroutine easyO_complex4_6d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(in) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=4) :: val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size( &
+    val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), &
+     size(val(1,1,1,:,1,1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real4_6d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real4_6d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real4_6d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_6d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real4_6d(fname, trim(vname)//'.real', val_re)
+    call easyO_real4_6d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex4_6d
+Subroutine easyOA_complex4_6d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(in) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:,:,:), val_re(:,:,:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real4_6d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real4_6d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real4_6d(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_6d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_re)
+    deallocate(val_im)
+  end if
+  return
+end subroutine easyOA_complex4_6d
+Subroutine easyI_complex4_6d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(out) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4) :: val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size( &
+    val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), &
+     size(val(1,1,1,:,1,1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real4_6d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_6d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_6d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_6d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex4_6d
+Subroutine easyIA_complex4_6d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(inout) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:,:,:), val_re(:,:,:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source = real(val))
+    allocate(val_im, source = aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real4_6d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_6d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_6d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_6d(fname, trim(vname)//'.imag', val_im)
+  end if
+  deallocate(val_re)
+  deallocate(val_im)
+  return
+end subroutine easyIA_complex4_6d
+Subroutine easyO_complex4_7d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(in) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=4) :: val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
+     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1,1)), size(val(1, &
+    :,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size( &
+    val(1,1,1,1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real4_7d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real4_7d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real4_7d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real4_7d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real4_7d(fname, trim(vname)//'.real', val_re)
+    call easyO_real4_7d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex4_7d
+Subroutine easyOA_complex4_7d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(in) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:,:,:,:), val_re(:,:,:,:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real4_7d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real4_7d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real4_7d(fname, trim(vname)//'.real', val_re)
+      call easyO_real4_7d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_re)
+    deallocate(val_im)
+  end if
+  return
+end subroutine easyOA_complex4_7d
+Subroutine easyI_complex4_7d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),intent(out) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4) :: val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
+     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1,1)), size(val(1, &
+    :,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size( &
+    val(1,1,1,1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real4_7d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_7d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_7d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_7d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex4_7d
+Subroutine easyIA_complex4_7d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=4),allocatable,intent(inout) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=4),allocatable :: val_im(:,:,:,:,:,:,:), val_re(:,:,:,:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc(2,7))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc( &
+    2,7))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc( &
+    2,7))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source = real(val))
+    allocate(val_im, source = aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real4_7d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real4_7d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real4_7d(fname, trim(vname)//'.real', val_re)
+    call easyI_real4_7d(fname, trim(vname)//'.imag', val_im)
+  end if
+  deallocate(val_re)
+  deallocate(val_im)
+  return
+end subroutine easyIA_complex4_7d
+Subroutine easyO_complex8_1d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(in) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=8) :: val_re(size(val)), val_im(size(val))
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real8_1d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real8_1d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real8_1d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real8_1d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real8_1d(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_1d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_1d
+Subroutine easyOA_complex8_1d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(in) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:), val_re(:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real8_1d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real8_1d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real8_1d(fname, trim(vname)//'.real', val_re)
+      call easyO_real8_1d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_im)
+    deallocate(val_re)
+  end if
+  return
+end subroutine easyOA_complex8_1d
+Subroutine easyI_complex8_1d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(out) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8) :: val_re(size(val)), val_im(size(val))
+  if (present(type_info)) then
+    call easyI_real8_1d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_1d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_1d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_1d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_1d
+Subroutine easyIA_complex8_1d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(inout) :: val(:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:), val_re(:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1)))
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1)))
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1)))
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1)))
+      allocate(val_re(dimsT_enc(1)))
+      allocate(val_im(dimsT_enc(1)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real8_1d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_1d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_1d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_1d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%im = val_im
+  val%re = val_re
+  deallocate(val_im)
+  deallocate(val_re)
+  return
+end subroutine easyIA_complex8_1d
+Subroutine easyO_complex8_2d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(in) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=8) :: val_re(size(val(:,1)), size(val(1,:))), val_im(size(val(:,1)), size(val(1,:)))
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real8_2d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real8_2d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real8_2d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real8_2d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real8_2d(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_2d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_2d
+Subroutine easyOA_complex8_2d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(in) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:), val_re(:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real8_2d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real8_2d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real8_2d(fname, trim(vname)//'.real', val_re)
+      call easyO_real8_2d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_im)
+    deallocate(val_re)
+  end if
+  return
+end subroutine easyOA_complex8_2d
+Subroutine easyI_complex8_2d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(out) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8) :: val_re(size(val(:,1)), size(val(1,:))), val_im(size(val(:,1)), size(val(1,:)))
+  if (present(type_info)) then
+    call easyI_real8_2d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_2d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_2d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_2d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_2d
+Subroutine easyIA_complex8_2d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(inout) :: val(:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:), val_re(:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real8_2d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_2d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_2d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_2d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%im = val_im
+  val%re = val_re
+  deallocate(val_im)
+  deallocate(val_re)
+  return
+end subroutine easyIA_complex8_2d
+Subroutine easyO_complex8_3d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(in) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=8) :: val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), val_im(size(val(:,1,1)), size(val(1,:,1)), size( &
+    val(1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real8_3d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real8_3d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real8_3d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real8_3d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real8_3d(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_3d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_3d
+Subroutine easyOA_complex8_3d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(in) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:), val_re(:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real8_3d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real8_3d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real8_3d(fname, trim(vname)//'.real', val_re)
+      call easyO_real8_3d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_im)
+    deallocate(val_re)
+  end if
+  return
+end subroutine easyOA_complex8_3d
+Subroutine easyI_complex8_3d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(out) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8) :: val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), val_im(size(val(:,1,1)), size(val(1,:,1)), size( &
+    val(1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real8_3d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_3d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_3d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_3d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_3d
+Subroutine easyIA_complex8_3d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(inout) :: val(:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:), val_re(:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real8_3d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_3d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_3d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_3d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%im = val_im
+  val%re = val_re
+  deallocate(val_im)
+  deallocate(val_re)
+  return
+end subroutine easyIA_complex8_3d
+Subroutine easyO_complex8_4d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(in) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=8) :: val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), val_im(size(val(:,1,1, &
+    1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real8_4d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real8_4d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real8_4d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real8_4d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real8_4d(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_4d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_4d
+Subroutine easyOA_complex8_4d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(in) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:), val_re(:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real8_4d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real8_4d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real8_4d(fname, trim(vname)//'.real', val_re)
+      call easyO_real8_4d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_im)
+    deallocate(val_re)
+  end if
+  return
+end subroutine easyOA_complex8_4d
+Subroutine easyI_complex8_4d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(out) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8) :: val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), val_im(size(val(:,1,1, &
+    1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real8_4d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_4d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_4d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_4d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_4d
+Subroutine easyIA_complex8_4d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(inout) :: val(:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:), val_re(:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real8_4d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_4d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_4d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_4d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%im = val_im
+  val%re = val_re
+  deallocate(val_im)
+  deallocate(val_re)
+  return
+end subroutine easyIA_complex8_4d
+Subroutine easyO_complex8_5d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(in) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=8) :: val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1, &
+    1,:))), val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real8_5d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real8_5d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real8_5d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real8_5d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real8_5d(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_5d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_5d
+Subroutine easyOA_complex8_5d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(in) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:,:), val_re(:,:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real8_5d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real8_5d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real8_5d(fname, trim(vname)//'.real', val_re)
+      call easyO_real8_5d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_im)
+    deallocate(val_re)
+  end if
+  return
+end subroutine easyOA_complex8_5d
+Subroutine easyI_complex8_5d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(out) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8) :: val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1, &
+    1,:))), val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real8_5d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_5d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_5d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_5d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_5d
+Subroutine easyIA_complex8_5d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(inout) :: val(:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:,:), val_re(:,:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real8_5d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_5d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_5d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_5d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%im = val_im
+  val%re = val_re
+  deallocate(val_im)
+  deallocate(val_re)
+  return
+end subroutine easyIA_complex8_5d
+Subroutine easyO_complex8_6d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(in) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=8) :: val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size( &
+    val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), &
+     size(val(1,1,1,:,1,1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real8_6d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real8_6d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real8_6d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real8_6d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real8_6d(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_6d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_6d
+Subroutine easyOA_complex8_6d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(in) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:,:,:), val_re(:,:,:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real8_6d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real8_6d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real8_6d(fname, trim(vname)//'.real', val_re)
+      call easyO_real8_6d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_im)
+    deallocate(val_re)
+  end if
+  return
+end subroutine easyOA_complex8_6d
+Subroutine easyI_complex8_6d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(out) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8) :: val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size( &
+    val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), &
+     size(val(1,1,1,:,1,1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real8_6d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_6d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_6d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_6d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_6d
+Subroutine easyIA_complex8_6d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(inout) :: val(:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:,:,:), val_re(:,:,:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real8_6d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_6d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_6d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_6d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%im = val_im
+  val%re = val_re
+  deallocate(val_im)
+  deallocate(val_re)
+  return
+end subroutine easyIA_complex8_6d
+Subroutine easyO_complex8_7d(fname, vname, val, type_info, type_ele_alone)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(in) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  integer,intent(in),optional :: type_ele_alone
+  real(kind=8) :: val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
+     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1,1)), size(val(1, &
+    :,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size( &
+    val(1,1,1,1,1,1,:))) ! 
+  val_re = val%re
+  val_im = val%im
+  if (present(type_info)) then
+    if (present(type_ele_alone)) then
+      call easyO_real8_7d(fname, trim(vname)//'.real', val_re, type_info, type_ele_alone)
+      call easyO_real8_7d(fname, trim(vname)//'.imag', val_re, type_info, type_ele_alone)
+    else
+      call easyO_real8_7d(fname, trim(vname)//'.real', val_re, type_info)
+      call easyO_real8_7d(fname, trim(vname)//'.imag', val_im, type_info)
+    end if
+  else
+    call easyO_real8_7d(fname, trim(vname)//'.real', val_re)
+    call easyO_real8_7d(fname, trim(vname)//'.imag', val_im)
+  end if
+  return
+end subroutine easyO_complex8_7d
+Subroutine easyOA_complex8_7d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(in) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:,:,:,:), val_re(:,:,:,:,:,:,:)
+  if (allocated(val) .and. size(val) .gt. 0) then
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+    if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
+    shape(val))],order=[2,1])) ! 
+    if (present(type_info)) then
+        call easyO_real8_7d(fname, trim(vname)//'.real', val_re, type_info, 1)
+        call easyO_real8_7d(fname, trim(vname)//'.imag', val_im, type_info, 1)
+    else
+      call easyO_real8_7d(fname, trim(vname)//'.real', val_re)
+      call easyO_real8_7d(fname, trim(vname)//'.imag', val_im)
+    end if
+    deallocate(val_im)
+    deallocate(val_re)
+  end if
+  return
+end subroutine easyOA_complex8_7d
+Subroutine easyI_complex8_7d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),intent(out) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8) :: val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
+     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), val_im(size(val(:,1,1,1,1,1,1)), size(val(1, &
+    :,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size( &
+    val(1,1,1,1,1,1,:))) ! 
+  if (present(type_info)) then
+    call easyI_real8_7d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_7d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_7d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_7d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%re = val_re
+  val%im = val_im
+  return
+end subroutine easyI_complex8_7d
+Subroutine easyIA_complex8_7d(fname, vname, val, type_info)
+  ! almost Duplicated with easyO_int
+  implicit none
+  ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+  complex(kind=8),allocatable,intent(inout) :: val(:,:,:,:,:,:,:)
+  character(*),intent(in) :: fname, vname
+  integer,intent(in),optional :: type_info(:, :)
+  real(kind=8),allocatable :: val_im(:,:,:,:,:,:,:), val_re(:,:,:,:,:,:,:)
+  if (.not. allocated(val)) then
+    call getDims2_enc(fname, trim(vname)//'.real', dimsT_enc)
+    if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+      allocate(dimsT2_enc(2, size(dimsT_enc)))
+      call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+      allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc(2,7))) ! 
+      allocate(val_re(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc( &
+    2,7))) ! 
+      allocate(val_im(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3), &
+    dimsT2_enc(1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc( &
+    2,7))) ! 
+      deallocate(dimsT_enc); deallocate(dimsT2_enc)
+    else
+      allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
+      allocate(val_re(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
+      allocate(val_im(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
+      deallocate(dimsT_enc)
+    end if
+  else
+    allocate(val_re, source=real(val))
+    allocate(val_im, source=aimag(val))
+  end if
+  if (present(type_info)) then
+    call easyI_real8_7d(fname, trim(vname)//'.real', val_re, type_info)
+    call easyI_real8_7d(fname, trim(vname)//'.imag', val_im, type_info)
+  else
+    call easyI_real8_7d(fname, trim(vname)//'.real', val_re)
+    call easyI_real8_7d(fname, trim(vname)//'.imag', val_im)
+  end if
+  val%im = val_im
+  val%re = val_re
+  deallocate(val_im)
+  deallocate(val_re)
+  return
+end subroutine easyIA_complex8_7d
   Subroutine easyO_int4_1d(fname, vname, data, type_info, type_ele_alone)
     integer(kind=4),intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
@@ -1997,20 +3641,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_int4_1d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_1d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -2065,20 +3704,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_int4_2d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_2d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -2133,20 +3767,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_int4_3d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_3d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -2201,20 +3830,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_int4_4d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_4d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -2270,20 +3894,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_int4_5d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_5d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -2339,20 +3958,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_int4_6d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_6d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -2408,20 +4022,15 @@ Module EasyNC
     end if
   end subroutine
   
-  Subroutine easyOA_int4_7d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_7d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -2947,15 +4556,14 @@ Module EasyNC
     end if
     return
   end subroutine easyO_logical_1d
-  Subroutine easyOA_logical_1d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_1d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val(:)
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b(:), i
+    integer,allocatable :: b(:)
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b(size(val)))
       if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
@@ -2963,14 +4571,11 @@ Module EasyNC
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_1d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_1d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_1d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_1d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_1d
@@ -2980,7 +4585,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,intent(out) :: val(:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val)), i
+    integer :: b(size(val))
     integer,intent(in),optional :: type_info(:, :)
     if (present(type_info)) then
       call easyI_int4_1d(fname, vname, b, type_info)
@@ -2997,7 +4602,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val(:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val)), i
+    integer,allocatable :: b(:)
     integer,intent(in),optional :: type_info(:, :)
     if (.not. allocated(val)) then
       call getDims2_enc(fname, vname, dimsT_enc)
@@ -3005,11 +4610,15 @@ Module EasyNC
         allocate(dimsT2_enc(2, size(dimsT_enc)))
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1)))
+        allocate(b(dimsT2_enc(1,1):dimsT2_enc(2,1)))
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val(dimsT_enc(1)))
+        allocate(b(dimsT_enc(1)))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b(size(val)))
     end if
     if (present(type_info)) then
       call easyI_int4_1d(fname, vname, b, type_info)
@@ -3018,6 +4627,7 @@ Module EasyNC
     end if
     val = .false.
     where(b .eq. 1) val = .true.
+    deallocate(b)
     return
   end subroutine easyIA_logical_1d
   Subroutine easyO_logical_2d(fname, vname, val, type_info, type_ele_alone)
@@ -3042,15 +4652,14 @@ Module EasyNC
     end if
     return
   end subroutine easyO_logical_2d
-  Subroutine easyOA_logical_2d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_2d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val(:,:)
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b(:,:), i
+    integer,allocatable :: b(:,:)
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b(size(val(:,1)), size(val(1,:))))
       if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
@@ -3058,14 +4667,11 @@ Module EasyNC
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_2d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_2d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_2d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_2d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_2d
@@ -3075,7 +4681,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,intent(out) :: val(:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1)), size(val(1,:))), i
+    integer :: b(size(val(:,1)), size(val(1,:)))
     integer,intent(in),optional :: type_info(:, :)
     if (present(type_info)) then
       call easyI_int4_2d(fname, vname, b, type_info)
@@ -3092,7 +4698,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val(:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1)), size(val(1,:))), i
+    integer,allocatable :: b(:,:)
     integer,intent(in),optional :: type_info(:, :)
     if (.not. allocated(val)) then
       call getDims2_enc(fname, vname, dimsT_enc)
@@ -3100,11 +4706,15 @@ Module EasyNC
         allocate(dimsT2_enc(2, size(dimsT_enc)))
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
+        allocate(b(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2)))
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val(dimsT_enc(1),dimsT_enc(2)))
+        allocate(b(dimsT_enc(1),dimsT_enc(2)))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b(size(val(:,1)), size(val(1,:))))
     end if
     if (present(type_info)) then
       call easyI_int4_2d(fname, vname, b, type_info)
@@ -3113,6 +4723,7 @@ Module EasyNC
     end if
     val = .false.
     where(b .eq. 1) val = .true.
+    deallocate(b)
     return
   end subroutine easyIA_logical_2d
   Subroutine easyO_logical_3d(fname, vname, val, type_info, type_ele_alone)
@@ -3137,15 +4748,14 @@ Module EasyNC
     end if
     return
   end subroutine easyO_logical_3d
-  Subroutine easyOA_logical_3d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_3d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val(:,:,:)
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b(:,:,:), i
+    integer,allocatable :: b(:,:,:)
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
       if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
@@ -3153,14 +4763,11 @@ Module EasyNC
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_3d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_3d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_3d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_3d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_3d
@@ -3170,7 +4777,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,intent(out) :: val(:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), i
+    integer :: b(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:)))
     integer,intent(in),optional :: type_info(:, :)
     if (present(type_info)) then
       call easyI_int4_3d(fname, vname, b, type_info)
@@ -3187,7 +4794,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val(:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), i
+    integer,allocatable :: b(:,:,:)
     integer,intent(in),optional :: type_info(:, :)
     if (.not. allocated(val)) then
       call getDims2_enc(fname, vname, dimsT_enc)
@@ -3195,11 +4802,15 @@ Module EasyNC
         allocate(dimsT2_enc(2, size(dimsT_enc)))
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
+        allocate(b(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3)))
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
+        allocate(b(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3)))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     end if
     if (present(type_info)) then
       call easyI_int4_3d(fname, vname, b, type_info)
@@ -3208,6 +4819,7 @@ Module EasyNC
     end if
     val = .false.
     where(b .eq. 1) val = .true.
+    deallocate(b)
     return
   end subroutine easyIA_logical_3d
   Subroutine easyO_logical_4d(fname, vname, val, type_info, type_ele_alone)
@@ -3232,15 +4844,14 @@ Module EasyNC
     end if
     return
   end subroutine easyO_logical_4d
-  Subroutine easyOA_logical_4d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_4d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val(:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b(:,:,:,:), i
+    integer,allocatable :: b(:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
       if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
@@ -3248,14 +4859,11 @@ Module EasyNC
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_4d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_4d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_4d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_4d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_4d
@@ -3265,7 +4873,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,intent(out) :: val(:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), i
+    integer :: b(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:)))
     integer,intent(in),optional :: type_info(:, :)
     if (present(type_info)) then
       call easyI_int4_4d(fname, vname, b, type_info)
@@ -3282,7 +4890,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val(:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), i
+    integer,allocatable :: b(:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
     if (.not. allocated(val)) then
       call getDims2_enc(fname, vname, dimsT_enc)
@@ -3291,11 +4899,16 @@ Module EasyNC
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc( &
     1,4):dimsT2_enc(2,4))) ! 
+        allocate(b(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4))) ! 
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
+        allocate(b(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4)))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     end if
     if (present(type_info)) then
       call easyI_int4_4d(fname, vname, b, type_info)
@@ -3304,6 +4917,7 @@ Module EasyNC
     end if
     val = .false.
     where(b .eq. 1) val = .true.
+    deallocate(b)
     return
   end subroutine easyIA_logical_4d
   Subroutine easyO_logical_5d(fname, vname, val, type_info, type_ele_alone)
@@ -3328,15 +4942,14 @@ Module EasyNC
     end if
     return
   end subroutine easyO_logical_5d
-  Subroutine easyOA_logical_5d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_5d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b(:,:,:,:,:), i
+    integer,allocatable :: b(:,:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
       if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size( &
@@ -3344,14 +4957,11 @@ Module EasyNC
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_5d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_5d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_5d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_5d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_5d
@@ -3361,7 +4971,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,intent(out) :: val(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))), i
+    integer :: b(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:)))
     integer,intent(in),optional :: type_info(:, :)
     if (present(type_info)) then
       call easyI_int4_5d(fname, vname, b, type_info)
@@ -3378,7 +4988,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))), i
+    integer,allocatable :: b(:,:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
     if (.not. allocated(val)) then
       call getDims2_enc(fname, vname, dimsT_enc)
@@ -3387,11 +4997,16 @@ Module EasyNC
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc( &
     1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
+        allocate(b(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5))) ! 
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
+        allocate(b(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5)))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     end if
     if (present(type_info)) then
       call easyI_int4_5d(fname, vname, b, type_info)
@@ -3400,6 +5015,7 @@ Module EasyNC
     end if
     val = .false.
     where(b .eq. 1) val = .true.
+    deallocate(b)
     return
   end subroutine easyIA_logical_5d
   Subroutine easyO_logical_6d(fname, vname, val, type_info, type_ele_alone)
@@ -3425,15 +5041,14 @@ Module EasyNC
     end if
     return
   end subroutine easyO_logical_6d
-  Subroutine easyOA_logical_6d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_6d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b(:,:,:,:,:,:), i
+    integer,allocatable :: b(:,:,:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1,1,1, &
     1,:,1)), size(val(1,1,1,1,1,:)))) ! 
@@ -3442,14 +5057,11 @@ Module EasyNC
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_6d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_6d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_6d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_6d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_6d
@@ -3460,7 +5072,7 @@ Module EasyNC
     logical,intent(out) :: val(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer :: b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1,1,1, &
-    1,:,1)), size(val(1,1,1,1,1,:))), i ! 
+    1,:,1)), size(val(1,1,1,1,1,:))) ! 
     integer,intent(in),optional :: type_info(:, :)
     if (present(type_info)) then
       call easyI_int4_6d(fname, vname, b, type_info)
@@ -3477,8 +5089,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1,1,1, &
-    1,:,1)), size(val(1,1,1,1,1,:))), i ! 
+    integer,allocatable :: b(:,:,:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
     if (.not. allocated(val)) then
       call getDims2_enc(fname, vname, dimsT_enc)
@@ -3487,11 +5098,17 @@ Module EasyNC
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc( &
     1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
+        allocate(b(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6))) ! 
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
+        allocate(b(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6)))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1,1,1, &
+    1,:,1)), size(val(1,1,1,1,1,:)))) ! 
     end if
     if (present(type_info)) then
       call easyI_int4_6d(fname, vname, b, type_info)
@@ -3500,6 +5117,7 @@ Module EasyNC
     end if
     val = .false.
     where(b .eq. 1) val = .true.
+    deallocate(b)
     return
   end subroutine easyIA_logical_6d
   Subroutine easyO_logical_7d(fname, vname, val, type_info, type_ele_alone)
@@ -3525,15 +5143,14 @@ Module EasyNC
     end if
     return
   end subroutine easyO_logical_7d
-  Subroutine easyOA_logical_7d(fname, vname, val, type_info, type_ele_alone)
+  Subroutine easyOA_logical_7d(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(in) :: val(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer,allocatable :: b(:,:,:,:,:,:,:), i
+    integer,allocatable :: b(:,:,:,:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(val) .and. size(val) .gt. 0) then
       allocate(b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size( &
     val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
@@ -3542,14 +5159,11 @@ Module EasyNC
       b = 0
       where(val) b = 1
       if (present(type_info)) then
-        if (present(type_ele_alone)) then
-          call easyO_int4_7d(fname, vname, b, type_info, type_ele_alone)
-        else
-          call easyO_int4_7d(fname, vname, b, type_info)
-        end if
+          call easyO_int4_7d(fname, vname, b, type_info, 1)
       else
         call easyO_int4_7d(fname, vname, b)
       end if
+      deallocate(b)
     end if
     return
   end subroutine easyOA_logical_7d
@@ -3560,7 +5174,7 @@ Module EasyNC
     logical,intent(out) :: val(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer :: b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size( &
-    val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), i ! 
+    val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))) ! 
     integer,intent(in),optional :: type_info(:, :)
     if (present(type_info)) then
       call easyI_int4_7d(fname, vname, b, type_info)
@@ -3577,8 +5191,7 @@ Module EasyNC
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     logical,allocatable,intent(inout) :: val(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer :: b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size( &
-    val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), i ! 
+    integer,allocatable :: b(:,:,:,:,:,:,:)
     integer,intent(in),optional :: type_info(:, :)
     if (.not. allocated(val)) then
       call getDims2_enc(fname, vname, dimsT_enc)
@@ -3587,11 +5200,17 @@ Module EasyNC
         call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
         allocate(val(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc( &
     1,4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc(2,7))) ! 
+        allocate(b(dimsT2_enc(1,1):dimsT2_enc(2,1),dimsT2_enc(1,2):dimsT2_enc(2,2),dimsT2_enc(1,3):dimsT2_enc(2,3),dimsT2_enc(1, &
+    4):dimsT2_enc(2,4),dimsT2_enc(1,5):dimsT2_enc(2,5),dimsT2_enc(1,6):dimsT2_enc(2,6),dimsT2_enc(1,7):dimsT2_enc(2,7))) ! 
         deallocate(dimsT_enc); deallocate(dimsT2_enc)
       else
         allocate(val(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
+        allocate(b(dimsT_enc(1),dimsT_enc(2),dimsT_enc(3),dimsT_enc(4),dimsT_enc(5),dimsT_enc(6),dimsT_enc(7)))
         deallocate(dimsT_enc)
       end if
+    else
+      allocate(b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size( &
+    val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
     end if
     if (present(type_info)) then
       call easyI_int4_7d(fname, vname, b, type_info)
@@ -3600,6 +5219,7 @@ Module EasyNC
     end if
     val = .false.
     where(b .eq. 1) val = .true.
+    deallocate(b)
     return
   end subroutine easyIA_logical_7d
   Subroutine easyO_char_1d(fname, vname, data, type_info, type_ele_alone)
@@ -3617,20 +5237,15 @@ Module EasyNC
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine easyO_char_1d
-  Subroutine easyOA_char_1d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_1d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -3684,20 +5299,15 @@ Module EasyNC
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine easyO_char_2d
-  Subroutine easyOA_char_2d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_2d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -3751,20 +5361,15 @@ Module EasyNC
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine easyO_char_3d
-  Subroutine easyOA_char_3d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_3d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -3818,20 +5423,15 @@ Module EasyNC
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine easyO_char_4d
-  Subroutine easyOA_char_4d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_4d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -3886,20 +5486,15 @@ Module EasyNC
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine easyO_char_5d
-  Subroutine easyOA_char_5d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_5d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -3954,20 +5549,15 @@ Module EasyNC
       call easyO_char_nd(fname, vname, data, shape(data))
     end if
   end subroutine easyO_char_6d
-  Subroutine easyOA_char_6d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_6d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, &
      size(shape(data))],order=[2,1])) ! 
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if

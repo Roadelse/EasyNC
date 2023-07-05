@@ -33,6 +33,16 @@ Module EasyNC
     module procedure easyO_char_{{ nd }}d
 !#jj2 endfor
     module procedure easyO_char
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyO_complex4_{{ nd }}d
+!#jj2 endfor
+    module procedure easyO_complex4_scalar
+    
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyO_complex8_{{ nd }}d
+!#jj2 endfor
+    module procedure easyO_complex8_scalar
   end interface
 
   interface easyI
@@ -60,6 +70,16 @@ Module EasyNC
     module procedure easyI_char_{{ nd }}d
 !#jj2 endfor
     module procedure easyI_char
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyI_complex4_{{ nd }}d
+!#jj2 endfor
+    module procedure easyI_complex4_scalar
+    
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyI_complex8_{{ nd }}d
+!#jj2 endfor
+    module procedure easyI_complex8_scalar
   end interface
 
 
@@ -83,6 +103,14 @@ Module EasyNC
 !#jj2 for nd in [1,2,3,4,5,6]:
     module procedure easyOA_char_{{ nd }}d
 !#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyOA_complex4_{{ nd }}d
+!#jj2 endfor
+    
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyOA_complex8_{{ nd }}d
+!#jj2 endfor
   end interface
 
   interface easyIA
@@ -105,6 +133,14 @@ Module EasyNC
 !#jj2 for nd in [1,2,3,4,5,6]:
     module procedure easyIA_char_{{ nd }}d
 !#jj2 endfor
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyIA_complex4_{{ nd }}d
+!#jj2 endfor
+    
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+    module procedure easyIA_complex8_{{ nd }}d
+!#jj2 endfor
   end interface
 
 
@@ -115,6 +151,8 @@ Module EasyNC
 #include "easync.real4.inc"
 
 #include "easync.real8.inc"
+
+#include "easync.complex.inc"
 
 #include "easync.int4.inc"
 

@@ -11,15 +11,16 @@ if __name__ == '__main__':
     # assert len(sys.argv) > 1  # all arguments are target files
 
     lsp = '!#jj2' # os.environ['jj2_lsp']  # line statement 
-    inDir = os.getenv('jj2_in',  sys.path[0] + '../jj2')
+    inDir = os.getenv('jj2_in',  sys.path[0] + '/../jj2')
     outDir = os.getenv("jj2_out", sys.path[0] + '/..')
 
     ctt = jj2_context.ctt
 
     files = glob.glob(inDir + "/*jj2")
-
+    # print(inDir)
+    # print(files)
     for infile in files:
-
+        print(f"handling {infile} ...")
         assert os.path.exists(infile), f'{infile} doesn''t exist'
         file_abspath = os.path.abspath(infile)
 

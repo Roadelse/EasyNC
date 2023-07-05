@@ -17,20 +17,15 @@
     end if
   end subroutine
   
-  Subroutine easyOA_int4_1d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_1d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -93,20 +88,15 @@
     end if
   end subroutine
   
-  Subroutine easyOA_int4_2d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_2d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -169,20 +159,15 @@
     end if
   end subroutine
   
-  Subroutine easyOA_int4_3d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_3d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -245,20 +230,15 @@
     end if
   end subroutine
   
-  Subroutine easyOA_int4_4d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_4d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -321,20 +301,15 @@
     end if
   end subroutine
   
-  Subroutine easyOA_int4_5d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_5d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -397,20 +372,15 @@
     end if
   end subroutine
   
-  Subroutine easyOA_int4_6d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_6d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if
@@ -473,20 +443,15 @@
     end if
   end subroutine
   
-  Subroutine easyOA_int4_7d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_int4_7d(fname, vname, data, type_info)
     integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer, intent(in), optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_int4(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_int4(fname, vname, data, shape(data))
       end if

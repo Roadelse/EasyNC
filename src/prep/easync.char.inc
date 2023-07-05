@@ -15,20 +15,15 @@
     end if
   end subroutine easyO_char_1d
 
-  Subroutine easyOA_char_1d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_1d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -88,20 +83,15 @@
     end if
   end subroutine easyO_char_2d
 
-  Subroutine easyOA_char_2d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_2d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -161,20 +151,15 @@
     end if
   end subroutine easyO_char_3d
 
-  Subroutine easyOA_char_3d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_3d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -234,20 +219,15 @@
     end if
   end subroutine easyO_char_4d
 
-  Subroutine easyOA_char_4d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_4d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -307,20 +287,15 @@
     end if
   end subroutine easyO_char_5d
 
-  Subroutine easyOA_char_5d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_5d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if
@@ -380,20 +355,15 @@
     end if
   end subroutine easyO_char_6d
 
-  Subroutine easyOA_char_6d(fname, vname, data, type_info, type_ele_alone)
+  Subroutine easyOA_char_6d(fname, vname, data, type_info)
     character(*),allocatable,intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
-    integer,intent(in),optional :: type_ele_alone
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        if (present(type_ele_alone)) then
-          call easyO_char_nd(fname, vname, data, shape(data), type_info, type_ele_alone)
-        else
-          call easyO_char_nd(fname, vname, data, shape(data), type_info)
-        end if
+          call easyO_char_nd(fname, vname, data, shape(data), type_info, 1)
       else
         call easyO_char_nd(fname, vname, data, shape(data))
       end if

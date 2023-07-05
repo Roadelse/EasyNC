@@ -52,6 +52,24 @@ Module EasyNC
     module procedure easyO_char_5d
     module procedure easyO_char_6d
     module procedure easyO_char
+
+    module procedure easyO_complex4_1d
+    module procedure easyO_complex4_2d
+    module procedure easyO_complex4_3d
+    module procedure easyO_complex4_4d
+    module procedure easyO_complex4_5d
+    module procedure easyO_complex4_6d
+    module procedure easyO_complex4_7d
+    module procedure easyO_complex4_scalar
+    
+    module procedure easyO_complex8_1d
+    module procedure easyO_complex8_2d
+    module procedure easyO_complex8_3d
+    module procedure easyO_complex8_4d
+    module procedure easyO_complex8_5d
+    module procedure easyO_complex8_6d
+    module procedure easyO_complex8_7d
+    module procedure easyO_complex8_scalar
   end interface
 
   interface easyI
@@ -98,6 +116,24 @@ Module EasyNC
     module procedure easyI_char_5d
     module procedure easyI_char_6d
     module procedure easyI_char
+
+    module procedure easyI_complex4_1d
+    module procedure easyI_complex4_2d
+    module procedure easyI_complex4_3d
+    module procedure easyI_complex4_4d
+    module procedure easyI_complex4_5d
+    module procedure easyI_complex4_6d
+    module procedure easyI_complex4_7d
+    module procedure easyI_complex4_scalar
+    
+    module procedure easyI_complex8_1d
+    module procedure easyI_complex8_2d
+    module procedure easyI_complex8_3d
+    module procedure easyI_complex8_4d
+    module procedure easyI_complex8_5d
+    module procedure easyI_complex8_6d
+    module procedure easyI_complex8_7d
+    module procedure easyI_complex8_scalar
   end interface
 
 
@@ -136,6 +172,20 @@ Module EasyNC
     module procedure easyOA_char_4d
     module procedure easyOA_char_5d
     module procedure easyOA_char_6d
+    module procedure easyOA_complex4_1d
+    module procedure easyOA_complex4_2d
+    module procedure easyOA_complex4_3d
+    module procedure easyOA_complex4_4d
+    module procedure easyOA_complex4_5d
+    module procedure easyOA_complex4_6d
+    module procedure easyOA_complex4_7d
+    module procedure easyOA_complex8_1d
+    module procedure easyOA_complex8_2d
+    module procedure easyOA_complex8_3d
+    module procedure easyOA_complex8_4d
+    module procedure easyOA_complex8_5d
+    module procedure easyOA_complex8_6d
+    module procedure easyOA_complex8_7d
   end interface
 
   interface easyIA
@@ -173,6 +223,20 @@ Module EasyNC
     module procedure easyIA_char_4d
     module procedure easyIA_char_5d
     module procedure easyIA_char_6d
+    module procedure easyIA_complex4_1d
+    module procedure easyIA_complex4_2d
+    module procedure easyIA_complex4_3d
+    module procedure easyIA_complex4_4d
+    module procedure easyIA_complex4_5d
+    module procedure easyIA_complex4_6d
+    module procedure easyIA_complex4_7d
+    module procedure easyIA_complex8_1d
+    module procedure easyIA_complex8_2d
+    module procedure easyIA_complex8_3d
+    module procedure easyIA_complex8_4d
+    module procedure easyIA_complex8_5d
+    module procedure easyIA_complex8_6d
+    module procedure easyIA_complex8_7d
   end interface
 
 
@@ -183,6 +247,8 @@ Module EasyNC
 #include "easync.real4.inc"
 
 #include "easync.real8.inc"
+
+#include "easync.complex.inc"
 
 #include "easync.int4.inc"
 
