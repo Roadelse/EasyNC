@@ -14,10 +14,4 @@ file(GLOB SRCS *.F90 *.f90 *.F *.f)
 message(STATUS "srcs = ${SRCS}")
 add_library(EasyNC STATIC ${SRCS})
 
-target_include_directories(EasyNC PRIVATE /usr/include /mnt/d/recRoot/GitRepos/rdee_fortran/cbuild/include)
-
-add_custom_command(TARGET EasyNC POST_BUILD
-    COMMAND bash -c "mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}"
-    COMMAND bash -c "cp ${SRC}/prep/scripts/render-struct-io.py ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/"
-    COMMAND bash -c "cp -f ${SRC}/prep/scripts/jj2_context.py ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/"
-)
+target_include_directories(EasyNC PRIVATE /usr/include)

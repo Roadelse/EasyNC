@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
         content = open(infile).read()
 
-        template = jj2.Template(content, line_statement_prefix=lsp, extensions=['jinja2.ext.loopcontrols'])
+        template = jj2.Template(content, line_statement_prefix=lsp)
 
         content2 = template.render(ctt)
         # print(content2)

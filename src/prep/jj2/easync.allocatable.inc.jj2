@@ -1,0 +1,84 @@
+
+
+
+! *********************************************************
+! easyIO for n-dimensional generic numeric data type :
+!   int4. int8, real4, real8
+! *********************************************************
+
+
+!#jj2 for nd in [1,2,3,4,5,6,7]
+!#jj2 set nColons_bracket = get_rank_from_nd(nd)
+!#jj2 for type in ['int4', 'int8', 'real4', 'real8', 'string', 'logical', 'complex4', 'complex8']:
+!#jj2 if type == 'string' and nd == 7: 
+!#jj2   continue
+!#jj2 endif
+!#jj2 set ftype = ftypes[type]
+!#jj2 set nf90_type = nf90_types[type]
+    Subroutine easyOA_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, position_, count_lens_)
+        !!! #####################################
+        ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
+        !!! #####################################
+        implicit none
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+        {{ ftype }},allocatable,intent(in) :: data{{ nColons_bracket }}
+        character(*),intent(in) :: fname, vname
+        integer, intent(in), optional :: shape_total(:)      ! total shape
+        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        if (allocated(data) .and. size(data) .gt. 0) then
+            if (any(lbound(data) .ne. 1)) then
+                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+            end if
+            if (present(shape_total)) then
+                call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, position_, count_lens_)
+            else
+                call easyO_{{ type }}_{{ nd }}d(fname, vname, data)
+            end if
+        end if
+
+    End Subroutine easyOA_{{ type }}_{{ nd }}d
+
+    Subroutine easyIA_{{ type }}_{{ nd }}d(fname, vname, data, position_, count_lens_)
+        !!! #####################################
+        ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
+        !!! #####################################
+        implicit none
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+        {{ ftype }},allocatable,intent(inout) :: data{{ nColons_bracket }}
+        character(*),intent(in) :: fname, vname
+        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
+        integer, allocatable :: shape_manual(:)
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        if (.not. allocated(data)) then
+            if (present(count_lens_)) then
+                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
+                call remove_val(count_lens_, 1, shape_manual, -1)
+                allocate(data({{ render_arrayShape_from_shape('shape_manual', nd) }}))
+                deallocate(shape_manual)
+            else
+                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                if (enc_var_exist(fname, trim(vname)//'.bounds')) then
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
+                    allocate(data({{ render_arrayShape_from_enc_iaaT_2d(nd) }}))
+                    deallocate(enc_iaaT_2d)
+                else
+                    allocate(data({{ render_arrayShape_from_shape('enc_iaaT_1d', nd) }}))
+                end if
+                deallocate(enc_iaaT_1d)
+            end if
+        end if
+
+        if (present(position_)) then
+            call easyI_{{ type }}_{{ nd }}d(fname, vname, data, position_, count_lens_)
+        else
+            call easyI_{{ type }}_{{ nd }}d(fname, vname, data)
+        end if
+    End Subroutine easyIA_{{ type }}_{{ nd }}d
+!#jj2 endfor
+!#jj2 endfor

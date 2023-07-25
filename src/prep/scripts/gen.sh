@@ -9,24 +9,26 @@ echo "jj2 -> f90"
 python render-jj2.py
 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> generate real8/int4 based on real4
-echo "real4 -> int4 & real8"
+# echo "real4 -> int4 & real8"
+
+# cp materials/easync.struct-defs-template.F90 ../easync.struct-defs.F90
+# cp materials/easync.struct-io-template.F90 ../easync.struct-io.F90
 
 cd ..
 
-sed  -e 's/real(kind=4)/integer(kind=4)/' \
-     -e 's/NF90_FLOAT/NF90_INT/' \
-     -e 's/_real4/_int4/' \
-     easync.real4.inc > easync.int4.inc
-
-sed  -e 's/real(kind=4)/real(kind=8)/' \
-     -e 's/NF90_FLOAT/NF90_DOUBLE/' \
-     -e 's/_real4/_real8/' \
-     easync.real4.inc > easync.real8.inc
-
 echo "cpp, expand"
 
-gfortran -cpp -E EasyNC.main.F90 | grep '^[^#]' > ../EasyNC.F90
 
-echo "split fortran lines"
+# Please note the ',', it matters! Take care if you add some other "allocatable" in source code
+sed  -e 's/allocatable,/pointer,/' \
+     -e 's/easyOA/easyOP/' \
+     -e 's/easyIA/easyIP/' \
+     -e 's/allocated/associated/' \
+     easync.allocatable.inc > easync.pointer.inc
+
+gfortran -cpp -E EasyNC.main.F90 | grep '^[^#]' > ../EasyNC.F90
+rm -f easync.main.F90 easync.numeric.inc easync.string.inc easync.allocatable.inc easync.pointer.inc
+
+# echo "split fortran lines"
 cd scripts
 python split-fortran-lines.py

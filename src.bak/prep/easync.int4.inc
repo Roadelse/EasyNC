@@ -1,6 +1,6 @@
 
-  Subroutine easyO_real8_1d(fname, vname, data, type_info, type_ele_alone)
-    real(kind=8),intent(in) :: data(:)
+  Subroutine easyO_int4_1d(fname, vname, data, type_info, type_ele_alone)
+    integer(kind=4),intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
     integer, intent(in), optional :: type_ele_alone
@@ -8,45 +8,45 @@
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
       if (present(type_ele_alone)) then
-        call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
+        call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
       else
-        call easyO_real8(fname, vname, data, shape(data), type_info)
+        call easyO_int4(fname, vname, data, shape(data), type_info)
       end if
     else
-      call easyO_real8(fname, vname, data, shape(data))
+      call easyO_int4(fname, vname, data, shape(data))
     end if
   end subroutine
   
-  Subroutine easyOA_real8_1d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(in) :: data(:)
+  Subroutine easyOA_int4_1d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
-        call easyO_real8(fname, vname, data, shape(data))
+        call easyO_int4(fname, vname, data, shape(data))
       end if
     end if
-  end subroutine easyOA_real8_1d
+  end subroutine easyOA_int4_1d
 
-  Subroutine easyI_real8_1d(fname, vname, data, type_info)
-    real(kind=8),intent(out) :: data(:)
+  Subroutine easyI_int4_1d(fname, vname, data, type_info)
+    integer(kind=4),intent(out) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyI_real8(fname, vname, data, shape(data), type_info)
+      call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-      call easyI_real8(fname, vname, data, shape(data))
+      call easyI_int4(fname, vname, data, shape(data))
     end if
   end subroutine
 
   
-  Subroutine easyIA_real8_1d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(inout) :: data(:)
+  Subroutine easyIA_int4_1d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(inout) :: data(:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
@@ -64,14 +64,14 @@
     end if
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        call easyI_real8(fname, vname, data, shape(data), type_info)
+        call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-        call easyI_real8(fname, vname, data, shape(data))
+        call easyI_int4(fname, vname, data, shape(data))
     end if
 
   end subroutine
-  Subroutine easyO_real8_2d(fname, vname, data, type_info, type_ele_alone)
-    real(kind=8),intent(in) :: data(:,:)
+  Subroutine easyO_int4_2d(fname, vname, data, type_info, type_ele_alone)
+    integer(kind=4),intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
     integer, intent(in), optional :: type_ele_alone
@@ -79,45 +79,45 @@
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
       if (present(type_ele_alone)) then
-        call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
+        call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
       else
-        call easyO_real8(fname, vname, data, shape(data), type_info)
+        call easyO_int4(fname, vname, data, shape(data), type_info)
       end if
     else
-      call easyO_real8(fname, vname, data, shape(data))
+      call easyO_int4(fname, vname, data, shape(data))
     end if
   end subroutine
   
-  Subroutine easyOA_real8_2d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(in) :: data(:,:)
+  Subroutine easyOA_int4_2d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
-        call easyO_real8(fname, vname, data, shape(data))
+        call easyO_int4(fname, vname, data, shape(data))
       end if
     end if
-  end subroutine easyOA_real8_2d
+  end subroutine easyOA_int4_2d
 
-  Subroutine easyI_real8_2d(fname, vname, data, type_info)
-    real(kind=8),intent(out) :: data(:,:)
+  Subroutine easyI_int4_2d(fname, vname, data, type_info)
+    integer(kind=4),intent(out) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyI_real8(fname, vname, data, shape(data), type_info)
+      call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-      call easyI_real8(fname, vname, data, shape(data))
+      call easyI_int4(fname, vname, data, shape(data))
     end if
   end subroutine
 
   
-  Subroutine easyIA_real8_2d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(inout) :: data(:,:)
+  Subroutine easyIA_int4_2d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(inout) :: data(:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
@@ -135,14 +135,14 @@
     end if
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        call easyI_real8(fname, vname, data, shape(data), type_info)
+        call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-        call easyI_real8(fname, vname, data, shape(data))
+        call easyI_int4(fname, vname, data, shape(data))
     end if
 
   end subroutine
-  Subroutine easyO_real8_3d(fname, vname, data, type_info, type_ele_alone)
-    real(kind=8),intent(in) :: data(:,:,:)
+  Subroutine easyO_int4_3d(fname, vname, data, type_info, type_ele_alone)
+    integer(kind=4),intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
     integer, intent(in), optional :: type_ele_alone
@@ -150,45 +150,45 @@
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
       if (present(type_ele_alone)) then
-        call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
+        call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
       else
-        call easyO_real8(fname, vname, data, shape(data), type_info)
+        call easyO_int4(fname, vname, data, shape(data), type_info)
       end if
     else
-      call easyO_real8(fname, vname, data, shape(data))
+      call easyO_int4(fname, vname, data, shape(data))
     end if
   end subroutine
   
-  Subroutine easyOA_real8_3d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(in) :: data(:,:,:)
+  Subroutine easyOA_int4_3d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
-        call easyO_real8(fname, vname, data, shape(data))
+        call easyO_int4(fname, vname, data, shape(data))
       end if
     end if
-  end subroutine easyOA_real8_3d
+  end subroutine easyOA_int4_3d
 
-  Subroutine easyI_real8_3d(fname, vname, data, type_info)
-    real(kind=8),intent(out) :: data(:,:,:)
+  Subroutine easyI_int4_3d(fname, vname, data, type_info)
+    integer(kind=4),intent(out) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyI_real8(fname, vname, data, shape(data), type_info)
+      call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-      call easyI_real8(fname, vname, data, shape(data))
+      call easyI_int4(fname, vname, data, shape(data))
     end if
   end subroutine
 
   
-  Subroutine easyIA_real8_3d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(inout) :: data(:,:,:)
+  Subroutine easyIA_int4_3d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(inout) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
@@ -206,14 +206,14 @@
     end if
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        call easyI_real8(fname, vname, data, shape(data), type_info)
+        call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-        call easyI_real8(fname, vname, data, shape(data))
+        call easyI_int4(fname, vname, data, shape(data))
     end if
 
   end subroutine
-  Subroutine easyO_real8_4d(fname, vname, data, type_info, type_ele_alone)
-    real(kind=8),intent(in) :: data(:,:,:,:)
+  Subroutine easyO_int4_4d(fname, vname, data, type_info, type_ele_alone)
+    integer(kind=4),intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
     integer, intent(in), optional :: type_ele_alone
@@ -221,45 +221,45 @@
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
       if (present(type_ele_alone)) then
-        call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
+        call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
       else
-        call easyO_real8(fname, vname, data, shape(data), type_info)
+        call easyO_int4(fname, vname, data, shape(data), type_info)
       end if
     else
-      call easyO_real8(fname, vname, data, shape(data))
+      call easyO_int4(fname, vname, data, shape(data))
     end if
   end subroutine
   
-  Subroutine easyOA_real8_4d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(in) :: data(:,:,:,:)
+  Subroutine easyOA_int4_4d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
-        call easyO_real8(fname, vname, data, shape(data))
+        call easyO_int4(fname, vname, data, shape(data))
       end if
     end if
-  end subroutine easyOA_real8_4d
+  end subroutine easyOA_int4_4d
 
-  Subroutine easyI_real8_4d(fname, vname, data, type_info)
-    real(kind=8),intent(out) :: data(:,:,:,:)
+  Subroutine easyI_int4_4d(fname, vname, data, type_info)
+    integer(kind=4),intent(out) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyI_real8(fname, vname, data, shape(data), type_info)
+      call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-      call easyI_real8(fname, vname, data, shape(data))
+      call easyI_int4(fname, vname, data, shape(data))
     end if
   end subroutine
 
   
-  Subroutine easyIA_real8_4d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(inout) :: data(:,:,:,:)
+  Subroutine easyIA_int4_4d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
@@ -277,14 +277,14 @@
     end if
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        call easyI_real8(fname, vname, data, shape(data), type_info)
+        call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-        call easyI_real8(fname, vname, data, shape(data))
+        call easyI_int4(fname, vname, data, shape(data))
     end if
 
   end subroutine
-  Subroutine easyO_real8_5d(fname, vname, data, type_info, type_ele_alone)
-    real(kind=8),intent(in) :: data(:,:,:,:,:)
+  Subroutine easyO_int4_5d(fname, vname, data, type_info, type_ele_alone)
+    integer(kind=4),intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
     integer, intent(in), optional :: type_ele_alone
@@ -292,45 +292,45 @@
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
       if (present(type_ele_alone)) then
-        call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
+        call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
       else
-        call easyO_real8(fname, vname, data, shape(data), type_info)
+        call easyO_int4(fname, vname, data, shape(data), type_info)
       end if
     else
-      call easyO_real8(fname, vname, data, shape(data))
+      call easyO_int4(fname, vname, data, shape(data))
     end if
   end subroutine
   
-  Subroutine easyOA_real8_5d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:)
+  Subroutine easyOA_int4_5d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
-        call easyO_real8(fname, vname, data, shape(data))
+        call easyO_int4(fname, vname, data, shape(data))
       end if
     end if
-  end subroutine easyOA_real8_5d
+  end subroutine easyOA_int4_5d
 
-  Subroutine easyI_real8_5d(fname, vname, data, type_info)
-    real(kind=8),intent(out) :: data(:,:,:,:,:)
+  Subroutine easyI_int4_5d(fname, vname, data, type_info)
+    integer(kind=4),intent(out) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyI_real8(fname, vname, data, shape(data), type_info)
+      call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-      call easyI_real8(fname, vname, data, shape(data))
+      call easyI_int4(fname, vname, data, shape(data))
     end if
   end subroutine
 
   
-  Subroutine easyIA_real8_5d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:)
+  Subroutine easyIA_int4_5d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
@@ -348,14 +348,14 @@
     end if
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        call easyI_real8(fname, vname, data, shape(data), type_info)
+        call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-        call easyI_real8(fname, vname, data, shape(data))
+        call easyI_int4(fname, vname, data, shape(data))
     end if
 
   end subroutine
-  Subroutine easyO_real8_6d(fname, vname, data, type_info, type_ele_alone)
-    real(kind=8),intent(in) :: data(:,:,:,:,:,:)
+  Subroutine easyO_int4_6d(fname, vname, data, type_info, type_ele_alone)
+    integer(kind=4),intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
     integer, intent(in), optional :: type_ele_alone
@@ -363,45 +363,45 @@
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
       if (present(type_ele_alone)) then
-        call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
+        call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
       else
-        call easyO_real8(fname, vname, data, shape(data), type_info)
+        call easyO_int4(fname, vname, data, shape(data), type_info)
       end if
     else
-      call easyO_real8(fname, vname, data, shape(data))
+      call easyO_int4(fname, vname, data, shape(data))
     end if
   end subroutine
   
-  Subroutine easyOA_real8_6d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:)
+  Subroutine easyOA_int4_6d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
-        call easyO_real8(fname, vname, data, shape(data))
+        call easyO_int4(fname, vname, data, shape(data))
       end if
     end if
-  end subroutine easyOA_real8_6d
+  end subroutine easyOA_int4_6d
 
-  Subroutine easyI_real8_6d(fname, vname, data, type_info)
-    real(kind=8),intent(out) :: data(:,:,:,:,:,:)
+  Subroutine easyI_int4_6d(fname, vname, data, type_info)
+    integer(kind=4),intent(out) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyI_real8(fname, vname, data, shape(data), type_info)
+      call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-      call easyI_real8(fname, vname, data, shape(data))
+      call easyI_int4(fname, vname, data, shape(data))
     end if
   end subroutine
 
   
-  Subroutine easyIA_real8_6d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:)
+  Subroutine easyIA_int4_6d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
@@ -419,14 +419,14 @@
     end if
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        call easyI_real8(fname, vname, data, shape(data), type_info)
+        call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-        call easyI_real8(fname, vname, data, shape(data))
+        call easyI_int4(fname, vname, data, shape(data))
     end if
 
   end subroutine
-  Subroutine easyO_real8_7d(fname, vname, data, type_info, type_ele_alone)
-    real(kind=8),intent(in) :: data(:,:,:,:,:,:,:)
+  Subroutine easyO_int4_7d(fname, vname, data, type_info, type_ele_alone)
+    integer(kind=4),intent(in) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
     integer, intent(in), optional :: type_ele_alone
@@ -434,45 +434,45 @@
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
       if (present(type_ele_alone)) then
-        call easyO_real8(fname, vname, data, shape(data), type_info, type_ele_alone)
+        call easyO_int4(fname, vname, data, shape(data), type_info, type_ele_alone)
       else
-        call easyO_real8(fname, vname, data, shape(data), type_info)
+        call easyO_int4(fname, vname, data, shape(data), type_info)
       end if
     else
-      call easyO_real8(fname, vname, data, shape(data))
+      call easyO_int4(fname, vname, data, shape(data))
     end if
   end subroutine
   
-  Subroutine easyOA_real8_7d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
+  Subroutine easyOA_int4_7d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (allocated(data) .and. size(data) .gt. 0) then
       if (any(lbound(data) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
       if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-          call easyO_real8(fname, vname, data, shape(data), type_info, 1)
+          call easyO_int4(fname, vname, data, shape(data), type_info, 1)
       else
-        call easyO_real8(fname, vname, data, shape(data))
+        call easyO_int4(fname, vname, data, shape(data))
       end if
     end if
-  end subroutine easyOA_real8_7d
+  end subroutine easyOA_int4_7d
 
-  Subroutine easyI_real8_7d(fname, vname, data, type_info)
-    real(kind=8),intent(out) :: data(:,:,:,:,:,:,:)
+  Subroutine easyI_int4_7d(fname, vname, data, type_info)
+    integer(kind=4),intent(out) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-      call easyI_real8(fname, vname, data, shape(data), type_info)
+      call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-      call easyI_real8(fname, vname, data, shape(data))
+      call easyI_int4(fname, vname, data, shape(data))
     end if
   end subroutine
 
   
-  Subroutine easyIA_real8_7d(fname, vname, data, type_info)
-    real(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
+  Subroutine easyIA_int4_7d(fname, vname, data, type_info)
+    integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
     integer,intent(in),optional :: type_info(:, :)
 
@@ -490,20 +490,22 @@
     end if
 
     if (present(type_info)) then  ! shape(data) is necessary due to shape cannot be used in assumed-size array
-        call easyI_real8(fname, vname, data, shape(data), type_info)
+        call easyI_int4(fname, vname, data, shape(data), type_info)
     else
-        call easyI_real8(fname, vname, data, shape(data))
+        call easyI_int4(fname, vname, data, shape(data))
     end if
 
   end subroutine
-  Subroutine easyO_real8(fname, vname, data, dims_data, type_info, type_ele_alone)
+  Subroutine easyO_int4(fname, vname, data, dims_data, type_info, type_ele_alone, shape_total, position)
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
-    real(kind=8),intent(in) :: data(*)
+    integer(kind=4),intent(in) :: data(*)
     character(*),intent(in) :: fname, vname
     integer, intent(in) :: dims_data(:)
     integer, intent(in), optional :: type_info(:, :) ! 2 x n, 0 : type array size, 1 : type position
     integer, intent(in), optional :: type_ele_alone
+    integer, intent(in), optional :: shape_total    ! total shape, such as (3,4,5)
+    integer, intent(in), optional :: position  ! such as (2,2,2)
 
     character(80) :: ovname, strT, posSuffix
 
@@ -659,7 +661,7 @@
         stop 1
       end if
     else
-      call check_enc( nf90_def_var(ncid, ovname, NF90_DOUBLE, dids, vid) , "nf90_def_var")
+      call check_enc( nf90_def_var(ncid, ovname, NF90_INT, dids, vid) , "nf90_def_var")
     end if
 
     call check_enc( nf90_enddef(ncid) , "nf90_enddef")
@@ -667,20 +669,20 @@
     ! print *, 'start_index = ',start_index
     ! print *, 'count_lens = ',count_lens
     call check_enc( nf90_put_var(ncid, vid, data(1:data_size), start=start_index, count=count_lens) , & 
-      "in easyO_real8, nf90_put_var, "//ovname)
+      "in easyO_int4, nf90_put_var, "//ovname)
 
     call check_enc( nf90_close(ncid) , "nf90_close")
     
     return
-  end subroutine easyO_real8
+  end subroutine easyO_int4
   
 
 
-  Subroutine easyO_real8_scalar(fname, vname, val, type_info)
+  Subroutine easyO_int4_scalar(fname, vname, val, type_info)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
-    real(kind=8),intent(in) :: val
+    integer(kind=4),intent(in) :: val
     character(*),intent(in) :: fname, vname
     integer, intent(in), optional :: type_info(:, :) ! 2 x n, 0 : type array size, 1 : type position
     
@@ -768,9 +770,9 @@
       end if
     else
       if (present(type_info)) then
-        call check_enc( nf90_def_var(ncid, vname, NF90_DOUBLE, dids, vid) , "nf90_def_var")
+        call check_enc( nf90_def_var(ncid, vname, NF90_INT, dids, vid) , "nf90_def_var")
       else
-        call check_enc( nf90_def_var(ncid, vname, NF90_DOUBLE, varid=vid) , "nf90_def_var")
+        call check_enc( nf90_def_var(ncid, vname, NF90_INT, varid=vid) , "nf90_def_var")
       end if
     end if
 
@@ -785,13 +787,13 @@
     call check_enc( nf90_close(ncid) , "nf90_close")
     
     return
-  end subroutine easyO_real8_scalar
+  end subroutine easyO_int4_scalar
 
 
-  Subroutine easyI_real8(fname, vname, data, dims_data, type_info)
+  Subroutine easyI_int4(fname, vname, data, dims_data, type_info)
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
-    real(kind=8),intent(out) :: data(*)
+    integer(kind=4),intent(out) :: data(*)
     character(*),intent(in) :: fname, vname
     integer, intent(in) :: dims_data(:)
     integer, intent(in), optional :: type_info(:, :) ! 2 x n, 0 : type array size, 1 : type position
@@ -903,25 +905,25 @@
 
     ! ~~~~~~~~~~~~ inquire variable
     call check_enc(nf90_inq_varid(ncid, ivname, vid), &
-      'in easyI_real8, nf90_inq_varid for '//trim(ivname))
+      'in easyI_int4, nf90_inq_varid for '//trim(ivname))
 
     ! ~~~~~~~~~~~~ read data
     ! print *, 'start_index = ',start_index
     ! print *, 'count_lens = ',count_lens
     call check_enc( nf90_get_var(ncid, vid, data(1:data_size), start=start_index, count=count_lens), &
-      "in easyI_real8, nf90_get_var, "//ivname)
+      "in easyI_int4, nf90_get_var, "//ivname)
 
     call check_enc( nf90_close(ncid) , "nf90_close")
     
     return
-  end subroutine easyI_real8
+  end subroutine easyI_int4
   
 
-  Subroutine easyI_real8_scalar(fname, vname, val, type_info)
+  Subroutine easyI_int4_scalar(fname, vname, val, type_info)
     ! almost Duplicated with easyI_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
-    real(kind=8),intent(out) :: val
+    integer(kind=4),intent(out) :: val
     character(*),intent(in) :: fname, vname
     integer, intent(in), optional :: type_info(:, :) ! 2 x n, 0 : type array size, 1 : type position
     
@@ -977,4 +979,4 @@
     call check_enc( nf90_close(ncid) , "nf90_close")
     
     return
-  end subroutine easyI_real8_scalar
+  end subroutine easyI_int4_scalar

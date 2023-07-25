@@ -1,0 +1,320 @@
+! *********************************************************
+! easyIO for scalar generic numeric data type :
+!   character()
+! *********************************************************
+
+    Subroutine easyO_string_scalar(fname, vname, data, shape_total, position)
+        !!! #####################################
+        ! This Subroutine aims to write a scalar string variable into a netcdf dataset
+        ! Also, the scalar variable can also be put in an array record in netcdf, 
+        ! via setting optional argument "shape_total" and "position"
+        !!! #####################################
+        implicit none
+
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+        character(*),intent(in) :: data
+        character(*),intent(in) :: fname, vname
+        integer, intent(in), optional :: shape_total(:)      ! total shape
+        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
+        integer :: rank_ncv                     ! ranks of output netcdf variable
+        integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
+        character(80), allocatable :: dimnames(:)
+        integer, allocatable :: dimids(:)
+        integer, allocatable :: position_(:)  !  , count_lens_(:)  ! should be unnecessary
+
+        integer :: ncid, vid
+        integer :: i
+        logical :: isExist
+
+
+        ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= prepare for netcdf IO
+        if (.not. present(shape_total)) then  !# sub-array IO
+            rank_ncv = 1
+            allocate(shape_ncv(1))
+            shape_ncv = len(data)
+
+            allocate(dimnames(rank_ncv))
+            allocate(dimids(rank_ncv))
+            dimnames(1) = toString(vname, '.L')
+        else !# single element  io
+            rank_ncv = size(shape_total) + 1  !# add one dim for character length
+            shape_ncv = union_arr1d([len(data)], shape_total)
+            ! allocate(shape_ncv(rank_ncv))
+            ! shape_ncv(1) = len(data)
+            ! shape_ncv(2:) = shape_total
+
+            ! ========================= handle dimensions, e.g., dimnames & dimdis
+            allocate(dimnames(rank_ncv))
+            allocate(dimids(rank_ncv))
+            dimnames(1) = toString(vname, '.L')
+            do i = 2, rank_ncv
+                write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+            end do
+
+            position_ = union_arr1d([1], position)  !# imply allocate
+
+        end if
+
+        ! ============================= netcdf core part
+        inquire(file = fname, exist = isExist)
+        ! ~~~~~~~~~~~~~~ open or create nc
+        if (isExist) then
+            call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
+            call check_enc( nf90_redef(ncid), "nf90_redef")
+        else
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        end if
+
+        ! ~~~~~~~~~~~~~~ get or define dimension
+        do i = 1, rank_ncv
+            if (isExist) then
+                if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
+                    call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                end if
+            else
+                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            end if
+        end do
+
+        ! ~~~~~~~~~~~~~~ define variable
+        if (nf90_inq_varid(ncid, vname, vid) .ne. nf90_noerr) then
+            call check_enc( nf90_def_var(ncid, vname, NF90_CHAR, dimids, vid) , "nf90_def_var")
+        end if
+
+        call check_enc( nf90_enddef(ncid) , "nf90_enddef")
+
+        ! ~~~~~~~~~~~~~~ write data
+        ! print *, 'start_index = ',start_index
+        ! print *, 'count_lens_ = ',count_lens_
+        if (present(shape_total)) then
+            call check_enc( nf90_put_var(ncid, vid, data, start=position_) , & 
+            "in easyO_{{ type }}_scalar, nf90_put_var, "//trim(vname))
+            deallocate(position_)
+            
+        else
+            call check_enc( nf90_put_var(ncid, vid, data) , & 
+            "in easyO_{{ type }}_scalar, nf90_put_var, "//trim(vname))
+        end if
+
+        call check_enc( nf90_close(ncid) , "nf90_close")
+        deallocate(shape_ncv)
+        deallocate(dimnames)
+        deallocate(dimids)
+        
+        return
+    end subroutine easyO_string_scalar
+  
+
+Subroutine easyI_string_scalar(fname, vname, data, position)
+    !!! #####################################
+    ! This Subroutine aims to read a scalar {{ type }} variable from a netcdf dataset
+    ! Also, the scalar variable can also be put in an array record in netcdf, 
+    ! via setting optional argument "shape_total" and "position_"
+    !!! #####################################
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+    character(*),intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    integer, intent(in), optional :: position(:)         ! `start` in netcdf
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
+    integer :: ncid, vid
+    logical :: isExist
+
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= netcdf core part
+    inquire(file = fname, exist = isExist)
+    ! ~~~~~~~~~~~~~~ open or create nc
+    if (isExist) then
+        call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
+    else
+        print *, "Error, file doesn't exist."
+        stop 1
+    end if
+    ! ~~~~~~~~~~~~~~ get variable
+    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ read data
+    if (present(position)) then
+        call check_enc( nf90_get_var(ncid, vid, data, start=union_arr1d([1], position)) , & 
+        "in easyI_{{ type }}_scalar, nf90_get_var, "//trim(vname))
+    else
+        call check_enc( nf90_get_var(ncid, vid, data) , & 
+        "in easyI_{{ type }}_scalar, nf90_get_var, "//trim(vname))
+    end if
+
+    call check_enc( nf90_close(ncid) , "nf90_close")
+    
+    return
+end subroutine easyI_string_scalar
+
+
+
+!#jj2 for nd in [1,2,3,4,5,6,7]
+!#jj2 set nColons_bracket = get_rank_from_nd(nd)
+Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, count_lens)
+    !!! #####################################
+    ! This Subroutine aims to write a {{ nd }}-dimensional {{ type }} variable into a netcdf dataset
+    ! Also, the scalar variable can also be put in an array record in netcdf, 
+    ! via setting optional argument "shape_total", "position" and "count_lens"
+    !!! #####################################
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+    character(*),intent(in) :: data{{ nColons_bracket }}
+    character(*),intent(in) :: fname, vname
+    integer, intent(in), optional :: shape_total(:)      ! total shape
+    integer, intent(in), optional :: position(:)         ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
+    integer, allocatable :: shape_data(:)
+    integer :: rank_data                    ! ranks of data, e.g., size of shape_data
+    integer :: rank_ncv                     ! ranks of output netcdf variable
+    integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
+
+    integer, allocatable :: position_(:), count_lens_(:)
+    
+    character(80), allocatable :: dimnames(:)
+    integer, allocatable :: dimids(:)
+
+    integer :: ncid, vid
+        
+    integer :: i
+    logical :: isExist
+
+
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= prepare for netcdf IO
+    ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
+    rank_data = size(shape(data))
+    ! allocate(shape_data(rank_data), source=shape(data))  ! will fail in gfortran
+    allocate(shape_data(size(shape(data))), source=shape(data))
+
+
+    if (present(shape_total)) then
+        rank_ncv = size(shape_total) + 1
+        ! allocate(shape_ncv, source=shape_total)
+        shape_ncv = union_arr1d([len(data)], shape_total)
+    else
+        rank_ncv = rank_data + 1
+        ! allocate(shape_ncv, source=shape_data)
+        shape_ncv = union_arr1d([len(data)], shape_data)
+    end if
+
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
+    allocate(dimnames(rank_ncv))
+    allocate(dimids(rank_ncv))
+
+    dimnames(1) = toString(vname, '.L')
+    do i = 2, rank_ncv
+        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+    end do
+
+    ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
+    if (present(shape_total)) then
+        position_ = union_arr1d([1], position)  !# imply allocate
+        count_lens_ = union_arr1d([len(data)], count_lens)
+    else
+        allocate(position_(rank_ncv))
+        position_ = 1
+        allocate(count_lens_, source=shape_ncv)
+    end if
+
+
+    ! ============================= netcdf core part
+    inquire(file = fname, exist = isExist)
+    ! ~~~~~~~~~~~~~~ open or create nc
+    if (isExist) then
+        call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
+        call check_enc( nf90_redef(ncid), "nf90_redef")
+    else
+        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+    end if
+    ! ~~~~~~~~~~~~~~ get or define dimension
+    do i = 1, rank_ncv
+        if (isExist) then
+        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        end if
+        else
+        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        end if
+    end do
+    ! ~~~~~~~~~~~~~~ define variable, or error
+    if (nf90_inq_varid(ncid, vname, vid) .ne. nf90_noerr) then
+        call check_enc( nf90_def_var(ncid, vname, NF90_CHAR, dimids, vid) , "nf90_def_var")
+    end if
+
+    call check_enc( nf90_enddef(ncid) , "nf90_enddef")
+    ! ~~~~~~~~~~~~~~ write data
+    ! print *, 'start_index = ',start_index
+    ! print *, 'count_lens_ = ',count_lens_
+    call check_enc( nf90_put_var(ncid, vid, data, start=position_, count=count_lens_) , & 
+        "in easyO_string_{{ nd }}d, nf90_put_var, "//trim(vname))
+    
+    call check_enc( nf90_close(ncid) , "nf90_close")
+    
+    return
+end subroutine easyO_string_{{ nd }}d
+
+Subroutine easyI_string_{{ nd }}d(fname, vname, data, position, count_lens)
+    !!! #####################################
+    ! This Subroutine aims to read a {{ nd }}-dimensional {{ type }} variable from a netcdf dataset
+    ! Also, the scalar variable can also be put in an array record in netcdf, 
+    ! via setting optional argument "shape_total", "position" and "count_lens"
+    !!! #####################################
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+    character(*),intent(inout) :: data{{ nColons_bracket }}
+    character(*),intent(in) :: fname, vname
+    integer, intent(in), optional :: position(:)         ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
+    integer :: rank_ncv                     ! ranks of output netcdf variable
+    integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
+
+    integer, allocatable :: position_(:), count_lens_(:)
+    
+    integer :: ncid, vid
+        
+    logical :: isExist
+
+
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= netcdf core part
+    inquire(file = fname, exist = isExist)
+    ! ~~~~~~~~~~~~~~ open or create nc
+    if (isExist) then
+        call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
+    else
+        print *, "Error, file doesn't exist."
+        stop 1
+    end if
+
+    ! ~~~~~~~~~~~~~~ get variable
+    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+
+    ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
+    if (present(position)) then
+        ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
+
+        position_ = union_arr1d([1], position)
+        count_lens_ = union_arr1d([len(data)], count_lens)
+
+        ! ~~~~~~~~~~~~~~ write data
+        call check_enc( nf90_get_var(ncid, vid, data, start=position_, count=count_lens_) , & 
+            "in easyI_string_{{ nd }}d, nf90_get_var, "//trim(vname))
+        
+        deallocate(position_)
+        deallocate(count_lens_)
+    else
+        call check_enc( nf90_get_var(ncid, vid, data) , & 
+        "in easyI_string_{{ nd }}d, nf90_get_var, "//trim(vname))
+    end if
+
+    call check_enc( nf90_close(ncid) , "nf90_close")
+
+    return
+end subroutine easyI_string_{{ nd }}d
+!#jj2 endfor
+

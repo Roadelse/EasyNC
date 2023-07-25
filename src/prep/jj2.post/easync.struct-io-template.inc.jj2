@@ -1,0 +1,95 @@
+
+Subroutine easyO_{{ struct_name }}_scalar(fname, vname, data)
+    !!! #####################################
+    ! This Subroutine aims to write a scalar int4 variable into a netcdf dataset
+    ! Also, the scalar variable can also be put in an array record in netcdf, 
+    ! via setting optional argument "shape_total" and "position"
+    !!! #####################################
+    implicit none
+
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+    type({{ struct_name }}),intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
+    
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    {{ calls_from_fctt('') }}
+    ! call easyO(fname, trim(vname)//'%is1', data%is1)
+    ! call easyO(fname, trim(vname)//'%ia1', data%ia1)
+    ! call easyOA(fname, trim(vname)//'%iaa1', data%iaa1)
+    
+End Subroutine easyO_{{ struct_name }}_scalar
+
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+!#jj2 set nColons_bracket = get_rank_from_nd(nd)
+Subroutine easyO_{{ struct_name }}_{{ nd }}d(fname, vname, data)
+    !!! #####################################
+    ! This Subroutine aims to write a scalar int4 variable into a netcdf dataset
+    ! Also, the scalar variable can also be put in an array record in netcdf, 
+    ! via setting optional argument "shape_total" and "position"
+    !!! #####################################
+    implicit none
+
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
+    type({{ struct_name }}),intent(in) :: data{{ nColons_bracket }}
+    character(*),intent(in) :: fname, vname
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
+    integer :: i, j, k, l, m, n, s
+
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    call easyO(fname, trim(vname)//'.shape', shape(data))
+    !#jj2 if nd == 1:
+    !#jj2 set index = "(i)"
+    do i = 1, size(data)
+    !#jj2 elif nd == 2:
+    !#jj2 set index = "(i,j)"
+    do i = 1, size(data(:,1))
+    do j = 1, size(data(1,:))
+    !#jj2 elif nd == 3:
+    !#jj2 set index = "(i,j,k)"
+    do i = 1, size(data(:,1,1))
+    do j = 1, size(data(1,:,1))
+    do k = 1, size(data(1,1,:))
+    !#jj2 elif nd == 4:
+    !#jj2 set index = "(i,j,k,l)"
+    do i = 1, size(data(:,1,1,1))
+    do j = 1, size(data(1,:,1,1))
+    do k = 1, size(data(1,1,:,1))
+    do l = 1, size(data(1,1,1,:))
+    !#jj2 elif nd == 5:
+    !#jj2 set index = "(i,j,k,l,m)"
+    do i = 1, size(data(:,1,1,1,1))
+    do j = 1, size(data(1,:,1,1,1))
+    do k = 1, size(data(1,1,:,1,1))
+    do l = 1, size(data(1,1,1,:,1))
+    do m = 1, size(data(1,1,1,1,:))
+    !#jj2 elif nd == 6:
+    !#jj2 set index = "(i,j,k,l,m,n)"
+    do i = 1, size(data(:,1,1,1,1,1))
+    do j = 1, size(data(1,:,1,1,1,1))
+    do k = 1, size(data(1,1,:,1,1,1))
+    do l = 1, size(data(1,1,1,:,1,1))
+    do m = 1, size(data(1,1,1,1,:,1))
+    do n = 1, size(data(1,1,1,1,1,:))
+    !#jj2 elif nd == 7:
+    !#jj2 set index = "(i,j,k,l,m,n,s)"
+    do i = 1, size(data(:,1,1,1,1,1,1))
+    do j = 1, size(data(1,:,1,1,1,1,1))
+    do k = 1, size(data(1,1,:,1,1,1,1))
+    do l = 1, size(data(1,1,1,:,1,1,1))
+    do m = 1, size(data(1,1,1,1,:,1,1))
+    do n = 1, size(data(1,1,1,1,1,:,1))
+    do s = 1, size(data(1,1,1,1,1,1,:))
+    !#jj2 endif
+        {{ calls_from_fctt(index) }}
+        ! call easyO(fname, trim(vname)//'('//  //')%is1', data(i)%is1, [size(data)], [i])
+        ! call easyO(fname, trim(vname)//'('//  //')%ia1', data(i)%ia1, [size(data), size(data(i)%ia1)], [i, 1], [1, size(data(i)%ia1)])
+        ! call easyOA(fname, trim(vname)//'('// //')%iaa1', data(i)%iaa1, [size(data), size(data(i)%ia1)], [i, 1], [1, size(data(i)%ia1)])
+    !#jj2 for i in range(1, nd+1):
+    end do
+    !#jj2 endfor
+
+End Subroutine easyO_{{ struct_name }}_{{ nd }}d
+!#jj2 endfor

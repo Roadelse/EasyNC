@@ -6,7 +6,7 @@ import shelve, pickle
 import platform
 # ----- my libs
 import rdee
-import FortranCode_sim as FortranCode
+import FortranCode
 
 
 

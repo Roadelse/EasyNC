@@ -1,0 +1,8 @@
+
+interface easyO_{{ struct_name }}
+    !#jj2 for nd in [1,2,3,4,5,6,7]:
+    {{ moduleOrNot }} procedure easyO_{{ struct_name }}_{{ nd }}d
+    !#jj2 endfor
+    {{ moduleOrNot }} procedure easyO_{{ struct_name }}_scalar
+end interface
+

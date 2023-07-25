@@ -1,0 +1,156 @@
+
+  Subroutine easyO_logical_scalar(fname, vname, val, type_info)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    logical,intent(in) :: val
+    character(*),intent(in) :: fname, vname
+    integer :: b, i
+    integer,intent(in),optional :: type_info(:, :)
+
+    b = 0
+    if(val) b = 1
+    if (present(type_info)) then
+      call easyO_int4_scalar(fname, vname, b, type_info)
+    else
+      call easyO_int4_scalar(fname, vname, b)
+    end if
+
+    return
+  end subroutine easyO_logical_scalar
+
+  Subroutine easyI_logical_scalar(fname, vname, val, type_info)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    logical,intent(out) :: val
+    character(*),intent(in) :: fname, vname
+    integer :: b, i
+    integer,intent(in),optional :: type_info(:, :)
+
+    if (present(type_info)) then
+      call easyI_int4_scalar(fname, vname, b, type_info)
+    else
+      call easyI_int4_scalar(fname, vname, b)
+    end if
+
+    val = .false.
+    if(b .eq. 1) val = .true.
+
+    return
+  end subroutine easyI_logical_scalar
+
+
+!#jj2 for nd in [1,2,3,4,5,6,7]:
+  Subroutine easyO_logical_{{ nd }}d(fname, vname, val, type_info, type_ele_alone)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    logical,intent(in) :: val{{ get_rank_from_nd(nd) }}
+    character(*),intent(in) :: fname, vname
+    integer :: b{{ get_b_shape(nd) }}, i
+    integer,intent(in),optional :: type_info(:, :)
+    integer,intent(in),optional :: type_ele_alone
+
+    b = 0
+    where(val) b = 1
+    if (present(type_info)) then
+      if (present(type_ele_alone)) then
+        call easyO_int4_{{ nd }}d(fname, vname, b, type_info, type_ele_alone)
+      else
+        call easyO_int4_{{ nd }}d(fname, vname, b, type_info)
+      end if
+    else
+      call easyO_int4_{{ nd }}d(fname, vname, b)
+    end if
+
+    return
+  end subroutine easyO_logical_{{ nd }}d
+
+  Subroutine easyOA_logical_{{ nd }}d(fname, vname, val, type_info)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    logical,allocatable,intent(in) :: val{{ get_rank_from_nd(nd) }}
+    character(*),intent(in) :: fname, vname
+    integer,allocatable :: b{{ get_rank_from_nd(nd) }}
+    integer,intent(in),optional :: type_info(:, :)
+
+    if (allocated(val) .and. size(val) .gt. 0) then
+      allocate(b{{ get_b_shape(nd) }})
+      if (any(lbound(val) .ne. 1)) call easyO(trim(fname), trim(vname)//'.bounds', reshape([lbound(val), ubound(val)], [2, size(shape(val))],order=[2,1]))
+      b = 0
+      where(val) b = 1
+      if (present(type_info)) then
+          call easyO_int4_{{ nd }}d(fname, vname, b, type_info, 1)
+      else
+        call easyO_int4_{{ nd }}d(fname, vname, b)
+      end if
+      deallocate(b)
+    end if
+    return
+  end subroutine easyOA_logical_{{ nd }}d
+
+  Subroutine easyI_logical_{{ nd }}d(fname, vname, val, type_info)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    logical,intent(out) :: val{{ get_rank_from_nd(nd) }}
+    character(*),intent(in) :: fname, vname
+    integer :: b{{ get_b_shape(nd) }}
+    integer,intent(in),optional :: type_info(:, :)
+
+    if (present(type_info)) then
+      call easyI_int4_{{ nd }}d(fname, vname, b, type_info)
+    else
+      call easyI_int4_{{ nd }}d(fname, vname, b)
+    end if
+
+    val = .false.
+    where(b .eq. 1) val = .true.
+
+    return
+  end subroutine easyI_logical_{{ nd }}d
+
+  Subroutine easyIA_logical_{{ nd }}d(fname, vname, val, type_info)
+    ! almost Duplicated with easyO_int
+    implicit none
+    ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
+    logical,allocatable,intent(inout) :: val{{ get_rank_from_nd(nd) }}
+    character(*),intent(in) :: fname, vname
+    integer,allocatable :: b{{ get_rank_from_nd(nd) }}
+    integer,intent(in),optional :: type_info(:, :)
+
+
+    if (.not. allocated(val)) then
+      call getDims2_enc(fname, vname, dimsT_enc)
+      if (hasVar(fname, trim(vname) // '.bounds') .eq. 1) then
+        allocate(dimsT2_enc(2, size(dimsT_enc)))
+        call easyI(fname, trim(vname) // '.bounds', dimsT2_enc)
+        allocate(val({{ get_dimsT2_enc_arrayBound(nd) }}))
+        allocate(b({{ get_dimsT2_enc_arrayBound(nd) }}))
+        deallocate(dimsT_enc); deallocate(dimsT2_enc)
+      else
+        allocate(val({{ get_dimsT_enc_arrayShape(nd) }}))
+        allocate(b({{ get_dimsT_enc_arrayShape(nd) }}))
+        deallocate(dimsT_enc)
+      end if
+    else
+      allocate(b{{ get_b_shape(nd) }})
+    end if
+
+    if (present(type_info)) then
+      call easyI_int4_{{ nd }}d(fname, vname, b, type_info)
+    else
+      call easyI_int4_{{ nd }}d(fname, vname, b)
+    end if
+
+    val = .false.
+    where(b .eq. 1) val = .true.
+
+    deallocate(b)
+
+    return
+  end subroutine easyIA_logical_{{ nd }}d
+!#jj2 endfor
+

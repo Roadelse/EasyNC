@@ -73,7 +73,7 @@
   end subroutine
 !#jj2 endfor
 
-  Subroutine easyO_real4(fname, vname, data, dims_data, type_info, type_ele_alone)
+  Subroutine easyO_real4(fname, vname, data, dims_data, type_info, type_ele_alone, shape_total, position)
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> header
     real(kind=4),intent(in) :: data(*)
@@ -81,6 +81,8 @@
     integer, intent(in) :: dims_data(:)
     integer, intent(in), optional :: type_info(:, :) ! 2 x n, 0 : type array size, 1 : type position
     integer, intent(in), optional :: type_ele_alone
+    integer, intent(in), optional :: shape_total    ! total shape, such as (3,4,5)
+    integer, intent(in), optional :: position  ! such as (2,2,2)
 
     character(80) :: ovname, strT, posSuffix
 
