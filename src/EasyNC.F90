@@ -3,7 +3,7 @@ Module EasyNC
     use rdee_fortran
     
     implicit none
-    integer,allocatable :: enc_iaaT_1d(:), enc_iaaT_2d(:,:)
+    integer,allocatable :: enc_iaaT_1d(:), enc_iaaT2_1d(:), enc_iaaT_2d(:,:)
     integer :: enc_i, enc_j, enc_k
     character(80) :: varname_enc, strT_enc
     !! Doesn't support allocatable/pointer scalar variable @2023-07-20
@@ -489,7 +489,7 @@ Contains
             stop 1
         end if
         ! ================== get variable and its dimensions
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid in enc_get_dims')
+        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid in enc_get_dims: '//trim(vname))
         call check_enc(nf90_inquire_variable(ncid, vid, ndims=ndims), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, dimids=dids(:ndims)), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, xtype=xt), 'in nf90_inquire_variable for xtype in enc_get_dims')
@@ -520,40 +520,6 @@ Contains
         return
     end function
     
-  ! subroutine getDims3_enc(fname, tname, dims)  ! pass allocatable dims in, get struct variable shape for allocate
-  !   implicit none
-  !   character(*),intent(in) :: fname, tname
-  !   integer, allocatable :: dims(:)
-  !   integer :: i, j, k, l, m, n
-  !   integer :: ncid, vid, ierr, ndims
-  !   logical :: isExist
-  !   character(1) :: c
-  !   integer :: xt  ! xtype
-  !   integer :: dids(10)
-  !   ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-  !   ! ================== open netcdf file
-  !   inquire(file = fname, exist = isExist)
-  !   if (isExist) then
-  !     call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "nf90_open")
-  !   else
-  !     write(*,*) 'Error! file not exist : '//trim(fname)
-  !     stop 1
-  !   end if
-  !   ! ================== get variable and its dimensions
-  !   do i = 1, 6
-  !     write(c, '(I1)') i
-  !     ierr = nf90_inq_dimid(ncid, trim(tname)//'_d'//c, dids(i))
-  !     if (ierr .ne. 0) exit
-  !   end do
-  !   ! print *, 'sss = ',i
-  !   allocate(dims(i-1), stat=ierr)
-  !   call check_enc(ierr, 'in allocate')
-  !   do j = 1, i-1
-  !     call check_enc(nf90_inquire_dimension(ncid, dids(j), len=dims(i-j)), 'nf90_inquire_dimension')
-  !   end do
-  !   call check_enc(nf90_close(ncid) , "in getDims3_enc, nf90_close")
-  !   return
-  ! end subroutine
 ! *********************************************************
 ! easyIO for scalar generic numeric data type :
 !   int4. int8, real4, real8
@@ -630,12 +596,17 @@ Contains
         if (present(shape_total)) then
             call check_enc( nf90_put_var(ncid, vid, data, start=position) , & 
             "in easyO_int4_scalar, nf90_put_var, "//trim(vname))
+            
         else
             call check_enc( nf90_put_var(ncid, vid, data) , & 
             "in easyO_int4_scalar, nf90_put_var, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
-        
+        if (present(shape_total)) then
+            deallocate(dimids)
+            deallocate(dimnames)
+        end if
+        deallocate(shape_ncv)
         return
     end subroutine easyO_int4_scalar
     Subroutine easyI_int4_scalar(fname, vname, data, position)
@@ -748,12 +719,17 @@ Contains
         if (present(shape_total)) then
             call check_enc( nf90_put_var(ncid, vid, data, start=position) , & 
             "in easyO_int8_scalar, nf90_put_var, "//trim(vname))
+            
         else
             call check_enc( nf90_put_var(ncid, vid, data) , & 
             "in easyO_int8_scalar, nf90_put_var, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
-        
+        if (present(shape_total)) then
+            deallocate(dimids)
+            deallocate(dimnames)
+        end if
+        deallocate(shape_ncv)
         return
     end subroutine easyO_int8_scalar
     Subroutine easyI_int8_scalar(fname, vname, data, position)
@@ -866,12 +842,17 @@ Contains
         if (present(shape_total)) then
             call check_enc( nf90_put_var(ncid, vid, data, start=position) , & 
             "in easyO_real4_scalar, nf90_put_var, "//trim(vname))
+            
         else
             call check_enc( nf90_put_var(ncid, vid, data) , & 
             "in easyO_real4_scalar, nf90_put_var, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
-        
+        if (present(shape_total)) then
+            deallocate(dimids)
+            deallocate(dimnames)
+        end if
+        deallocate(shape_ncv)
         return
     end subroutine easyO_real4_scalar
     Subroutine easyI_real4_scalar(fname, vname, data, position)
@@ -984,12 +965,17 @@ Contains
         if (present(shape_total)) then
             call check_enc( nf90_put_var(ncid, vid, data, start=position) , & 
             "in easyO_real8_scalar, nf90_put_var, "//trim(vname))
+            
         else
             call check_enc( nf90_put_var(ncid, vid, data) , & 
             "in easyO_real8_scalar, nf90_put_var, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
-        
+        if (present(shape_total)) then
+            deallocate(dimids)
+            deallocate(dimnames)
+        end if
+        deallocate(shape_ncv)
         return
     end subroutine easyO_real8_scalar
     Subroutine easyI_real8_scalar(fname, vname, data, position)
@@ -1121,6 +1107,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int4_1d
     Subroutine easyI_int4_1d(fname, vname, data, position, count_lens)
@@ -1254,6 +1246,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int8_1d
     Subroutine easyI_int8_1d(fname, vname, data, position, count_lens)
@@ -1387,6 +1385,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real4_1d
     Subroutine easyI_real4_1d(fname, vname, data, position, count_lens)
@@ -1520,6 +1524,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real8_1d
     Subroutine easyI_real8_1d(fname, vname, data, position, count_lens)
@@ -1653,6 +1663,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int4_2d
     Subroutine easyI_int4_2d(fname, vname, data, position, count_lens)
@@ -1786,6 +1802,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int8_2d
     Subroutine easyI_int8_2d(fname, vname, data, position, count_lens)
@@ -1919,6 +1941,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real4_2d
     Subroutine easyI_real4_2d(fname, vname, data, position, count_lens)
@@ -2052,6 +2080,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real8_2d
     Subroutine easyI_real8_2d(fname, vname, data, position, count_lens)
@@ -2185,6 +2219,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int4_3d
     Subroutine easyI_int4_3d(fname, vname, data, position, count_lens)
@@ -2318,6 +2358,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int8_3d
     Subroutine easyI_int8_3d(fname, vname, data, position, count_lens)
@@ -2451,6 +2497,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real4_3d
     Subroutine easyI_real4_3d(fname, vname, data, position, count_lens)
@@ -2584,6 +2636,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real8_3d
     Subroutine easyI_real8_3d(fname, vname, data, position, count_lens)
@@ -2717,6 +2775,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int4_4d
     Subroutine easyI_int4_4d(fname, vname, data, position, count_lens)
@@ -2850,6 +2914,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int8_4d
     Subroutine easyI_int8_4d(fname, vname, data, position, count_lens)
@@ -2983,6 +3053,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real4_4d
     Subroutine easyI_real4_4d(fname, vname, data, position, count_lens)
@@ -3116,6 +3192,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real8_4d
     Subroutine easyI_real8_4d(fname, vname, data, position, count_lens)
@@ -3249,6 +3331,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int4_5d
     Subroutine easyI_int4_5d(fname, vname, data, position, count_lens)
@@ -3382,6 +3470,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int8_5d
     Subroutine easyI_int8_5d(fname, vname, data, position, count_lens)
@@ -3515,6 +3609,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real4_5d
     Subroutine easyI_real4_5d(fname, vname, data, position, count_lens)
@@ -3648,6 +3748,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real8_5d
     Subroutine easyI_real8_5d(fname, vname, data, position, count_lens)
@@ -3781,6 +3887,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int4_6d
     Subroutine easyI_int4_6d(fname, vname, data, position, count_lens)
@@ -3914,6 +4026,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int8_6d
     Subroutine easyI_int8_6d(fname, vname, data, position, count_lens)
@@ -4047,6 +4165,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real4_6d
     Subroutine easyI_real4_6d(fname, vname, data, position, count_lens)
@@ -4180,6 +4304,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real8_6d
     Subroutine easyI_real8_6d(fname, vname, data, position, count_lens)
@@ -4313,6 +4443,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int4_7d
     Subroutine easyI_int4_7d(fname, vname, data, position, count_lens)
@@ -4446,6 +4582,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_int8_7d
     Subroutine easyI_int8_7d(fname, vname, data, position, count_lens)
@@ -4579,6 +4721,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real4_7d
     Subroutine easyI_real4_7d(fname, vname, data, position, count_lens)
@@ -4712,6 +4860,12 @@ Contains
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
         return
     end subroutine easyO_real8_7d
     Subroutine easyI_real8_7d(fname, vname, data, position, count_lens)
@@ -4978,6 +5132,12 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
     return
 end subroutine easyO_string_1d
 Subroutine easyI_string_1d(fname, vname, data, position, count_lens)
@@ -5119,6 +5279,12 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
     return
 end subroutine easyO_string_2d
 Subroutine easyI_string_2d(fname, vname, data, position, count_lens)
@@ -5260,6 +5426,12 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
     return
 end subroutine easyO_string_3d
 Subroutine easyI_string_3d(fname, vname, data, position, count_lens)
@@ -5401,6 +5573,12 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
     return
 end subroutine easyO_string_4d
 Subroutine easyI_string_4d(fname, vname, data, position, count_lens)
@@ -5542,6 +5720,12 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
     return
 end subroutine easyO_string_5d
 Subroutine easyI_string_5d(fname, vname, data, position, count_lens)
@@ -5683,6 +5867,12 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
     return
 end subroutine easyO_string_6d
 Subroutine easyI_string_6d(fname, vname, data, position, count_lens)
@@ -5824,6 +6014,12 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
     return
 end subroutine easyO_string_7d
 Subroutine easyI_string_7d(fname, vname, data, position, count_lens)
@@ -6435,7 +6631,7 @@ Subroutine easyI_complex8_1d(fname, vname, val, position, count_lens)
         call easyI_real8_1d(fname, trim(vname)//'.real', val_re)
         call easyI_real8_1d(fname, trim(vname)//'.imag', val_im)
     end if
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return
@@ -6539,7 +6735,7 @@ Subroutine easyI_complex8_2d(fname, vname, val, position, count_lens)
         call easyI_real8_2d(fname, trim(vname)//'.real', val_re)
         call easyI_real8_2d(fname, trim(vname)//'.imag', val_im)
     end if
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return
@@ -6643,7 +6839,7 @@ Subroutine easyI_complex8_3d(fname, vname, val, position, count_lens)
         call easyI_real8_3d(fname, trim(vname)//'.real', val_re)
         call easyI_real8_3d(fname, trim(vname)//'.imag', val_im)
     end if
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return
@@ -6747,7 +6943,7 @@ Subroutine easyI_complex8_4d(fname, vname, val, position, count_lens)
         call easyI_real8_4d(fname, trim(vname)//'.real', val_re)
         call easyI_real8_4d(fname, trim(vname)//'.imag', val_im)
     end if
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return
@@ -6851,7 +7047,7 @@ Subroutine easyI_complex8_5d(fname, vname, val, position, count_lens)
         call easyI_real8_5d(fname, trim(vname)//'.real', val_re)
         call easyI_real8_5d(fname, trim(vname)//'.imag', val_im)
     end if
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return
@@ -6963,7 +7159,7 @@ Subroutine easyI_complex8_6d(fname, vname, val, position, count_lens)
         call easyI_real8_6d(fname, trim(vname)//'.real', val_re)
         call easyI_real8_6d(fname, trim(vname)//'.imag', val_im)
     end if
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return
@@ -7075,7 +7271,7 @@ Subroutine easyI_complex8_7d(fname, vname, val, position, count_lens)
         call easyI_real8_7d(fname, trim(vname)//'.real', val_re)
         call easyI_real8_7d(fname, trim(vname)//'.imag', val_im)
     end if
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return
@@ -7120,6 +7316,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7181,6 +7382,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7242,6 +7448,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7303,6 +7514,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7364,6 +7580,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7425,6 +7646,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7486,6 +7712,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7547,6 +7778,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7608,6 +7844,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7669,6 +7910,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7730,6 +7976,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7791,6 +8042,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7852,6 +8108,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7913,6 +8174,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -7974,6 +8240,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8035,6 +8306,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8096,6 +8372,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8158,6 +8439,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8220,6 +8506,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8282,6 +8573,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8344,6 +8640,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8406,6 +8707,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8468,6 +8774,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8530,6 +8841,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8592,6 +8908,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8654,6 +8975,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8716,6 +9042,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8778,6 +9109,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8840,6 +9176,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8902,6 +9243,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -8964,6 +9310,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9026,6 +9377,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9088,6 +9444,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9150,6 +9511,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9212,6 +9578,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9274,6 +9645,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9336,6 +9712,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9398,6 +9779,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9460,6 +9846,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9522,6 +9913,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9584,6 +9980,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9646,6 +10047,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9708,6 +10114,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9770,6 +10181,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9832,6 +10248,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9894,6 +10315,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -9956,6 +10382,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10018,6 +10449,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10080,6 +10516,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10145,6 +10586,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10210,6 +10656,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10275,6 +10726,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10340,6 +10796,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10405,6 +10866,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10470,6 +10936,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10539,6 +11010,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10600,6 +11076,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10661,6 +11142,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10722,6 +11208,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10783,6 +11274,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10844,6 +11340,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10905,6 +11406,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -10966,6 +11472,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11027,6 +11538,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11088,6 +11604,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11149,6 +11670,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11210,6 +11736,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11271,6 +11802,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11332,6 +11868,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11393,6 +11934,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11454,6 +12000,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11515,6 +12066,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11577,6 +12133,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11639,6 +12200,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11701,6 +12267,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11763,6 +12334,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11825,6 +12401,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11887,6 +12468,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -11949,6 +12535,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12011,6 +12602,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12073,6 +12669,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12135,6 +12736,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12197,6 +12803,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12259,6 +12870,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12321,6 +12937,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12383,6 +13004,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12445,6 +13071,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12507,6 +13138,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12569,6 +13205,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12631,6 +13272,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12693,6 +13339,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12755,6 +13406,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12817,6 +13473,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12879,6 +13540,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -12941,6 +13607,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13003,6 +13674,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13065,6 +13741,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13127,6 +13808,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13189,6 +13875,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13251,6 +13942,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13313,6 +14009,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13375,6 +14076,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13437,6 +14143,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13499,6 +14210,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13564,6 +14280,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13629,6 +14350,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13694,6 +14420,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13759,6 +14490,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13824,6 +14560,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
@@ -13889,6 +14630,11 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. associated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')

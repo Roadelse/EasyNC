@@ -8,5 +8,7 @@
 *.out
 /cbuild
 /build
+/cbuild*
+/build*
 __pycache__/
 .vscode

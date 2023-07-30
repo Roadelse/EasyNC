@@ -232,7 +232,7 @@ Subroutine easyI_complex8_{{ nd }}d(fname, vname, val, position, count_lens)
         call easyI_real8_{{ nd }}d(fname, trim(vname)//'.imag', val_im)
     end if
 
-    val = cmplx(val_re, val_im)
+    val = cmplx(val_re, val_im, 8)
     deallocate(val_re)
     deallocate(val_im)
     return

@@ -254,6 +254,13 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
     
     call check_enc( nf90_close(ncid) , "nf90_close")
     
+    deallocate(shape_data)
+    deallocate(shape_ncv)
+    deallocate(dimids)
+    deallocate(dimnames)
+    deallocate(count_lens_)
+    deallocate(position_)
+
     return
 end subroutine easyO_string_{{ nd }}d
 

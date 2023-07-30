@@ -27,7 +27,7 @@ sed  -e 's/allocatable,/pointer,/' \
      easync.allocatable.inc > easync.pointer.inc
 
 gfortran -cpp -E EasyNC.main.F90 | grep '^[^#]' > ../EasyNC.F90
-rm -f easync.main.F90 easync.numeric.inc easync.string.inc easync.allocatable.inc easync.pointer.inc
+rm -f EasyNC.main.F90 easync.numeric.inc easync.string.inc easync.allocatable.inc easync.pointer.inc easync.complex.inc easync.logical.inc
 
 # echo "split fortran lines"
 cd scripts

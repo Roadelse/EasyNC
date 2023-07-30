@@ -90,13 +90,18 @@
         if (present(shape_total)) then
             call check_enc( nf90_put_var(ncid, vid, data, start=position) , & 
             "in easyO_{{ type }}_scalar, nf90_put_var, "//trim(vname))
+            
         else
             call check_enc( nf90_put_var(ncid, vid, data) , & 
             "in easyO_{{ type }}_scalar, nf90_put_var, "//trim(vname))
         end if
 
         call check_enc( nf90_close(ncid) , "nf90_close")
-        
+        if (present(shape_total)) then
+            deallocate(dimids)
+            deallocate(dimnames)
+        end if
+        deallocate(shape_ncv)
         return
     end subroutine easyO_{{ type }}_scalar
 
@@ -257,6 +262,13 @@
         
         call check_enc( nf90_close(ncid) , "nf90_close")
         
+        deallocate(shape_data)
+        deallocate(shape_ncv)
+        deallocate(dimids)
+        deallocate(dimnames)
+        deallocate(position_)
+        deallocate(count_lens_)
+
         return
     end subroutine easyO_{{ type }}_{{ nd }}d
 

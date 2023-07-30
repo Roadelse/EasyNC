@@ -5,7 +5,7 @@ Module EasyNC
     
     implicit none
 
-    integer,allocatable :: enc_iaaT_1d(:), enc_iaaT_2d(:,:)
+    integer,allocatable :: enc_iaaT_1d(:), enc_iaaT2_1d(:), enc_iaaT_2d(:,:)
     integer :: enc_i, enc_j, enc_k
     character(80) :: varname_enc, strT_enc
 

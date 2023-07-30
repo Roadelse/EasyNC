@@ -1,8 +1,42 @@
 
-interface easyO_{{ struct_name }}
-    !#jj2 for nd in [1,2,3,4,5,6,7]:
-    {{ moduleOrNot }} procedure easyO_{{ struct_name }}_{{ nd }}d
-    !#jj2 endfor
-    {{ moduleOrNot }} procedure easyO_{{ struct_name }}_scalar
-end interface
+        interface easyO_{{ struct_name }}
+            !#jj2 for nd in [1,2,3,4,5,6,7]:
+            {{ moduleOrNot }} procedure easyO_{{ struct_name }}_{{ nd }}d
+            !#jj2 endfor
+            {{ moduleOrNot }} procedure easyO_{{ struct_name }}_scalar
+        end interface
 
+        interface easyOA_{{ struct_name }}
+            !#jj2 for nd in [1,2,3,4,5,6,7]:
+            {{ moduleOrNot }} procedure easyOA_{{ struct_name }}_{{ nd }}d
+            !#jj2 endfor
+            ! {{ moduleOrNot }} procedure easyOA_{{ struct_name }}_scalar
+        end interface
+
+        interface easyOP_{{ struct_name }}
+            !#jj2 for nd in [1,2,3,4,5,6,7]:
+            {{ moduleOrNot }} procedure easyOP_{{ struct_name }}_{{ nd }}d
+            !#jj2 endfor
+            ! {{ moduleOrNot }} procedure easyOP_{{ struct_name }}_scalar
+        end interface
+
+        interface easyI_{{ struct_name }}
+            !#jj2 for nd in [1,2,3,4,5,6,7]:
+            {{ moduleOrNot }} procedure easyI_{{ struct_name }}_{{ nd }}d
+            !#jj2 endfor
+            {{ moduleOrNot }} procedure easyI_{{ struct_name }}_scalar
+        end interface
+
+        interface easyIA_{{ struct_name }}
+            !#jj2 for nd in [1,2,3,4,5,6,7]:
+            {{ moduleOrNot }} procedure easyIA_{{ struct_name }}_{{ nd }}d
+            !#jj2 endfor
+            ! {{ moduleOrNot }} procedure easyIA_{{ struct_name }}_scalar
+        end interface
+
+        interface easyIP_{{ struct_name }}
+            !#jj2 for nd in [1,2,3,4,5,6,7]:
+            {{ moduleOrNot }} procedure easyIP_{{ struct_name }}_{{ nd }}d
+            !#jj2 endfor
+            ! {{ moduleOrNot }} procedure easyIP_{{ struct_name }}_scalar
+        end interface

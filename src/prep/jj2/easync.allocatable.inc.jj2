@@ -54,6 +54,11 @@
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ========================= return if ncv doesn't exist in file
+        if (.not. enc_var_exist(fname, vname)) then
+            return
+        end if
+        
         if (.not. allocated(data)) then
             if (present(count_lens_)) then
                 call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')

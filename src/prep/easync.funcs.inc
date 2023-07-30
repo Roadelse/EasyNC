@@ -108,7 +108,7 @@
         end if
 
         ! ================== get variable and its dimensions
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid in enc_get_dims')
+        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid in enc_get_dims: '//trim(vname))
         call check_enc(nf90_inquire_variable(ncid, vid, ndims=ndims), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, dimids=dids(:ndims)), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, xtype=xt), 'in nf90_inquire_variable for xtype in enc_get_dims')
@@ -144,53 +144,4 @@
         return
     end function
     
-
-
-
-  ! subroutine getDims3_enc(fname, tname, dims)  ! pass allocatable dims in, get struct variable shape for allocate
-  !   implicit none
-  !   character(*),intent(in) :: fname, tname
-  !   integer, allocatable :: dims(:)
-
-  !   integer :: i, j, k, l, m, n
-  !   integer :: ncid, vid, ierr, ndims
-  !   logical :: isExist
-
-  !   character(1) :: c
-
-
-  !   integer :: xt  ! xtype
-  !   integer :: dids(10)
-
-  !   ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-  !   ! ================== open netcdf file
-  !   inquire(file = fname, exist = isExist)
-
-  !   if (isExist) then
-  !     call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "nf90_open")
-  !   else
-  !     write(*,*) 'Error! file not exist : '//trim(fname)
-  !     stop 1
-  !   end if
-
-  !   ! ================== get variable and its dimensions
-  !   do i = 1, 6
-  !     write(c, '(I1)') i
-  !     ierr = nf90_inq_dimid(ncid, trim(tname)//'_d'//c, dids(i))
-  !     if (ierr .ne. 0) exit
-  !   end do
-  !   ! print *, 'sss = ',i
-  !   allocate(dims(i-1), stat=ierr)
-  !   call check_enc(ierr, 'in allocate')
-
-  !   do j = 1, i-1
-  !     call check_enc(nf90_inquire_dimension(ncid, dids(j), len=dims(i-j)), 'nf90_inquire_dimension')
-  !   end do
-
-  !   call check_enc(nf90_close(ncid) , "in getDims3_enc, nf90_close")
-
-  !   return
-
-  ! end subroutine
-
 

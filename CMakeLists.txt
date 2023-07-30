@@ -25,8 +25,20 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 SET(SRC ${CMAKE_SOURCE_DIR}/src)
 
 
+find_package(rdee_fortran)
+find_package(netcdff)
+
+
 enable_testing()
+
+Message(STATUS "compiler id = ${CMAKE_Fortran_COMPILER_ID}")
+if (${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
+    add_compile_options(-g -fPIE -extend-source 132 "SHELL:-check all" "SHELL:-warn all" -std08 "SHELL:-warn nounused")
+elseif(${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU")
+    add_compile_options(-g -fPIE -ffree-line-length-none -ffixed-line-length-132 -std=f2008 -Wall -fcheck=all -fall-intrinsics -Wno-unused -Wno-maybe-uninitialized)
+endif()
 
 add_subdirectory(src)
 add_subdirectory(test)
+
 

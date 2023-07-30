@@ -1,5 +1,18 @@
 
 
+
+
+# v2.0.1 @2023-07-30
+
+some minor updates
+
++ bugs fix
++ **cmake** : add scripts to find rdee_fortran and netcdff
++ **render-struct-io** : optimize and bug fix
+
+
+***
+
 # v2.0  @ 2023-07-25
 
 re-constructed in general, now support:

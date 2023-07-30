@@ -20,9 +20,16 @@ a wrapper for allocatable array (doesn't support allocatable scalar by now)
 a wrapper for pointer array (doesn't support pointer scalar as well), will not keep the `=>` relationship after dump & load
 
 
-## binary & scripts
+## build
 
-I provide a python script "render-struct-io.py" to generate I/O code for specific derived data type, which is used to be inserted into target fortran code file, making target struct easy to be I/O
+usually just build it in `./cbuild.gnu`, or `intel`
+
+### structure
+
++ lib/ : will possess the `libEasyNC.a` library
++ include/ : will possess the `easync.mod`
++ bin/ : 
+   * render-struct-io/ : possess the scripts and templates for rendering a struct I/O Fortran code
 
 
 ## source
