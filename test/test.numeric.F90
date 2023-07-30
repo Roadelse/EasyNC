@@ -10,6 +10,7 @@ character(*),parameter :: fname = "test.numeric.nc"
 
 call test_int4
 call test_basic
+call test_vea
 
 contains
     subroutine test_int4()
@@ -139,6 +140,24 @@ contains
         call assert(all(da_1d_2 .eq. da_1d_2_), 'Error in easyIO for double array, turn 2')
 
         print *, 'Succeed in test_basic'
+
+    end subroutine
+
+
+    subroutine test_vea()
+        implicit none
+        integer :: iT
+
+        iT = 0
+        enc_vea = 1
+
+        call easyO(fname, 'aaq', 1)
+        call easyO(fname, 'aaq', 2)
+        call easyI(fname, 'aaq', iT)
+
+        enc_vea = 0
+
+        call assert(iT .eq. 1, 'Error in var-exist action') 
 
     end subroutine
 

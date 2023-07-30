@@ -30,6 +30,16 @@
 
 
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -184,6 +194,16 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
 
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
+
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))

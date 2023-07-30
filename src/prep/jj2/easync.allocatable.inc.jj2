@@ -28,6 +28,16 @@
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
 
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
