@@ -2,9 +2,9 @@
 
 import sys
 import pickle
-sys.path.append('../../cbuild.gnu/bin/render-struct-io/')
+sys.path.append('../../cbuild.intel/bin/render-struct-io/')
 import render_struct_io
-sys.path.append('/mnt/d/recRoot/GitRepos/froed')
+sys.path.append('/sharedata01/zjx/recRoot/GitRepos/froed')
 import froed
 
 
@@ -16,5 +16,5 @@ for fcn, fc in fctts.items():
     if fc.context_type == 'Type':
         if not fc.isrun:
             fc.run()
-        render_struct_io.handle_1struct(fc, outDir = '.')
+        render_struct_io.handle_1struct(fc, 4, outDir = '.')
     

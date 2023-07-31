@@ -8,7 +8,7 @@ import jinja2 as jj2
 
 import jj2_context
 
-def handle_1struct(fc, outDir = '.'):
+def handle_1struct(fc, N: int = 7, outDir = '.'):
     ctt = jj2_context.ctt
     ctt['struct_name'] = fc.context_name
     lsp = '!#jj2' # os.environ['jj2_lsp']  # line statement 
@@ -44,6 +44,7 @@ def handle_1struct(fc, outDir = '.'):
 
     ctt['calls_from_fctt'] = calls_from_fctt
     ctt['moduleOrNot'] = 'module' if fc.parent_context.context_type == 'module' else ''
+    ctt['N'] = N
 
     content_body = open(inFile_body).read()
     content_itf = open(inFile_itf).read()
