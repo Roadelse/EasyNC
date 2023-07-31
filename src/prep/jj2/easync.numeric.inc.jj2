@@ -43,6 +43,13 @@
             end if
         end if
             
+        !#jj2 if type == 'int8':
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
+        !#jj2 endif
 
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
@@ -68,7 +75,11 @@
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
 
         ! ~~~~~~~~~~~~~~ get or define dimension
@@ -215,6 +226,13 @@
             end if
         end if
             
+        !#jj2 if type == 'int8':
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
+        !#jj2 endif
 
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
@@ -258,7 +276,11 @@
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv

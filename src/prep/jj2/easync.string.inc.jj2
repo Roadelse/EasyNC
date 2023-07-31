@@ -75,7 +75,11 @@
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
 
         ! ~~~~~~~~~~~~~~ get or define dimension
@@ -248,7 +252,11 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv

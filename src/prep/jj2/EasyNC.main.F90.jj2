@@ -10,6 +10,7 @@ Module EasyNC
     character(80) :: varname_enc, strT_enc
 
     integer :: enc_vea = 0  ! var-exist-action, 0 - ignore it; 1 - just return; -1 : Abort
+    logical :: enc_use_nc4 = .false.  ! determine if easyO* will write data to netcdf-4 format file
 
     !! Doesn't support allocatable/pointer scalar variable @2023-07-20
 

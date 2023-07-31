@@ -7,6 +7,7 @@ Module EasyNC
     integer :: enc_i, enc_j, enc_k
     character(80) :: varname_enc, strT_enc
     integer :: enc_vea = 0  ! var-exist-action, 0 - ignore it; 1 - just return; -1 : Abort
+    logical :: enc_use_nc4 = .false.  ! determine if easyO* will write data to netcdf-4 format file
     !! Doesn't support allocatable/pointer scalar variable @2023-07-20
     interface easyO
         module procedure easyO_int4_1d
@@ -578,7 +579,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -689,6 +694,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -711,7 +721,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -844,7 +858,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -977,7 +995,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -1133,7 +1155,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1247,6 +1273,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1282,7 +1313,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1431,7 +1466,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1580,7 +1619,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1729,7 +1772,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1843,6 +1890,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1878,7 +1930,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2027,7 +2083,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2176,7 +2236,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2325,7 +2389,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2439,6 +2507,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2474,7 +2547,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2623,7 +2700,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2772,7 +2853,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2921,7 +3006,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3035,6 +3124,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3070,7 +3164,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3219,7 +3317,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3368,7 +3470,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3517,7 +3623,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3631,6 +3741,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3666,7 +3781,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3815,7 +3934,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3964,7 +4087,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4113,7 +4240,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4227,6 +4358,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4262,7 +4398,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4411,7 +4551,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4560,7 +4704,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4709,7 +4857,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4823,6 +4975,11 @@ Contains
             end if
         end if
             
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4858,7 +5015,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -5007,7 +5168,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -5156,7 +5321,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -5298,7 +5467,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -5446,7 +5619,11 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5602,7 +5779,11 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5758,7 +5939,11 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5914,7 +6099,11 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -6070,7 +6259,11 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -6226,7 +6419,11 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -6382,7 +6579,11 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
