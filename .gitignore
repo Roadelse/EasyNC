@@ -2,6 +2,7 @@
 *.lnk
 *.o
 *.a
+*.s
 *.mod
 *.smod
 *.x

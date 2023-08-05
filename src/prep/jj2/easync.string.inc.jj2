@@ -30,6 +30,16 @@
 
 
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -65,7 +75,11 @@
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
 
         ! ~~~~~~~~~~~~~~ get or define dimension
@@ -184,6 +198,16 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
 
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
+
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -228,7 +252,11 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv

@@ -11,6 +11,16 @@
         integer :: b, i
 
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+
         b = 0
         if(val) b = 1
 
@@ -62,6 +72,16 @@
         integer :: i
 
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+
         allocate(b{{ get_b_shape(nd) }})
         b = 0
         where(val) b = 1

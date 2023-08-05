@@ -6,6 +6,8 @@ Module EasyNC
     integer,allocatable :: enc_iaaT_1d(:), enc_iaaT2_1d(:), enc_iaaT_2d(:,:)
     integer :: enc_i, enc_j, enc_k
     character(80) :: varname_enc, strT_enc
+    integer :: enc_vea = 0  ! var-exist-action, 0 - ignore it; 1 - just return; -1 : Abort
+    logical :: enc_use_nc4 = .false.  ! determine if easyO* will write data to netcdf-4 format file
     !! Doesn't support allocatable/pointer scalar variable @2023-07-20
     interface easyO
         module procedure easyO_int4_1d
@@ -545,6 +547,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -567,7 +579,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -668,6 +684,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -690,7 +721,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -791,6 +826,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -813,7 +858,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -914,6 +963,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -936,7 +995,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         if (present(shape_total)) then
@@ -1047,6 +1110,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1082,7 +1155,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1186,6 +1263,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1221,7 +1313,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1325,6 +1421,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1360,7 +1466,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1464,6 +1574,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1499,7 +1619,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1603,6 +1727,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1638,7 +1772,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1742,6 +1880,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1777,7 +1930,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -1881,6 +2038,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -1916,7 +2083,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2020,6 +2191,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2055,7 +2236,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2159,6 +2344,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2194,7 +2389,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2298,6 +2497,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2333,7 +2547,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2437,6 +2655,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2472,7 +2700,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2576,6 +2808,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2611,7 +2853,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2715,6 +2961,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2750,7 +3006,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2854,6 +3114,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -2889,7 +3164,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -2993,6 +3272,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3028,7 +3317,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3132,6 +3425,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3167,7 +3470,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3271,6 +3578,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3306,7 +3623,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3410,6 +3731,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3445,7 +3781,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3549,6 +3889,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3584,7 +3934,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3688,6 +4042,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3723,7 +4087,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3827,6 +4195,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -3862,7 +4240,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -3966,6 +4348,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4001,7 +4398,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4105,6 +4506,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4140,7 +4551,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4244,6 +4659,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4279,7 +4704,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4383,6 +4812,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4418,7 +4857,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4522,6 +4965,21 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
+        ! ============================= netcdf-4 compatability
+        if (.not. enc_use_nc4) then
+            print *, 'Error, cannot write INT64 to netcdf classic file, or set the enc_use_nc4 to .true.'
+            stop 1
+        end if
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4557,7 +5015,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4661,6 +5123,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4696,7 +5168,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4800,6 +5276,16 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
+            
         ! ============================= prepare for netcdf IO
         ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
         rank_data = size(shape(data))
@@ -4835,7 +5321,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -4938,6 +5428,15 @@ Contains
         integer :: i
         logical :: isExist
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         ! ============================= prepare for netcdf IO
         if (.not. present(shape_total)) then  !# sub-array IO
             rank_ncv = 1
@@ -4968,7 +5467,11 @@ Contains
             call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
             call check_enc( nf90_redef(ncid), "nf90_redef")
         else
-            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+            if (enc_use_nc4) then
+                call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+            else
+                call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+            end if
         end if
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
@@ -5070,6 +5573,15 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
     integer :: i
     logical :: isExist
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -5107,7 +5619,11 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5217,6 +5733,15 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
     integer :: i
     logical :: isExist
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -5254,7 +5779,11 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5364,6 +5893,15 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
     integer :: i
     logical :: isExist
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -5401,7 +5939,11 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5511,6 +6053,15 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
     integer :: i
     logical :: isExist
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -5548,7 +6099,11 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5658,6 +6213,15 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
     integer :: i
     logical :: isExist
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -5695,7 +6259,11 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5805,6 +6373,15 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
     integer :: i
     logical :: isExist
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -5842,7 +6419,11 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -5952,6 +6533,15 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
     integer :: i
     logical :: isExist
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     ! ============================= prepare for netcdf IO
     ! ~~~~~~~~~~~~~~ handle rank & shape for netcdf variable
     rank_data = size(shape(data))
@@ -5989,7 +6579,11 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
         call check_enc( nf90_open(fname, NF90_WRITE, ncid) , "in nf90_open, "//fname)
         call check_enc( nf90_redef(ncid), "nf90_redef")
     else
-        call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create, "//fname)
+        if (enc_use_nc4) then
+            call check_enc( nf90_create(fname, NF90_NETCDF4, ncid) , "in nf90_create nc4, "//fname)
+        else
+            call check_enc( nf90_create(fname, NF90_CLOBBER, ncid) , "in nf90_create, "//fname)
+        end if
     end if
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
@@ -6083,6 +6677,15 @@ end subroutine easyI_string_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer :: b, i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         b = 0
         if(val) b = 1
         if (present(shape_total)) then
@@ -6124,6 +6727,15 @@ end subroutine easyI_string_7d
         integer, allocatable :: b(:)
         integer :: i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         allocate(b(size(val)))
         b = 0
         where(val) b = 1
@@ -6171,6 +6783,15 @@ end subroutine easyI_string_7d
         integer, allocatable :: b(:,:)
         integer :: i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         allocate(b(size(val(:,1)), size(val(1,:))))
         b = 0
         where(val) b = 1
@@ -6218,6 +6839,15 @@ end subroutine easyI_string_7d
         integer, allocatable :: b(:,:,:)
         integer :: i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         allocate(b(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
         b = 0
         where(val) b = 1
@@ -6265,6 +6895,15 @@ end subroutine easyI_string_7d
         integer, allocatable :: b(:,:,:,:)
         integer :: i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         allocate(b(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
         b = 0
         where(val) b = 1
@@ -6312,6 +6951,15 @@ end subroutine easyI_string_7d
         integer, allocatable :: b(:,:,:,:,:)
         integer :: i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         allocate(b(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
         b = 0
         where(val) b = 1
@@ -6359,6 +7007,15 @@ end subroutine easyI_string_7d
         integer, allocatable :: b(:,:,:,:,:,:)
         integer :: i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         allocate(b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1,1, &
     1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
         b = 0
@@ -6408,6 +7065,15 @@ end subroutine easyI_string_7d
         integer, allocatable :: b(:,:,:,:,:,:,:)
         integer :: i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         allocate(b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size( &
     val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
         b = 0
@@ -6455,6 +7121,15 @@ Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) :: val_re, val_im
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
@@ -6499,6 +7174,15 @@ Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) :: val_re, val_im
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
@@ -6544,6 +7228,15 @@ Subroutine easyO_complex4_1d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:), val_im(:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val)))
     allocate(val_im(size(val)))
     val_re = real(val)
@@ -6596,6 +7289,15 @@ Subroutine easyO_complex8_1d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:), val_im(:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val)))
     allocate(val_im(size(val)))
     val_re = real(val)
@@ -6648,6 +7350,15 @@ Subroutine easyO_complex4_2d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:), val_im(:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1)), size(val(1,:))))
     allocate(val_im(size(val(:,1)), size(val(1,:))))
     val_re = real(val)
@@ -6700,6 +7411,15 @@ Subroutine easyO_complex8_2d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:), val_im(:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1)), size(val(1,:))))
     allocate(val_im(size(val(:,1)), size(val(1,:))))
     val_re = real(val)
@@ -6752,6 +7472,15 @@ Subroutine easyO_complex4_3d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:), val_im(:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     val_re = real(val)
@@ -6804,6 +7533,15 @@ Subroutine easyO_complex8_3d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:), val_im(:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     val_re = real(val)
@@ -6856,6 +7594,15 @@ Subroutine easyO_complex4_4d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:), val_im(:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     val_re = real(val)
@@ -6908,6 +7655,15 @@ Subroutine easyO_complex8_4d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:), val_im(:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     val_re = real(val)
@@ -6960,6 +7716,15 @@ Subroutine easyO_complex4_5d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:), val_im(:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     val_re = real(val)
@@ -7012,6 +7777,15 @@ Subroutine easyO_complex8_5d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:), val_im(:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     val_re = real(val)
@@ -7064,6 +7838,15 @@ Subroutine easyO_complex4_6d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
     1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
@@ -7120,6 +7903,15 @@ Subroutine easyO_complex8_6d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
     1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
@@ -7176,6 +7968,15 @@ Subroutine easyO_complex4_7d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
      size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
@@ -7232,6 +8033,15 @@ Subroutine easyO_complex8_7d(fname, vname, val, shape_total, position, count_len
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
      size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
@@ -7292,6 +8102,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7358,6 +8177,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7424,6 +8252,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7490,6 +8327,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7556,6 +8402,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7622,6 +8477,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7688,6 +8552,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7754,6 +8627,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7820,6 +8702,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7886,6 +8777,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -7952,6 +8852,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8018,6 +8927,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8084,6 +9002,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8150,6 +9077,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8216,6 +9152,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8282,6 +9227,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8348,6 +9302,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8415,6 +9378,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8482,6 +9454,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8549,6 +9530,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8616,6 +9606,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8683,6 +9682,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8750,6 +9758,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8817,6 +9834,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8884,6 +9910,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -8951,6 +9986,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9018,6 +10062,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9085,6 +10138,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9152,6 +10214,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9219,6 +10290,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9286,6 +10366,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9353,6 +10442,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9420,6 +10518,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9487,6 +10594,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9554,6 +10670,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9621,6 +10746,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9688,6 +10822,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9755,6 +10898,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9822,6 +10974,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9889,6 +11050,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -9956,6 +11126,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10023,6 +11202,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10090,6 +11278,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10157,6 +11354,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10224,6 +11430,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10291,6 +11506,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10358,6 +11582,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10425,6 +11658,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10492,6 +11734,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10562,6 +11813,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10632,6 +11892,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10702,6 +11971,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10772,6 +12050,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10842,6 +12129,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10912,6 +12208,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (allocated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -10986,6 +12291,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11052,6 +12366,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11118,6 +12441,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11184,6 +12516,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11250,6 +12591,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11316,6 +12666,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11382,6 +12741,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11448,6 +12816,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11514,6 +12891,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11580,6 +12966,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11646,6 +13041,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11712,6 +13116,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11778,6 +13191,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11844,6 +13266,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11910,6 +13341,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -11976,6 +13416,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12042,6 +13491,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12109,6 +13567,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12176,6 +13643,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12243,6 +13719,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12310,6 +13795,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12377,6 +13871,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12444,6 +13947,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12511,6 +14023,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12578,6 +14099,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12645,6 +14175,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12712,6 +14251,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12779,6 +14327,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12846,6 +14403,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12913,6 +14479,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -12980,6 +14555,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13047,6 +14631,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13114,6 +14707,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13181,6 +14783,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13248,6 +14859,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13315,6 +14935,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13382,6 +15011,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13449,6 +15087,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13516,6 +15163,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13583,6 +15239,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13650,6 +15315,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13717,6 +15391,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13784,6 +15467,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13851,6 +15543,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13918,6 +15619,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -13985,6 +15695,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14052,6 +15771,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14119,6 +15847,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14186,6 +15923,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14256,6 +16002,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14326,6 +16081,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14396,6 +16160,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14466,6 +16239,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14536,6 +16318,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
@@ -14606,6 +16397,15 @@ end subroutine easyI_complex8_7d
         integer, intent(in), optional :: position_(:)         ! `start` in netcdf
         integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
+        ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+        if (enc_var_exist(fname, vname)) then
+            if (enc_vea .eq. 1) then
+                return
+            elseif (enc_vea .eq. -1) then
+                print *, 'Error in easyO with enc_vea = -1, variable exist!'
+                stop 1
+            end if
+        end if
         if (associated(data) .and. size(data) .gt. 0) then
             if (any(lbound(data) .ne. 1)) then
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))

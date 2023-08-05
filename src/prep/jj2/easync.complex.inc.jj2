@@ -11,6 +11,16 @@ Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position)
     real(kind=4) :: val_re, val_im
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
+
     val_re = real(val)
     val_im = aimag(val)
 
@@ -66,6 +76,15 @@ Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
     real(kind=8) :: val_re, val_im
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
 
     val_re = real(val)
     val_im = aimag(val)
@@ -126,6 +145,16 @@ Subroutine easyO_complex4_{{ nd }}d(fname, vname, val, shape_total, position, co
     real(kind=4) ,allocatable :: val_re{{ get_rank_from_nd(nd) }}, val_im{{ get_rank_from_nd(nd) }}
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
+
     allocate(val_re{{ get_b_shape(nd) }})
     allocate(val_im{{ get_b_shape(nd) }})
 
@@ -189,6 +218,16 @@ Subroutine easyO_complex8_{{ nd }}d(fname, vname, val, shape_total, position, co
     real(kind=8) ,allocatable :: val_re{{ get_rank_from_nd(nd) }}, val_im{{ get_rank_from_nd(nd) }}
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
+    if (enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. 1) then
+            return
+        elseif (enc_vea .eq. -1) then
+            print *, 'Error in easyO with enc_vea = -1, variable exist!'
+            stop 1
+        end if
+    end if
+
     allocate(val_re{{ get_b_shape(nd) }})
     allocate(val_im{{ get_b_shape(nd) }})
 

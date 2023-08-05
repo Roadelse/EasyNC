@@ -7,9 +7,11 @@ implicit none
 
 character(*),parameter :: fname = "test.numeric.nc"
 
+! enc_use_nc4 = .true.
 
 call test_int4
 call test_basic
+call test_vea
 
 contains
     subroutine test_int4()
@@ -20,6 +22,7 @@ contains
         integer(kind=4), pointer :: iap_1d_1(:) => null(), iap_1d_1_(:) => null(), iap_1d_2(:) => null()
         
         
+        print *, '>>>>>>>>>>>>>>>>>>>>>>>>>>>> enter test_int4'
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> gen data
         ! ====================== int4
         is1 = 1
@@ -100,22 +103,21 @@ contains
         double precision, allocatable :: da_1d_2_(:)
 
 
+        print *, '>>>>>>>>>>>>>>>>>>>>>>>>>>>> enter test_basic'
+
         ls1 = 1
         fs1 = 2.
         ds1 = 3.d0
         ds2 = 4.d0
-
-        call easyO(fname, 'ls1', ls1)
+        
         call easyO(fname, 'fs1', fs1)
         call easyO(fname, 'ds1', ds1)
         call easyO(fname, 'ds2', ds2)
 
-        call easyI(fname, 'ls1', ls1_)
         call easyI(fname, 'fs1', fs1_)
         call easyI(fname, 'ds1', ds1_)
         call easyI(fname, 'ds2', ds2_)
 
-        call assert(ls1 .eq. ls1_, 'Error in easyIO for long')
         call assert(fs1 .eq. fs1_, 'Error in easyIO for float')
         call assert(ds1 .eq. ds1_, 'Error in easyIO for double, turn 1')
         call assert(ds2 .eq. ds2_, 'Error in easyIO for double, turn 2')
@@ -125,21 +127,49 @@ contains
         fa_1d_1 = [1.,2.,3.]
         da_1d_1 = [1.d0,2.d0,3.d0]
         da_1d_2 = [1.d0,2.d0,3.d0]
-        call easyO(fname, 'la_1d_1', la_1d_1)
         call easyO(fname, 'fa_1d_1', fa_1d_1)
         call easyO(fname, 'da_1d_1', da_1d_1)
         call easyO(fname, 'da_1d_2', da_1d_2)
-        call easyIA(fname, 'la_1d_1', la_1d_1_)
         call easyIA(fname, 'fa_1d_1', fa_1d_1_)
         call easyIA(fname, 'da_1d_1', da_1d_1_)
         call easyIA(fname, 'da_1d_2', da_1d_2_)
-        call assert(all(la_1d_1 .eq. la_1d_1_), 'Error in easyIO for long array')
         call assert(all(fa_1d_1 .eq. fa_1d_1_), 'Error in easyIO for real*4 array')
         call assert(all(da_1d_1 .eq. da_1d_1_), 'Error in easyIO for double array')
         call assert(all(da_1d_2 .eq. da_1d_2_), 'Error in easyIO for double array, turn 2')
 
+        if (enc_use_nc4) then
+            call easyO(fname, 'ls1', ls1)
+            call easyI(fname, 'ls1', ls1_)
+            call assert(ls1 .eq. ls1_, 'Error in easyIO for long')
+
+            call easyO(fname, 'la_1d_1', la_1d_1)
+            call easyIA(fname, 'la_1d_1', la_1d_1_)
+            call assert(all(la_1d_1 .eq. la_1d_1_), 'Error in easyIO for long array')
+        end if
+
         print *, 'Succeed in test_basic'
 
     end subroutine
+
+
+    subroutine test_vea()
+        implicit none
+        integer :: iT
+
+        print *, '>>>>>>>>>>>>>>>>>>>>>>>>>>>> enter test_vea'
+
+        iT = 0
+        enc_vea = 1
+
+        call easyO(fname, 'aaq', 1)
+        call easyO(fname, 'aaq', 2)
+        call easyI(fname, 'aaq', iT)
+
+        enc_vea = 0
+
+        call assert(iT .eq. 1, 'Error in var-exist action') 
+
+    end subroutine
+
 
 end program

@@ -65,3 +65,13 @@ add_test(NAME test.complex
 set_tests_properties(test.numeric test.string test.logical test.complex test.type.direct PROPERTIES FIXTURES_REQUIRED setup)
 
 add_subdirectory(test.type.union)
+
+
+add_executable(test.unlimited test.unlimited.F90 )
+set_target_properties(test.unlimited PROPERTIES OUTPUT_NAME test.unlimited.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test.unlimited EasyNC rdee_fortran netcdff)
+target_compile_options(test.unlimited
+    PUBLIC -g)
+add_test(NAME test.unlimited
+    COMMAND $<TARGET_FILE:test.unlimited>)
+set_tests_properties(test.unlimited PROPERTIES FIXTURES_REQUIRED setup)
