@@ -15,7 +15,7 @@
 !#jj2 endif
 !#jj2 set ftype = ftypes[type]
 !#jj2 set nf90_type = nf90_types[type]
-    Subroutine easyOA_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -23,9 +23,10 @@
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         {{ ftype }},allocatable,intent(in) :: data{{ nColons_bracket }}
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
 
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
@@ -43,15 +44,23 @@
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_{{ type }}_{{ nd }}d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data)
+                end if
             end if
         end if
 
     End Subroutine easyOA_{{ type }}_{{ nd }}d
 
-    Subroutine easyIA_{{ type }}_{{ nd }}d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_{{ type }}_{{ nd }}d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -59,8 +68,8 @@
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         {{ ftype }},allocatable,intent(inout) :: data{{ nColons_bracket }}
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -70,9 +79,9 @@
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data({{ render_arrayShape_from_shape('shape_manual', nd) }}))
                 deallocate(shape_manual)
             else
@@ -89,8 +98,8 @@
             end if
         end if
 
-        if (present(position_)) then
-            call easyI_{{ type }}_{{ nd }}d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_{{ type }}_{{ nd }}d(fname, vname, data, positioin, count_lens)
         else
             call easyI_{{ type }}_{{ nd }}d(fname, vname, data)
         end if

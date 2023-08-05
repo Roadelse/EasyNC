@@ -3,6 +3,7 @@ program test_logical
 use EasyNC
     character(*), parameter :: fname = 'test.logical.nc'
 
+    call test_basic
 contains
 
     subroutine test_basic()

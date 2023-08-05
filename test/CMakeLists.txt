@@ -64,8 +64,6 @@ add_test(NAME test.complex
 
 set_tests_properties(test.numeric test.string test.logical test.complex test.type.direct PROPERTIES FIXTURES_REQUIRED setup)
 
-add_subdirectory(test.type.union)
-
 
 add_executable(test.unlimited test.unlimited.F90 )
 set_target_properties(test.unlimited PROPERTIES OUTPUT_NAME test.unlimited.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
@@ -75,3 +73,24 @@ target_compile_options(test.unlimited
 add_test(NAME test.unlimited
     COMMAND $<TARGET_FILE:test.unlimited>)
 set_tests_properties(test.unlimited PROPERTIES FIXTURES_REQUIRED setup)
+
+add_executable(test.dimnames test.dimnames.F90 )
+set_target_properties(test.dimnames PROPERTIES OUTPUT_NAME test.dimnames.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test.dimnames EasyNC rdee_fortran netcdff)
+target_compile_options(test.dimnames
+    PUBLIC -g)
+add_test(NAME test.dimnames
+    COMMAND $<TARGET_FILE:test.dimnames>)
+
+add_test(NAME post-check.dimnames
+    COMMAND bash -c "cd ${CMAKE_BINARY_DIR}/test && ./post-check.dimnames.sh")
+add_custom_command(TARGET test.dimnames POST_BUILD
+    COMMAND bash -c "cp ${TEST}/post-check.dimnames.sh ${CMAKE_BINARY_DIR}/test/"
+)
+
+set_tests_properties(test.dimnames PROPERTIES FIXTURES_REQUIRED setup FIXTURES_CLEANUP post-check.dimnames)
+
+
+
+
+add_subdirectory(test.type.union)

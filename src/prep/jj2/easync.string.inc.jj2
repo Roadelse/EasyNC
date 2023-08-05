@@ -3,7 +3,7 @@
 !   character()
 ! *********************************************************
 
-    Subroutine easyO_string_scalar(fname, vname, data, shape_total, position)
+    Subroutine easyO_string_scalar(fname, vname, data, shape_total, position, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a scalar string variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -14,13 +14,14 @@
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),intent(in) :: data
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
 
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer :: rank_ncv                     ! ranks of output netcdf variable
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer, allocatable :: position_(:)  !  , count_lens_(:)  ! should be unnecessary
 
@@ -46,9 +47,9 @@
             allocate(shape_ncv(1))
             shape_ncv = len(data)
 
-            allocate(dimnames(rank_ncv))
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
-            dimnames(1) = toString(vname, '.L')
+            dimnames_(1) = toString(vname, '.L')
         else !# single element  io
             rank_ncv = size(shape_total) + 1  !# add one dim for character length
             shape_ncv = union_arr1d([len(data)], shape_total)
@@ -56,12 +57,19 @@
             ! shape_ncv(1) = len(data)
             ! shape_ncv(2:) = shape_total
 
-            ! ========================= handle dimensions, e.g., dimnames & dimdis
-            allocate(dimnames(rank_ncv))
+            ! ========================= handle dimensions, e.g., dimnames_ & dimdis
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
-            dimnames(1) = toString(vname, '.L')
+            dimnames_(1) = toString(vname, '.L')
             do i = 2, rank_ncv
-                write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+                if (present(dimnames)) then
+                    call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_scalar, argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
+                    if (len_trim(dimnames(i+1)) .gt. 0) then
+                        dimnames_(i) = trim(dimnames(i+1))
+                        cycle
+                    end if
+                end if
+                write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
             end do
 
             position_ = union_arr1d([1], position)  !# imply allocate
@@ -85,11 +93,11 @@
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-                if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                    call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                    call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                 end if
             else
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
 
@@ -115,7 +123,7 @@
 
         call check_enc( nf90_close(ncid) , "nf90_close")
         deallocate(shape_ncv)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(dimids)
         
         return
@@ -167,7 +175,7 @@ end subroutine easyI_string_scalar
 
 !#jj2 for nd in [1,2,3,4,5,6,7]
 !#jj2 set nColons_bracket = get_rank_from_nd(nd)
-Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a {{ nd }}-dimensional {{ type }} variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -177,9 +185,11 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data{{ nColons_bracket }}
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
+
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -188,7 +198,7 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
 
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
 
     integer :: ncid, vid
@@ -225,13 +235,20 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
 
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
 
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_{{ nd }}d, argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
 
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
@@ -261,11 +278,11 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -285,7 +302,7 @@ Subroutine easyO_string_{{ nd }}d(fname, vname, data, shape_total, position, cou
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
 

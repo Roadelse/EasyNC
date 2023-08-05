@@ -4,7 +4,7 @@ use EasyNC
 
     character(*), parameter :: fname = 'test.string.nc'
 
-    ! call test_basic
+    call test_basic
     call test_AP
 
 

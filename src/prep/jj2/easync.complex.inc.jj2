@@ -1,12 +1,14 @@
 
-Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position)
+Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     Complex(kind=4),intent(in) :: val
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
+
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) :: val_re, val_im
 
@@ -25,8 +27,13 @@ Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position)
     val_im = aimag(val)
 
     if (present(shape_total)) then
-      call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
-      call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        if (present(dimnames)) then
+            call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, shape_total, position, dimnames)
+            call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position, dimnames)
+        else
+            call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
+            call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        end if
     else
       call easyO_real4_scalar(fname, trim(vname)//'.real', val_re)
       call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im)
@@ -63,7 +70,7 @@ Subroutine easyI_complex4_scalar(fname, vname, val, position)
     return
 end subroutine easyI_complex4_scalar
 
-Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
+Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
@@ -71,6 +78,7 @@ Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
     character(*),intent(in) :: fname, vname
     integer, intent(in), optional :: shape_total(:)      ! total shape
     integer, intent(in), optional :: position(:)         ! `start` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) :: val_re, val_im
@@ -90,8 +98,13 @@ Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
     val_im = aimag(val)
 
     if (present(shape_total)) then
-        call easyO_real8_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
-        call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        if (present(dimnames)) then
+            call easyO_real8_scalar(fname, trim(vname)//'.real', val_re, shape_total, position, dimnames)
+            call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position, dimnames)
+        else
+            call easyO_real8_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
+            call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        end if
     else
         call easyO_real8_scalar(fname, trim(vname)//'.real', val_re)
         call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im)
@@ -131,15 +144,16 @@ end subroutine easyI_complex8_scalar
 
 
 !#jj2 for nd in [1,2,3,4,5,6,7]:
-Subroutine easyO_complex4_{{ nd }}d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_{{ nd }}d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val{{ get_rank_from_nd(nd) }}
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re{{ get_rank_from_nd(nd) }}, val_im{{ get_rank_from_nd(nd) }}
@@ -162,11 +176,21 @@ Subroutine easyO_complex4_{{ nd }}d(fname, vname, val, shape_total, position, co
     val_im = aimag(val)
 
     if (present(shape_total)) then
-        call easyO_real4_{{ nd }}d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_{{ nd }}d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_{{ nd }}d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_{{ nd }}d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_{{ nd }}d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
 
     deallocate(val_re)
@@ -204,15 +228,16 @@ Subroutine easyI_complex4_{{ nd }}d(fname, vname, val, position, count_lens)
     return
 end subroutine easyI_complex4_{{ nd }}d
 
-Subroutine easyO_complex8_{{ nd }}d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_{{ nd }}d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val{{ get_rank_from_nd(nd) }}
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
 
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re{{ get_rank_from_nd(nd) }}, val_im{{ get_rank_from_nd(nd) }}
@@ -235,11 +260,21 @@ Subroutine easyO_complex8_{{ nd }}d(fname, vname, val, shape_total, position, co
     val_im = aimag(val)
 
     if (present(shape_total)) then
-        call easyO_real8_{{ nd }}d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_{{ nd }}d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_{{ nd }}d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_{{ nd }}d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_{{ nd }}d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
 
     deallocate(val_re)

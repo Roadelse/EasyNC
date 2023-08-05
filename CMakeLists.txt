@@ -23,6 +23,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 
 SET(SRC ${CMAKE_SOURCE_DIR}/src)
+SET(TEST ${CMAKE_SOURCE_DIR}/test)
 
 
 find_package(rdee_fortran)

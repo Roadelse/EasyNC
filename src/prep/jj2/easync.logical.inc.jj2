@@ -1,12 +1,14 @@
 
-    Subroutine easyO_logical_scalar(fname, vname, val, shape_total, position)
+    Subroutine easyO_logical_scalar(fname, vname, val, shape_total, position, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
+
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer :: b, i
 
@@ -25,7 +27,11 @@
         if(val) b = 1
 
         if (present(shape_total)) then
-            call easyO_int4_scalar(fname, vname, b, shape_total, position)
+            if (present(dimnames)) then
+                call easyO_int4_scalar(fname, vname, b, shape_total, position, dimnames)
+            else
+                call easyO_int4_scalar(fname, vname, b, shape_total, position)
+            end if
         else
             call easyO_int4_scalar(fname, vname, b)
         end if
@@ -58,15 +64,17 @@
 
 
     !#jj2 for nd in [1,2,3,4,5,6,7]:
-    Subroutine easyO_logical_{{ nd }}d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_{{ nd }}d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val{{ get_rank_from_nd(nd) }}
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
+
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b{{ get_rank_from_nd(nd) }}
         integer :: i
@@ -87,9 +95,17 @@
         where(val) b = 1
 
         if (present(shape_total)) then
-            call easyO_int4_{{ nd }}d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_{{ nd }}d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_{{ nd }}d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_{{ nd }}d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_{{ nd }}d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_{{ nd }}d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)

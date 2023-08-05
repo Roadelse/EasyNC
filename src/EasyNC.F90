@@ -526,7 +526,7 @@ Contains
 ! easyIO for scalar generic numeric data type :
 !   int4. int8, real4, real8
 ! *********************************************************
-    Subroutine easyO_int4_scalar(fname, vname, data, shape_total, position)
+    Subroutine easyO_int4_scalar(fname, vname, data, shape_total, position, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a scalar int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -536,12 +536,13 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer :: rank_ncv                     ! ranks of output netcdf variable
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
         integer :: i
@@ -565,11 +566,19 @@ Contains
         else !# single element  io
             rank_ncv = size(shape_total)
             allocate(shape_ncv, source=shape_total)
-            ! ========================= handle dimensions, e.g., dimnames & dimdis
-            allocate(dimnames(rank_ncv))
+            ! ========================= handle dimensions, e.g., dimnames_ & dimdis
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
             do i = 1, rank_ncv
-                write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+                if (present(dimnames)) then
+                    call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_scalar, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                    if (len_trim(dimnames(i)) .gt. 0) then
+                        dimnames_(i) = trim(dimnames(i))
+                        cycle
+                    end if
+                end if
+                write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
             end do
         end if
         ! ============================= netcdf core part
@@ -589,11 +598,11 @@ Contains
         if (present(shape_total)) then
             do i = 1, rank_ncv
                 if (isExist) then
-                    if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                     end if
                 else
-                    call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                 end if
             end do
         end if
@@ -620,7 +629,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         if (present(shape_total)) then
             deallocate(dimids)
-            deallocate(dimnames)
+            deallocate(dimnames_)
         end if
         deallocate(shape_ncv)
         return
@@ -663,7 +672,7 @@ Contains
         
         return
     end subroutine easyI_int4_scalar
-    Subroutine easyO_int8_scalar(fname, vname, data, shape_total, position)
+    Subroutine easyO_int8_scalar(fname, vname, data, shape_total, position, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a scalar int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -673,12 +682,13 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer :: rank_ncv                     ! ranks of output netcdf variable
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
         integer :: i
@@ -707,11 +717,19 @@ Contains
         else !# single element  io
             rank_ncv = size(shape_total)
             allocate(shape_ncv, source=shape_total)
-            ! ========================= handle dimensions, e.g., dimnames & dimdis
-            allocate(dimnames(rank_ncv))
+            ! ========================= handle dimensions, e.g., dimnames_ & dimdis
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
             do i = 1, rank_ncv
-                write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+                if (present(dimnames)) then
+                    call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_scalar, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                    if (len_trim(dimnames(i)) .gt. 0) then
+                        dimnames_(i) = trim(dimnames(i))
+                        cycle
+                    end if
+                end if
+                write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
             end do
         end if
         ! ============================= netcdf core part
@@ -731,11 +749,11 @@ Contains
         if (present(shape_total)) then
             do i = 1, rank_ncv
                 if (isExist) then
-                    if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                     end if
                 else
-                    call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                 end if
             end do
         end if
@@ -762,7 +780,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         if (present(shape_total)) then
             deallocate(dimids)
-            deallocate(dimnames)
+            deallocate(dimnames_)
         end if
         deallocate(shape_ncv)
         return
@@ -805,7 +823,7 @@ Contains
         
         return
     end subroutine easyI_int8_scalar
-    Subroutine easyO_real4_scalar(fname, vname, data, shape_total, position)
+    Subroutine easyO_real4_scalar(fname, vname, data, shape_total, position, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a scalar real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -815,12 +833,13 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer :: rank_ncv                     ! ranks of output netcdf variable
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
         integer :: i
@@ -844,11 +863,19 @@ Contains
         else !# single element  io
             rank_ncv = size(shape_total)
             allocate(shape_ncv, source=shape_total)
-            ! ========================= handle dimensions, e.g., dimnames & dimdis
-            allocate(dimnames(rank_ncv))
+            ! ========================= handle dimensions, e.g., dimnames_ & dimdis
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
             do i = 1, rank_ncv
-                write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+                if (present(dimnames)) then
+                    call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_scalar, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                    if (len_trim(dimnames(i)) .gt. 0) then
+                        dimnames_(i) = trim(dimnames(i))
+                        cycle
+                    end if
+                end if
+                write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
             end do
         end if
         ! ============================= netcdf core part
@@ -868,11 +895,11 @@ Contains
         if (present(shape_total)) then
             do i = 1, rank_ncv
                 if (isExist) then
-                    if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                     end if
                 else
-                    call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                 end if
             end do
         end if
@@ -899,7 +926,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         if (present(shape_total)) then
             deallocate(dimids)
-            deallocate(dimnames)
+            deallocate(dimnames_)
         end if
         deallocate(shape_ncv)
         return
@@ -942,7 +969,7 @@ Contains
         
         return
     end subroutine easyI_real4_scalar
-    Subroutine easyO_real8_scalar(fname, vname, data, shape_total, position)
+    Subroutine easyO_real8_scalar(fname, vname, data, shape_total, position, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a scalar real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -952,12 +979,13 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer :: rank_ncv                     ! ranks of output netcdf variable
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
         integer :: i
@@ -981,11 +1009,19 @@ Contains
         else !# single element  io
             rank_ncv = size(shape_total)
             allocate(shape_ncv, source=shape_total)
-            ! ========================= handle dimensions, e.g., dimnames & dimdis
-            allocate(dimnames(rank_ncv))
+            ! ========================= handle dimensions, e.g., dimnames_ & dimdis
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
             do i = 1, rank_ncv
-                write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+                if (present(dimnames)) then
+                    call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_scalar, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                    if (len_trim(dimnames(i)) .gt. 0) then
+                        dimnames_(i) = trim(dimnames(i))
+                        cycle
+                    end if
+                end if
+                write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
             end do
         end if
         ! ============================= netcdf core part
@@ -1005,11 +1041,11 @@ Contains
         if (present(shape_total)) then
             do i = 1, rank_ncv
                 if (isExist) then
-                    if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                     end if
                 else
-                    call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                    call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                 end if
             end do
         end if
@@ -1036,7 +1072,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         if (present(shape_total)) then
             deallocate(dimids)
-            deallocate(dimnames)
+            deallocate(dimnames_)
         end if
         deallocate(shape_ncv)
         return
@@ -1083,7 +1119,7 @@ Contains
 ! easyIO for n-dimensional generic numeric data type :
 !   int4. int8, real4, real8
 ! *********************************************************
-    Subroutine easyO_int4_1d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int4_1d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 1-dimensional int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -1093,9 +1129,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -1103,7 +1140,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -1132,11 +1169,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_1d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -1164,11 +1209,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -1187,7 +1232,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -1236,7 +1281,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int4_1d
-    Subroutine easyO_int8_1d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int8_1d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 1-dimensional int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -1246,9 +1291,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -1256,7 +1302,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -1290,11 +1336,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_1d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -1322,11 +1376,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -1345,7 +1399,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -1394,7 +1448,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int8_1d
-    Subroutine easyO_real4_1d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real4_1d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 1-dimensional real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -1404,9 +1458,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -1414,7 +1469,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -1443,11 +1498,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_1d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -1475,11 +1538,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -1498,7 +1561,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -1547,7 +1610,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real4_1d
-    Subroutine easyO_real8_1d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real8_1d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 1-dimensional real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -1557,9 +1620,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -1567,7 +1631,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -1596,11 +1660,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_1d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -1628,11 +1700,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -1651,7 +1723,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -1700,7 +1772,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real8_1d
-    Subroutine easyO_int4_2d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int4_2d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 2-dimensional int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -1710,9 +1782,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -1720,7 +1793,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -1749,11 +1822,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_2d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -1781,11 +1862,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -1804,7 +1885,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -1853,7 +1934,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int4_2d
-    Subroutine easyO_int8_2d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int8_2d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 2-dimensional int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -1863,9 +1944,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -1873,7 +1955,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -1907,11 +1989,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_2d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -1939,11 +2029,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -1962,7 +2052,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -2011,7 +2101,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int8_2d
-    Subroutine easyO_real4_2d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real4_2d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 2-dimensional real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -2021,9 +2111,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -2031,7 +2122,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -2060,11 +2151,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_2d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -2092,11 +2191,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -2115,7 +2214,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -2164,7 +2263,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real4_2d
-    Subroutine easyO_real8_2d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real8_2d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 2-dimensional real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -2174,9 +2273,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -2184,7 +2284,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -2213,11 +2313,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_2d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -2245,11 +2353,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -2268,7 +2376,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -2317,7 +2425,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real8_2d
-    Subroutine easyO_int4_3d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int4_3d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 3-dimensional int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -2327,9 +2435,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -2337,7 +2446,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -2366,11 +2475,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_3d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -2398,11 +2515,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -2421,7 +2538,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -2470,7 +2587,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int4_3d
-    Subroutine easyO_int8_3d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int8_3d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 3-dimensional int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -2480,9 +2597,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -2490,7 +2608,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -2524,11 +2642,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_3d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -2556,11 +2682,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -2579,7 +2705,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -2628,7 +2754,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int8_3d
-    Subroutine easyO_real4_3d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real4_3d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 3-dimensional real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -2638,9 +2764,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -2648,7 +2775,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -2677,11 +2804,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_3d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -2709,11 +2844,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -2732,7 +2867,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -2781,7 +2916,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real4_3d
-    Subroutine easyO_real8_3d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real8_3d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 3-dimensional real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -2791,9 +2926,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -2801,7 +2937,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -2830,11 +2966,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_3d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -2862,11 +3006,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -2885,7 +3029,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -2934,7 +3078,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real8_3d
-    Subroutine easyO_int4_4d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int4_4d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 4-dimensional int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -2944,9 +3088,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -2954,7 +3099,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -2983,11 +3128,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_4d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -3015,11 +3168,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -3038,7 +3191,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -3087,7 +3240,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int4_4d
-    Subroutine easyO_int8_4d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int8_4d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 4-dimensional int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -3097,9 +3250,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -3107,7 +3261,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -3141,11 +3295,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_4d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -3173,11 +3335,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -3196,7 +3358,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -3245,7 +3407,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int8_4d
-    Subroutine easyO_real4_4d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real4_4d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 4-dimensional real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -3255,9 +3417,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -3265,7 +3428,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -3294,11 +3457,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_4d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -3326,11 +3497,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -3349,7 +3520,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -3398,7 +3569,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real4_4d
-    Subroutine easyO_real8_4d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real8_4d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 4-dimensional real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -3408,9 +3579,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -3418,7 +3590,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -3447,11 +3619,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_4d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -3479,11 +3659,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -3502,7 +3682,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -3551,7 +3731,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real8_4d
-    Subroutine easyO_int4_5d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int4_5d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 5-dimensional int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -3561,9 +3741,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -3571,7 +3752,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -3600,11 +3781,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_5d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -3632,11 +3821,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -3655,7 +3844,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -3704,7 +3893,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int4_5d
-    Subroutine easyO_int8_5d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int8_5d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 5-dimensional int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -3714,9 +3903,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -3724,7 +3914,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -3758,11 +3948,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_5d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -3790,11 +3988,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -3813,7 +4011,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -3862,7 +4060,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int8_5d
-    Subroutine easyO_real4_5d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real4_5d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 5-dimensional real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -3872,9 +4070,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -3882,7 +4081,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -3911,11 +4110,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_5d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -3943,11 +4150,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -3966,7 +4173,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -4015,7 +4222,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real4_5d
-    Subroutine easyO_real8_5d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real8_5d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 5-dimensional real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -4025,9 +4232,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -4035,7 +4243,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -4064,11 +4272,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_5d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -4096,11 +4312,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -4119,7 +4335,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -4168,7 +4384,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real8_5d
-    Subroutine easyO_int4_6d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int4_6d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 6-dimensional int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -4178,9 +4394,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -4188,7 +4405,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -4217,11 +4434,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_6d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -4249,11 +4474,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -4272,7 +4497,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -4321,7 +4546,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int4_6d
-    Subroutine easyO_int8_6d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int8_6d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 6-dimensional int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -4331,9 +4556,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -4341,7 +4567,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -4375,11 +4601,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_6d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -4407,11 +4641,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -4430,7 +4664,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -4479,7 +4713,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int8_6d
-    Subroutine easyO_real4_6d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real4_6d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 6-dimensional real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -4489,9 +4723,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -4499,7 +4734,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -4528,11 +4763,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_6d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -4560,11 +4803,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -4583,7 +4826,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -4632,7 +4875,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real4_6d
-    Subroutine easyO_real8_6d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real8_6d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 6-dimensional real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -4642,9 +4885,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -4652,7 +4896,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -4681,11 +4925,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_6d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -4713,11 +4965,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -4736,7 +4988,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -4785,7 +5037,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real8_6d
-    Subroutine easyO_int4_7d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int4_7d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 7-dimensional int4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -4795,9 +5047,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -4805,7 +5058,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -4834,11 +5087,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_7d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -4866,11 +5127,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -4889,7 +5150,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -4938,7 +5199,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int4_7d
-    Subroutine easyO_int8_7d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_int8_7d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 7-dimensional int8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -4948,9 +5209,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -4958,7 +5220,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -4992,11 +5254,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_7d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -5024,11 +5294,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -5047,7 +5317,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -5096,7 +5366,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_int8_7d
-    Subroutine easyO_real4_7d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real4_7d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 7-dimensional real4 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -5106,9 +5376,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -5116,7 +5387,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -5145,11 +5416,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_7d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -5177,11 +5456,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -5200,7 +5479,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -5249,7 +5528,7 @@ Contains
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
     end subroutine easyI_real4_7d
-    Subroutine easyO_real8_7d(fname, vname, data, shape_total, position, count_lens)
+    Subroutine easyO_real8_7d(fname, vname, data, shape_total, position, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a 7-dimensional real8 variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -5259,9 +5538,10 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_data(:)
         integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -5269,7 +5549,7 @@ Contains
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
         integer, allocatable :: position_(:), count_lens_(:)
         
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer :: ncid, vid
             
@@ -5298,11 +5578,19 @@ Contains
             rank_ncv = rank_data
             allocate(shape_ncv, source=shape_data)
         end if
-        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-        allocate(dimnames(rank_ncv))
+        ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+        allocate(dimnames_(rank_ncv))
         allocate(dimids(rank_ncv))
         do i = 1, rank_ncv
-            write(dimnames(i), '(A, ".d", I1)') trim(vname), i
+            if (present(dimnames)) then
+                call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_7d, &
+     argument<dimnames> should have the same size as rank_ncv') ! 
+                if (len_trim(dimnames(i)) .gt. 0) then
+                    dimnames_(i) = trim(dimnames(i))
+                    cycle
+                end if
+            end if
+            write(dimnames_(i), '(A, ".d", I1)') trim(vname), i
         end do
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         allocate(position_(rank_ncv))
@@ -5330,11 +5618,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-            if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
             else
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable, or error
@@ -5353,7 +5641,7 @@ Contains
         deallocate(shape_data)
         deallocate(shape_ncv)
         deallocate(dimids)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(position_)
         deallocate(count_lens_)
         return
@@ -5406,7 +5694,7 @@ Contains
 ! easyIO for scalar generic numeric data type :
 !   character()
 ! *********************************************************
-    Subroutine easyO_string_scalar(fname, vname, data, shape_total, position)
+    Subroutine easyO_string_scalar(fname, vname, data, shape_total, position, dimnames)
         !!! #####################################
         ! This Subroutine aims to write a scalar string variable into a netcdf dataset
         ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -5416,12 +5704,13 @@ Contains
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),intent(in) :: data
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer :: rank_ncv                     ! ranks of output netcdf variable
         integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
-        character(80), allocatable :: dimnames(:)
+        character(80), allocatable :: dimnames_(:)
         integer, allocatable :: dimids(:)
         integer, allocatable :: position_(:)  !  , count_lens_(:)  ! should be unnecessary
         integer :: ncid, vid
@@ -5442,21 +5731,29 @@ Contains
             rank_ncv = 1
             allocate(shape_ncv(1))
             shape_ncv = len(data)
-            allocate(dimnames(rank_ncv))
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
-            dimnames(1) = toString(vname, '.L')
+            dimnames_(1) = toString(vname, '.L')
         else !# single element  io
             rank_ncv = size(shape_total) + 1  !# add one dim for character length
             shape_ncv = union_arr1d([len(data)], shape_total)
             ! allocate(shape_ncv(rank_ncv))
             ! shape_ncv(1) = len(data)
             ! shape_ncv(2:) = shape_total
-            ! ========================= handle dimensions, e.g., dimnames & dimdis
-            allocate(dimnames(rank_ncv))
+            ! ========================= handle dimensions, e.g., dimnames_ & dimdis
+            allocate(dimnames_(rank_ncv))
             allocate(dimids(rank_ncv))
-            dimnames(1) = toString(vname, '.L')
+            dimnames_(1) = toString(vname, '.L')
             do i = 2, rank_ncv
-                write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+                if (present(dimnames)) then
+                    call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_scalar, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+                    if (len_trim(dimnames(i+1)) .gt. 0) then
+                        dimnames_(i) = trim(dimnames(i+1))
+                        cycle
+                    end if
+                end if
+                write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
             end do
             position_ = union_arr1d([1], position)  !# imply allocate
         end if
@@ -5476,11 +5773,11 @@ Contains
         ! ~~~~~~~~~~~~~~ get or define dimension
         do i = 1, rank_ncv
             if (isExist) then
-                if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-                    call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+                    call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
                 end if
             else
-                call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+                call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
             end if
         end do
         ! ~~~~~~~~~~~~~~ define variable
@@ -5502,7 +5799,7 @@ Contains
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         deallocate(shape_ncv)
-        deallocate(dimnames)
+        deallocate(dimnames_)
         deallocate(dimids)
         
         return
@@ -5546,7 +5843,7 @@ Subroutine easyI_string_scalar(fname, vname, data, position)
     
     return
 end subroutine easyI_string_scalar
-Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a 1-dimensional  variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -5556,9 +5853,10 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data(:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -5566,7 +5864,7 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
     integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
     integer :: ncid, vid
         
@@ -5596,12 +5894,20 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
         ! allocate(shape_ncv, source=shape_data)
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_1d, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(shape_total)) then
@@ -5628,11 +5934,11 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -5651,7 +5957,7 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
     return
@@ -5706,7 +6012,7 @@ Subroutine easyI_string_1d(fname, vname, data, position, count_lens)
     call check_enc( nf90_close(ncid) , "nf90_close")
     return
 end subroutine easyI_string_1d
-Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a 2-dimensional  variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -5716,9 +6022,10 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data(:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -5726,7 +6033,7 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
     integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
     integer :: ncid, vid
         
@@ -5756,12 +6063,20 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
         ! allocate(shape_ncv, source=shape_data)
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_2d, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(shape_total)) then
@@ -5788,11 +6103,11 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -5811,7 +6126,7 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
     return
@@ -5866,7 +6181,7 @@ Subroutine easyI_string_2d(fname, vname, data, position, count_lens)
     call check_enc( nf90_close(ncid) , "nf90_close")
     return
 end subroutine easyI_string_2d
-Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a 3-dimensional  variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -5876,9 +6191,10 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data(:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -5886,7 +6202,7 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
     integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
     integer :: ncid, vid
         
@@ -5916,12 +6232,20 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
         ! allocate(shape_ncv, source=shape_data)
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_3d, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(shape_total)) then
@@ -5948,11 +6272,11 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -5971,7 +6295,7 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
     return
@@ -6026,7 +6350,7 @@ Subroutine easyI_string_3d(fname, vname, data, position, count_lens)
     call check_enc( nf90_close(ncid) , "nf90_close")
     return
 end subroutine easyI_string_3d
-Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a 4-dimensional  variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -6036,9 +6360,10 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data(:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -6046,7 +6371,7 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
     integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
     integer :: ncid, vid
         
@@ -6076,12 +6401,20 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
         ! allocate(shape_ncv, source=shape_data)
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_4d, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(shape_total)) then
@@ -6108,11 +6441,11 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -6131,7 +6464,7 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
     return
@@ -6186,7 +6519,7 @@ Subroutine easyI_string_4d(fname, vname, data, position, count_lens)
     call check_enc( nf90_close(ncid) , "nf90_close")
     return
 end subroutine easyI_string_4d
-Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a 5-dimensional  variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -6196,9 +6529,10 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -6206,7 +6540,7 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
     integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
     integer :: ncid, vid
         
@@ -6236,12 +6570,20 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
         ! allocate(shape_ncv, source=shape_data)
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_5d, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(shape_total)) then
@@ -6268,11 +6610,11 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -6291,7 +6633,7 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
     return
@@ -6346,7 +6688,7 @@ Subroutine easyI_string_5d(fname, vname, data, position, count_lens)
     call check_enc( nf90_close(ncid) , "nf90_close")
     return
 end subroutine easyI_string_5d
-Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a 6-dimensional  variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -6356,9 +6698,10 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -6366,7 +6709,7 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
     integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
     integer :: ncid, vid
         
@@ -6396,12 +6739,20 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
         ! allocate(shape_ncv, source=shape_data)
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_6d, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(shape_total)) then
@@ -6428,11 +6779,11 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -6451,7 +6802,7 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
     return
@@ -6506,7 +6857,7 @@ Subroutine easyI_string_6d(fname, vname, data, position, count_lens)
     call check_enc( nf90_close(ncid) , "nf90_close")
     return
 end subroutine easyI_string_6d
-Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens)
+Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens, dimnames)
     !!! #####################################
     ! This Subroutine aims to write a 7-dimensional  variable into a netcdf dataset
     ! Also, the scalar variable can also be put in an array record in netcdf, 
@@ -6516,9 +6867,10 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     character(*),intent(in) :: data(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     integer, allocatable :: shape_data(:)
     integer :: rank_data                    ! ranks of data, e.g., size of shape_data
@@ -6526,7 +6878,7 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
     integer, allocatable :: shape_ncv(:)    ! shape if output netcdf variable
     integer, allocatable :: position_(:), count_lens_(:)
     
-    character(80), allocatable :: dimnames(:)
+    character(80), allocatable :: dimnames_(:)
     integer, allocatable :: dimids(:)
     integer :: ncid, vid
         
@@ -6556,12 +6908,20 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
         ! allocate(shape_ncv, source=shape_data)
         shape_ncv = union_arr1d([len(data)], shape_data)
     end if
-    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames & dimids
-    allocate(dimnames(rank_ncv))
+    ! ~~~~~~~~~~~~~~ handle dimensions, e.g., dimnames_ & dimids
+    allocate(dimnames_(rank_ncv))
     allocate(dimids(rank_ncv))
-    dimnames(1) = toString(vname, '.L')
+    dimnames_(1) = toString(vname, '.L')
     do i = 2, rank_ncv
-        write(dimnames(i), '(A, ".d", I1)') trim(vname), i-1
+        if (present(dimnames)) then
+            call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_7d, &
+     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+            if (len_trim(dimnames(i+1)) .gt. 0) then
+                dimnames_(i) = trim(dimnames(i+1))
+                cycle
+            end if
+        end if
+        write(dimnames_(i), '(A, ".d", I1)') trim(vname), i-1
     end do
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(shape_total)) then
@@ -6588,11 +6948,11 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
     ! ~~~~~~~~~~~~~~ get or define dimension
     do i = 1, rank_ncv
         if (isExist) then
-        if (nf90_inq_dimid(ncid, dimnames(i), dimids(i)) .ne. nf90_noerr) then
-            call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        if (nf90_inq_dimid(ncid, dimnames_(i), dimids(i)) .ne. nf90_noerr) then
+            call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
         else
-        call check_enc(nf90_def_dim(ncid, dimnames(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
+        call check_enc(nf90_def_dim(ncid, dimnames_(i), shape_ncv(i), dimids(i)), "nf90_def_dim")
         end if
     end do
     ! ~~~~~~~~~~~~~~ define variable, or error
@@ -6611,7 +6971,7 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
     deallocate(shape_data)
     deallocate(shape_ncv)
     deallocate(dimids)
-    deallocate(dimnames)
+    deallocate(dimnames_)
     deallocate(count_lens_)
     deallocate(position_)
     return
@@ -6666,14 +7026,15 @@ Subroutine easyI_string_7d(fname, vname, data, position, count_lens)
     call check_enc( nf90_close(ncid) , "nf90_close")
     return
 end subroutine easyI_string_7d
-    Subroutine easyO_logical_scalar(fname, vname, val, shape_total, position)
+    Subroutine easyO_logical_scalar(fname, vname, val, shape_total, position, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer :: b, i
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -6689,7 +7050,11 @@ end subroutine easyI_string_7d
         b = 0
         if(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_scalar(fname, vname, b, shape_total, position)
+            if (present(dimnames)) then
+                call easyO_int4_scalar(fname, vname, b, shape_total, position, dimnames)
+            else
+                call easyO_int4_scalar(fname, vname, b, shape_total, position)
+            end if
         else
             call easyO_int4_scalar(fname, vname, b)
         end if
@@ -6714,15 +7079,16 @@ end subroutine easyI_string_7d
         if(b .eq. 1) val = .true.
         return
     end subroutine easyI_logical_scalar
-    Subroutine easyO_logical_1d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_1d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:)
         integer :: i
@@ -6740,9 +7106,17 @@ end subroutine easyI_string_7d
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_1d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_1d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_1d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_1d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_1d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_1d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)
@@ -6770,15 +7144,16 @@ end subroutine easyI_string_7d
         deallocate(b)
         return
     end subroutine easyI_logical_1d
-    Subroutine easyO_logical_2d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_2d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:)
         integer :: i
@@ -6796,9 +7171,17 @@ end subroutine easyI_string_7d
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_2d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_2d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_2d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_2d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_2d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_2d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)
@@ -6826,15 +7209,16 @@ end subroutine easyI_string_7d
         deallocate(b)
         return
     end subroutine easyI_logical_2d
-    Subroutine easyO_logical_3d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_3d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:,:)
         integer :: i
@@ -6852,9 +7236,17 @@ end subroutine easyI_string_7d
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_3d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_3d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_3d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_3d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_3d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_3d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)
@@ -6882,15 +7274,16 @@ end subroutine easyI_string_7d
         deallocate(b)
         return
     end subroutine easyI_logical_3d
-    Subroutine easyO_logical_4d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_4d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:,:,:)
         integer :: i
@@ -6908,9 +7301,17 @@ end subroutine easyI_string_7d
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_4d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_4d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_4d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_4d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_4d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_4d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)
@@ -6938,15 +7339,16 @@ end subroutine easyI_string_7d
         deallocate(b)
         return
     end subroutine easyI_logical_4d
-    Subroutine easyO_logical_5d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_5d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:,:,:,:)
         integer :: i
@@ -6964,9 +7366,17 @@ end subroutine easyI_string_7d
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_5d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_5d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_5d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_5d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_5d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_5d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)
@@ -6994,15 +7404,16 @@ end subroutine easyI_string_7d
         deallocate(b)
         return
     end subroutine easyI_logical_5d
-    Subroutine easyO_logical_6d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_6d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:,:,:,:,:)
         integer :: i
@@ -7021,9 +7432,17 @@ end subroutine easyI_string_7d
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_6d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_6d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_6d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_6d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_6d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_6d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)
@@ -7052,15 +7471,16 @@ end subroutine easyI_string_7d
         deallocate(b)
         return
     end subroutine easyI_logical_6d
-    Subroutine easyO_logical_7d(fname, vname, val, shape_total, position, count_lens)
+    Subroutine easyO_logical_7d(fname, vname, val, shape_total, position, count_lens, dimnames)
         ! almost Duplicated with easyO_int
         implicit none
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,intent(in) :: val(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: position(:)            ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:,:,:,:,:,:)
         integer :: i
@@ -7079,9 +7499,17 @@ end subroutine easyI_string_7d
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
-            call easyO_int4_7d(fname, vname, b, shape_total, position, count_lens)
+            if (present(dimnames)) then
+                call easyO_int4_7d(fname, vname, b, shape_total, position, count_lens, dimnames)
+            else
+                call easyO_int4_7d(fname, vname, b, shape_total, position, count_lens)
+            end if
         else
-            call easyO_int4_7d(fname, vname, b)
+            if (present(dimnames)) then
+                call easyO_int4_7d(fname, vname, b, dimnames=dimnames)
+            else
+                call easyO_int4_7d(fname, vname, b)
+            end if
         end if
         
         deallocate(b)
@@ -7110,14 +7538,15 @@ end subroutine easyI_string_7d
         deallocate(b)
         return
     end subroutine easyI_logical_7d
-Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position)
+Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     Complex(kind=4),intent(in) :: val
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) :: val_re, val_im
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7133,8 +7562,13 @@ Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position)
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-      call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
-      call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        if (present(dimnames)) then
+            call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, shape_total, position, dimnames)
+            call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position, dimnames)
+        else
+            call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
+            call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        end if
     else
       call easyO_real4_scalar(fname, trim(vname)//'.real', val_re)
       call easyO_real4_scalar(fname, trim(vname)//'.imag', val_im)
@@ -7163,7 +7597,7 @@ Subroutine easyI_complex4_scalar(fname, vname, val, position)
     val = cmplx(val_re, val_im)
     return
 end subroutine easyI_complex4_scalar
-Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
+Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
@@ -7171,6 +7605,7 @@ Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
     character(*),intent(in) :: fname, vname
     integer, intent(in), optional :: shape_total(:)      ! total shape
     integer, intent(in), optional :: position(:)         ! `start` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) :: val_re, val_im
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7186,8 +7621,13 @@ Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position)
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
-        call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        if (present(dimnames)) then
+            call easyO_real8_scalar(fname, trim(vname)//'.real', val_re, shape_total, position, dimnames)
+            call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position, dimnames)
+        else
+            call easyO_real8_scalar(fname, trim(vname)//'.real', val_re, shape_total, position)
+            call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im, shape_total, position)
+        end if
     else
         call easyO_real8_scalar(fname, trim(vname)//'.real', val_re)
         call easyO_real8_scalar(fname, trim(vname)//'.imag', val_im)
@@ -7216,15 +7656,16 @@ Subroutine easyI_complex8_scalar(fname, vname, val, position)
     val = cmplx(val_re, val_im, 8)
     return
 end subroutine easyI_complex8_scalar
-Subroutine easyO_complex4_1d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_1d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val(:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:), val_im(:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7242,11 +7683,21 @@ Subroutine easyO_complex4_1d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real4_1d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_1d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_1d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_1d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_1d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_1d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_1d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_1d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_1d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_1d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_1d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_1d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7277,15 +7728,16 @@ Subroutine easyI_complex4_1d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex4_1d
-Subroutine easyO_complex8_1d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_1d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val(:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:), val_im(:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7303,11 +7755,21 @@ Subroutine easyO_complex8_1d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_1d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_1d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_1d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_1d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_1d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_1d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_1d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_1d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_1d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_1d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_1d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_1d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7338,15 +7800,16 @@ Subroutine easyI_complex8_1d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex8_1d
-Subroutine easyO_complex4_2d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_2d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val(:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:), val_im(:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7364,11 +7827,21 @@ Subroutine easyO_complex4_2d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real4_2d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_2d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_2d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_2d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_2d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_2d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_2d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_2d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_2d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_2d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_2d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_2d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7399,15 +7872,16 @@ Subroutine easyI_complex4_2d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex4_2d
-Subroutine easyO_complex8_2d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_2d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val(:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:), val_im(:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7425,11 +7899,21 @@ Subroutine easyO_complex8_2d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_2d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_2d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_2d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_2d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_2d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_2d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_2d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_2d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_2d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_2d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_2d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_2d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7460,15 +7944,16 @@ Subroutine easyI_complex8_2d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex8_2d
-Subroutine easyO_complex4_3d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_3d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val(:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:), val_im(:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7486,11 +7971,21 @@ Subroutine easyO_complex4_3d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real4_3d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_3d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_3d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_3d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_3d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_3d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_3d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_3d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_3d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_3d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_3d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_3d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7521,15 +8016,16 @@ Subroutine easyI_complex4_3d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex4_3d
-Subroutine easyO_complex8_3d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_3d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val(:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:), val_im(:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7547,11 +8043,21 @@ Subroutine easyO_complex8_3d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_3d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_3d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_3d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_3d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_3d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_3d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_3d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_3d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_3d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_3d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_3d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_3d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7582,15 +8088,16 @@ Subroutine easyI_complex8_3d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex8_3d
-Subroutine easyO_complex4_4d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_4d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val(:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:), val_im(:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7608,11 +8115,21 @@ Subroutine easyO_complex4_4d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real4_4d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_4d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_4d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_4d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_4d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_4d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_4d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_4d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_4d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_4d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_4d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_4d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7643,15 +8160,16 @@ Subroutine easyI_complex4_4d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex4_4d
-Subroutine easyO_complex8_4d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_4d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val(:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:), val_im(:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7669,11 +8187,21 @@ Subroutine easyO_complex8_4d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_4d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_4d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_4d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_4d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_4d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_4d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_4d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_4d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_4d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_4d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_4d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_4d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7704,15 +8232,16 @@ Subroutine easyI_complex8_4d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex8_4d
-Subroutine easyO_complex4_5d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_5d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:), val_im(:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7730,11 +8259,21 @@ Subroutine easyO_complex4_5d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real4_5d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_5d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_5d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_5d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_5d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_5d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_5d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_5d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_5d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_5d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_5d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_5d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7765,15 +8304,16 @@ Subroutine easyI_complex4_5d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex4_5d
-Subroutine easyO_complex8_5d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_5d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val(:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:), val_im(:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7791,11 +8331,21 @@ Subroutine easyO_complex8_5d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_5d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_5d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_5d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_5d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_5d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_5d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_5d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_5d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_5d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_5d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_5d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_5d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7826,15 +8376,16 @@ Subroutine easyI_complex8_5d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex8_5d
-Subroutine easyO_complex4_6d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_6d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7854,11 +8405,21 @@ Subroutine easyO_complex4_6d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real4_6d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_6d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_6d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_6d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_6d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_6d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_6d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_6d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_6d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_6d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_6d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_6d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7891,15 +8452,16 @@ Subroutine easyI_complex4_6d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex4_6d
-Subroutine easyO_complex8_6d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_6d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val(:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7919,11 +8481,21 @@ Subroutine easyO_complex8_6d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_6d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_6d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_6d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_6d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_6d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_6d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_6d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_6d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_6d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_6d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_6d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_6d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -7956,15 +8528,16 @@ Subroutine easyI_complex8_6d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex8_6d
-Subroutine easyO_complex4_7d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex4_7d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=4),intent(in) :: val(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -7984,11 +8557,21 @@ Subroutine easyO_complex4_7d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real4_7d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real4_7d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real4_7d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real4_7d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real4_7d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real4_7d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real4_7d(fname, trim(vname)//'.real', val_re)
-        call easyO_real4_7d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real4_7d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real4_7d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real4_7d(fname, trim(vname)//'.real', val_re)
+            call easyO_real4_7d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -8021,15 +8604,16 @@ Subroutine easyI_complex4_7d(fname, vname, val, position, count_lens)
     deallocate(val_im)
     return
 end subroutine easyI_complex4_7d
-Subroutine easyO_complex8_7d(fname, vname, val, shape_total, position, count_lens)
+Subroutine easyO_complex8_7d(fname, vname, val, shape_total, position, count_lens, dimnames)
     ! almost Duplicated with easyO_int
     implicit none
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
     complex(kind=8),intent(in) :: val(:,:,:,:,:,:,:)
     character(*),intent(in) :: fname, vname
-    integer, intent(in), optional :: shape_total(:)      ! total shape
-    integer, intent(in), optional :: position(:)         ! `start` in netcdf
-    integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
+    integer, intent(in), optional :: shape_total(:)         ! total shape
+    integer, intent(in), optional :: position(:)            ! `start` in netcdf
+    integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+    character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
@@ -8049,11 +8633,21 @@ Subroutine easyO_complex8_7d(fname, vname, val, shape_total, position, count_len
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
-        call easyO_real8_7d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
-        call easyO_real8_7d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        if (present(dimnames)) then
+            call easyO_real8_7d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens, dimnames)
+            call easyO_real8_7d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens, dimnames)
+        else
+            call easyO_real8_7d(fname, trim(vname)//'.real', val_re, shape_total, position, count_lens)
+            call easyO_real8_7d(fname, trim(vname)//'.imag', val_im, shape_total, position, count_lens)
+        end if       
     else
-        call easyO_real8_7d(fname, trim(vname)//'.real', val_re)
-        call easyO_real8_7d(fname, trim(vname)//'.imag', val_im)
+        if (present(dimnames)) then
+            call easyO_real8_7d(fname, trim(vname)//'.real', val_re, dimnames=dimnames)
+            call easyO_real8_7d(fname, trim(vname)//'.imag', val_im, dimnames=dimnames)
+        else
+            call easyO_real8_7d(fname, trim(vname)//'.real', val_re)
+            call easyO_real8_7d(fname, trim(vname)//'.imag', val_im)
+        end if
     end if
     deallocate(val_re)
     deallocate(val_im)
@@ -8090,7 +8684,7 @@ end subroutine easyI_complex8_7d
 ! easyIO for n-dimensional generic numeric data type :
 !   int4. int8, real4, real8
 ! *********************************************************
-    Subroutine easyOA_int4_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8098,9 +8692,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8116,13 +8711,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int4_1d
-    Subroutine easyIA_int4_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int4_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8130,8 +8733,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8141,9 +8744,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8159,13 +8762,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_1d(fname, vname, data)
         end if
     End Subroutine easyIA_int4_1d
-    Subroutine easyOA_int8_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8173,9 +8776,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8191,13 +8795,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int8_1d
-    Subroutine easyIA_int8_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int8_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8205,8 +8817,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8216,9 +8828,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8234,13 +8846,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_1d(fname, vname, data)
         end if
     End Subroutine easyIA_int8_1d
-    Subroutine easyOA_real4_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8248,9 +8860,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8266,13 +8879,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real4_1d
-    Subroutine easyIA_real4_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real4_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8280,8 +8901,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8291,9 +8912,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8309,13 +8930,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_1d(fname, vname, data)
         end if
     End Subroutine easyIA_real4_1d
-    Subroutine easyOA_real8_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8323,9 +8944,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8341,13 +8963,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real8_1d
-    Subroutine easyIA_real8_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real8_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8355,8 +8985,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8366,9 +8996,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8384,13 +9014,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_1d(fname, vname, data)
         end if
     End Subroutine easyIA_real8_1d
-    Subroutine easyOA_string_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8398,9 +9028,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8416,13 +9047,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_string_1d
-    Subroutine easyIA_string_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_string_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8430,8 +9069,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8441,9 +9080,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8459,13 +9098,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_1d(fname, vname, data)
         end if
     End Subroutine easyIA_string_1d
-    Subroutine easyOA_logical_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8473,9 +9112,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8491,13 +9131,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_logical_1d
-    Subroutine easyIA_logical_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_logical_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8505,8 +9153,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8516,9 +9164,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8534,13 +9182,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_1d(fname, vname, data)
         end if
     End Subroutine easyIA_logical_1d
-    Subroutine easyOA_complex4_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8548,9 +9196,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8566,13 +9215,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex4_1d
-    Subroutine easyIA_complex4_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex4_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8580,8 +9237,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8591,9 +9248,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8609,13 +9266,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_1d(fname, vname, data)
         end if
     End Subroutine easyIA_complex4_1d
-    Subroutine easyOA_complex8_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8623,9 +9280,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8641,13 +9299,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex8_1d
-    Subroutine easyIA_complex8_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex8_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8655,8 +9321,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8666,9 +9332,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -8684,13 +9350,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_1d(fname, vname, data)
         end if
     End Subroutine easyIA_complex8_1d
-    Subroutine easyOA_int4_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8698,9 +9364,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8716,13 +9383,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int4_2d
-    Subroutine easyIA_int4_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int4_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8730,8 +9405,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8741,9 +9416,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -8759,13 +9434,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_2d(fname, vname, data)
         end if
     End Subroutine easyIA_int4_2d
-    Subroutine easyOA_int8_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8773,9 +9448,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8791,13 +9467,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int8_2d
-    Subroutine easyIA_int8_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int8_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8805,8 +9489,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8816,9 +9500,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -8834,13 +9518,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_2d(fname, vname, data)
         end if
     End Subroutine easyIA_int8_2d
-    Subroutine easyOA_real4_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8848,9 +9532,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8866,13 +9551,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real4_2d
-    Subroutine easyIA_real4_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real4_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8880,8 +9573,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8891,9 +9584,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -8909,13 +9602,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_2d(fname, vname, data)
         end if
     End Subroutine easyIA_real4_2d
-    Subroutine easyOA_real8_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8923,9 +9616,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -8941,13 +9635,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real8_2d
-    Subroutine easyIA_real8_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real8_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8955,8 +9657,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -8966,9 +9668,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -8984,13 +9686,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_2d(fname, vname, data)
         end if
     End Subroutine easyIA_real8_2d
-    Subroutine easyOA_string_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -8998,9 +9700,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9016,13 +9719,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_string_2d
-    Subroutine easyIA_string_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_string_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9030,8 +9741,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9041,9 +9752,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -9059,13 +9770,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_2d(fname, vname, data)
         end if
     End Subroutine easyIA_string_2d
-    Subroutine easyOA_logical_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9073,9 +9784,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9091,13 +9803,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_logical_2d
-    Subroutine easyIA_logical_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_logical_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9105,8 +9825,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9116,9 +9836,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -9134,13 +9854,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_2d(fname, vname, data)
         end if
     End Subroutine easyIA_logical_2d
-    Subroutine easyOA_complex4_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9148,9 +9868,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9166,13 +9887,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex4_2d
-    Subroutine easyIA_complex4_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex4_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9180,8 +9909,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9191,9 +9920,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -9209,13 +9938,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_2d(fname, vname, data)
         end if
     End Subroutine easyIA_complex4_2d
-    Subroutine easyOA_complex8_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9223,9 +9952,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9241,13 +9971,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex8_2d
-    Subroutine easyIA_complex8_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex8_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9255,8 +9993,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9266,9 +10004,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -9284,13 +10022,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_2d(fname, vname, data)
         end if
     End Subroutine easyIA_complex8_2d
-    Subroutine easyOA_int4_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9298,9 +10036,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9316,13 +10055,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int4_3d
-    Subroutine easyIA_int4_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int4_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9330,8 +10077,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9341,9 +10088,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9360,13 +10107,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_3d(fname, vname, data)
         end if
     End Subroutine easyIA_int4_3d
-    Subroutine easyOA_int8_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9374,9 +10121,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9392,13 +10140,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int8_3d
-    Subroutine easyIA_int8_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int8_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9406,8 +10162,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9417,9 +10173,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9436,13 +10192,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_3d(fname, vname, data)
         end if
     End Subroutine easyIA_int8_3d
-    Subroutine easyOA_real4_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9450,9 +10206,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9468,13 +10225,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real4_3d
-    Subroutine easyIA_real4_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real4_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9482,8 +10247,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9493,9 +10258,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9512,13 +10277,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_3d(fname, vname, data)
         end if
     End Subroutine easyIA_real4_3d
-    Subroutine easyOA_real8_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9526,9 +10291,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9544,13 +10310,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real8_3d
-    Subroutine easyIA_real8_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real8_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9558,8 +10332,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9569,9 +10343,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9588,13 +10362,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_3d(fname, vname, data)
         end if
     End Subroutine easyIA_real8_3d
-    Subroutine easyOA_string_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9602,9 +10376,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9620,13 +10395,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_string_3d
-    Subroutine easyIA_string_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_string_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9634,8 +10417,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9645,9 +10428,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9664,13 +10447,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_3d(fname, vname, data)
         end if
     End Subroutine easyIA_string_3d
-    Subroutine easyOA_logical_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9678,9 +10461,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9696,13 +10480,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_logical_3d
-    Subroutine easyIA_logical_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_logical_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9710,8 +10502,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9721,9 +10513,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9740,13 +10532,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_3d(fname, vname, data)
         end if
     End Subroutine easyIA_logical_3d
-    Subroutine easyOA_complex4_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9754,9 +10546,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9772,13 +10565,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex4_3d
-    Subroutine easyIA_complex4_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex4_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9786,8 +10587,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9797,9 +10598,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9816,13 +10617,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_3d(fname, vname, data)
         end if
     End Subroutine easyIA_complex4_3d
-    Subroutine easyOA_complex8_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9830,9 +10631,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9848,13 +10650,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex8_3d
-    Subroutine easyIA_complex8_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex8_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9862,8 +10672,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9873,9 +10683,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -9892,13 +10702,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_3d(fname, vname, data)
         end if
     End Subroutine easyIA_complex8_3d
-    Subroutine easyOA_int4_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9906,9 +10716,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -9924,13 +10735,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int4_4d
-    Subroutine easyIA_int4_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int4_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9938,8 +10757,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -9949,9 +10768,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -9968,13 +10787,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_4d(fname, vname, data)
         end if
     End Subroutine easyIA_int4_4d
-    Subroutine easyOA_int8_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -9982,9 +10801,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10000,13 +10820,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int8_4d
-    Subroutine easyIA_int8_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int8_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10014,8 +10842,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10025,9 +10853,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -10044,13 +10872,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_4d(fname, vname, data)
         end if
     End Subroutine easyIA_int8_4d
-    Subroutine easyOA_real4_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10058,9 +10886,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10076,13 +10905,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real4_4d
-    Subroutine easyIA_real4_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real4_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10090,8 +10927,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10101,9 +10938,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -10120,13 +10957,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_4d(fname, vname, data)
         end if
     End Subroutine easyIA_real4_4d
-    Subroutine easyOA_real8_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10134,9 +10971,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10152,13 +10990,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real8_4d
-    Subroutine easyIA_real8_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real8_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10166,8 +11012,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10177,9 +11023,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -10196,13 +11042,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_4d(fname, vname, data)
         end if
     End Subroutine easyIA_real8_4d
-    Subroutine easyOA_string_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10210,9 +11056,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10228,13 +11075,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_string_4d
-    Subroutine easyIA_string_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_string_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10242,8 +11097,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10253,9 +11108,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -10272,13 +11127,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_4d(fname, vname, data)
         end if
     End Subroutine easyIA_string_4d
-    Subroutine easyOA_logical_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10286,9 +11141,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10304,13 +11160,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_logical_4d
-    Subroutine easyIA_logical_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_logical_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10318,8 +11182,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10329,9 +11193,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -10348,13 +11212,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_4d(fname, vname, data)
         end if
     End Subroutine easyIA_logical_4d
-    Subroutine easyOA_complex4_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10362,9 +11226,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10380,13 +11245,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex4_4d
-    Subroutine easyIA_complex4_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex4_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10394,8 +11267,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10405,9 +11278,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -10424,13 +11297,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_4d(fname, vname, data)
         end if
     End Subroutine easyIA_complex4_4d
-    Subroutine easyOA_complex8_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10438,9 +11311,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10456,13 +11330,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex8_4d
-    Subroutine easyIA_complex8_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex8_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10470,8 +11352,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10481,9 +11363,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -10500,13 +11382,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_4d(fname, vname, data)
         end if
     End Subroutine easyIA_complex8_4d
-    Subroutine easyOA_int4_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10514,9 +11396,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10532,13 +11415,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int4_5d
-    Subroutine easyIA_int4_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int4_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10546,8 +11437,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10557,9 +11448,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -10576,13 +11467,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_5d(fname, vname, data)
         end if
     End Subroutine easyIA_int4_5d
-    Subroutine easyOA_int8_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10590,9 +11481,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10608,13 +11500,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int8_5d
-    Subroutine easyIA_int8_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int8_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10622,8 +11522,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10633,9 +11533,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -10652,13 +11552,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_5d(fname, vname, data)
         end if
     End Subroutine easyIA_int8_5d
-    Subroutine easyOA_real4_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10666,9 +11566,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10684,13 +11585,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real4_5d
-    Subroutine easyIA_real4_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real4_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10698,8 +11607,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10709,9 +11618,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -10728,13 +11637,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_5d(fname, vname, data)
         end if
     End Subroutine easyIA_real4_5d
-    Subroutine easyOA_real8_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10742,9 +11651,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10760,13 +11670,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real8_5d
-    Subroutine easyIA_real8_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real8_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10774,8 +11692,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10785,9 +11703,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -10804,13 +11722,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_5d(fname, vname, data)
         end if
     End Subroutine easyIA_real8_5d
-    Subroutine easyOA_string_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10818,9 +11736,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10836,13 +11755,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_string_5d
-    Subroutine easyIA_string_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_string_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10850,8 +11777,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10861,9 +11788,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -10880,13 +11807,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_5d(fname, vname, data)
         end if
     End Subroutine easyIA_string_5d
-    Subroutine easyOA_logical_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10894,9 +11821,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10912,13 +11840,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_logical_5d
-    Subroutine easyIA_logical_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_logical_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10926,8 +11862,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -10937,9 +11873,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -10956,13 +11892,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_5d(fname, vname, data)
         end if
     End Subroutine easyIA_logical_5d
-    Subroutine easyOA_complex4_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -10970,9 +11906,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -10988,13 +11925,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex4_5d
-    Subroutine easyIA_complex4_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex4_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11002,8 +11947,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11013,9 +11958,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -11032,13 +11977,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_5d(fname, vname, data)
         end if
     End Subroutine easyIA_complex4_5d
-    Subroutine easyOA_complex8_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11046,9 +11991,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11064,13 +12010,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex8_5d
-    Subroutine easyIA_complex8_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex8_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11078,8 +12032,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11089,9 +12043,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -11108,13 +12062,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_5d(fname, vname, data)
         end if
     End Subroutine easyIA_complex8_5d
-    Subroutine easyOA_int4_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11122,9 +12076,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11140,13 +12095,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int4_6d
-    Subroutine easyIA_int4_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int4_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11154,8 +12117,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11165,9 +12128,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11184,13 +12147,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_6d(fname, vname, data)
         end if
     End Subroutine easyIA_int4_6d
-    Subroutine easyOA_int8_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11198,9 +12161,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11216,13 +12180,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int8_6d
-    Subroutine easyIA_int8_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int8_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11230,8 +12202,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11241,9 +12213,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11260,13 +12232,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_6d(fname, vname, data)
         end if
     End Subroutine easyIA_int8_6d
-    Subroutine easyOA_real4_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11274,9 +12246,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11292,13 +12265,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real4_6d
-    Subroutine easyIA_real4_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real4_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11306,8 +12287,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11317,9 +12298,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11336,13 +12317,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_6d(fname, vname, data)
         end if
     End Subroutine easyIA_real4_6d
-    Subroutine easyOA_real8_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11350,9 +12331,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11368,13 +12350,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real8_6d
-    Subroutine easyIA_real8_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real8_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11382,8 +12372,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11393,9 +12383,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11412,13 +12402,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_6d(fname, vname, data)
         end if
     End Subroutine easyIA_real8_6d
-    Subroutine easyOA_string_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11426,9 +12416,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11444,13 +12435,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_string_6d
-    Subroutine easyIA_string_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_string_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11458,8 +12457,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11469,9 +12468,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11488,13 +12487,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_6d(fname, vname, data)
         end if
     End Subroutine easyIA_string_6d
-    Subroutine easyOA_logical_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11502,9 +12501,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11520,13 +12520,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_logical_6d
-    Subroutine easyIA_logical_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_logical_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11534,8 +12542,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11545,9 +12553,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11564,13 +12572,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_6d(fname, vname, data)
         end if
     End Subroutine easyIA_logical_6d
-    Subroutine easyOA_complex4_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11578,9 +12586,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11596,13 +12605,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex4_6d
-    Subroutine easyIA_complex4_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex4_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11610,8 +12627,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11621,9 +12638,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11640,13 +12657,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_6d(fname, vname, data)
         end if
     End Subroutine easyIA_complex4_6d
-    Subroutine easyOA_complex8_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11654,9 +12671,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11672,13 +12690,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex8_6d
-    Subroutine easyIA_complex8_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex8_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11686,8 +12712,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11697,9 +12723,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -11716,13 +12742,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_6d(fname, vname, data)
         end if
     End Subroutine easyIA_complex8_6d
-    Subroutine easyOA_int4_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11730,9 +12756,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11748,13 +12775,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int4_7d
-    Subroutine easyIA_int4_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int4_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11762,8 +12797,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11773,9 +12808,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -11795,13 +12830,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_7d(fname, vname, data)
         end if
     End Subroutine easyIA_int4_7d
-    Subroutine easyOA_int8_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11809,9 +12844,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11827,13 +12863,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_int8_7d
-    Subroutine easyIA_int8_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_int8_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11841,8 +12885,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11852,9 +12896,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -11874,13 +12918,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_7d(fname, vname, data)
         end if
     End Subroutine easyIA_int8_7d
-    Subroutine easyOA_real4_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11888,9 +12932,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11906,13 +12951,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real4_7d
-    Subroutine easyIA_real4_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real4_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11920,8 +12973,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -11931,9 +12984,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -11953,13 +13006,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_7d(fname, vname, data)
         end if
     End Subroutine easyIA_real4_7d
-    Subroutine easyOA_real8_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11967,9 +13020,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -11985,13 +13039,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_real8_7d
-    Subroutine easyIA_real8_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_real8_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -11999,8 +13061,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12010,9 +13072,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -12032,13 +13094,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_7d(fname, vname, data)
         end if
     End Subroutine easyIA_real8_7d
-    Subroutine easyOA_logical_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12046,9 +13108,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12064,13 +13127,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_logical_7d
-    Subroutine easyIA_logical_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_logical_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12078,8 +13149,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12089,9 +13160,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -12111,13 +13182,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_7d(fname, vname, data)
         end if
     End Subroutine easyIA_logical_7d
-    Subroutine easyOA_complex4_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12125,9 +13196,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12143,13 +13215,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex4_7d
-    Subroutine easyIA_complex4_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex4_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12157,8 +13237,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12168,9 +13248,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -12190,13 +13270,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_7d(fname, vname, data)
         end if
     End Subroutine easyIA_complex4_7d
-    Subroutine easyOA_complex8_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOA_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12204,9 +13284,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12222,13 +13303,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOA_complex8_7d
-    Subroutine easyIA_complex8_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIA_complex8_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12236,8 +13325,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),allocatable,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12247,9 +13336,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. allocated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -12269,8 +13358,8 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_7d(fname, vname, data)
         end if
@@ -12279,7 +13368,7 @@ end subroutine easyI_complex8_7d
 ! easyIO for n-dimensional generic numeric data type :
 !   int4. int8, real4, real8
 ! *********************************************************
-    Subroutine easyOP_int4_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12287,9 +13376,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12305,13 +13395,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int4_1d
-    Subroutine easyIP_int4_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int4_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12319,8 +13417,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12330,9 +13428,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12348,13 +13446,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_1d(fname, vname, data)
         end if
     End Subroutine easyIP_int4_1d
-    Subroutine easyOP_int8_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12362,9 +13460,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12380,13 +13479,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int8_1d
-    Subroutine easyIP_int8_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int8_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12394,8 +13501,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12405,9 +13512,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12423,13 +13530,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_1d(fname, vname, data)
         end if
     End Subroutine easyIP_int8_1d
-    Subroutine easyOP_real4_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12437,9 +13544,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12455,13 +13563,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real4_1d
-    Subroutine easyIP_real4_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real4_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12469,8 +13585,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12480,9 +13596,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12498,13 +13614,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_1d(fname, vname, data)
         end if
     End Subroutine easyIP_real4_1d
-    Subroutine easyOP_real8_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12512,9 +13628,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12530,13 +13647,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real8_1d
-    Subroutine easyIP_real8_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real8_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12544,8 +13669,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12555,9 +13680,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12573,13 +13698,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_1d(fname, vname, data)
         end if
     End Subroutine easyIP_real8_1d
-    Subroutine easyOP_string_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12587,9 +13712,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12605,13 +13731,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_string_1d
-    Subroutine easyIP_string_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_string_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12619,8 +13753,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12630,9 +13764,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12648,13 +13782,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_1d(fname, vname, data)
         end if
     End Subroutine easyIP_string_1d
-    Subroutine easyOP_logical_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12662,9 +13796,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12680,13 +13815,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_logical_1d
-    Subroutine easyIP_logical_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_logical_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12694,8 +13837,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12705,9 +13848,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12723,13 +13866,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_1d(fname, vname, data)
         end if
     End Subroutine easyIP_logical_1d
-    Subroutine easyOP_complex4_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12737,9 +13880,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12755,13 +13899,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex4_1d
-    Subroutine easyIP_complex4_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex4_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12769,8 +13921,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12780,9 +13932,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12798,13 +13950,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_1d(fname, vname, data)
         end if
     End Subroutine easyIP_complex4_1d
-    Subroutine easyOP_complex8_1d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12812,9 +13964,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(in) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12830,13 +13983,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_1d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_1d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_1d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_1d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex8_1d
-    Subroutine easyIP_complex8_1d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex8_1d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12844,8 +14005,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(inout) :: data(:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12855,9 +14016,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)))
                 deallocate(shape_manual)
             else
@@ -12873,13 +14034,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_1d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_1d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_1d(fname, vname, data)
         end if
     End Subroutine easyIP_complex8_1d
-    Subroutine easyOP_int4_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12887,9 +14048,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12905,13 +14067,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int4_2d
-    Subroutine easyIP_int4_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int4_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12919,8 +14089,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -12930,9 +14100,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -12948,13 +14118,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_2d(fname, vname, data)
         end if
     End Subroutine easyIP_int4_2d
-    Subroutine easyOP_int8_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12962,9 +14132,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -12980,13 +14151,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int8_2d
-    Subroutine easyIP_int8_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int8_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -12994,8 +14173,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13005,9 +14184,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -13023,13 +14202,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_2d(fname, vname, data)
         end if
     End Subroutine easyIP_int8_2d
-    Subroutine easyOP_real4_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13037,9 +14216,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13055,13 +14235,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real4_2d
-    Subroutine easyIP_real4_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real4_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13069,8 +14257,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13080,9 +14268,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -13098,13 +14286,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_2d(fname, vname, data)
         end if
     End Subroutine easyIP_real4_2d
-    Subroutine easyOP_real8_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13112,9 +14300,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13130,13 +14319,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real8_2d
-    Subroutine easyIP_real8_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real8_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13144,8 +14341,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13155,9 +14352,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -13173,13 +14370,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_2d(fname, vname, data)
         end if
     End Subroutine easyIP_real8_2d
-    Subroutine easyOP_string_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13187,9 +14384,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13205,13 +14403,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_string_2d
-    Subroutine easyIP_string_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_string_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13219,8 +14425,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13230,9 +14436,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -13248,13 +14454,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_2d(fname, vname, data)
         end if
     End Subroutine easyIP_string_2d
-    Subroutine easyOP_logical_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13262,9 +14468,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13280,13 +14487,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_logical_2d
-    Subroutine easyIP_logical_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_logical_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13294,8 +14509,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13305,9 +14520,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -13323,13 +14538,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_2d(fname, vname, data)
         end if
     End Subroutine easyIP_logical_2d
-    Subroutine easyOP_complex4_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13337,9 +14552,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13355,13 +14571,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex4_2d
-    Subroutine easyIP_complex4_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex4_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13369,8 +14593,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13380,9 +14604,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -13398,13 +14622,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_2d(fname, vname, data)
         end if
     End Subroutine easyIP_complex4_2d
-    Subroutine easyOP_complex8_2d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13412,9 +14636,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(in) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13430,13 +14655,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_2d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_2d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_2d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_2d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex8_2d
-    Subroutine easyIP_complex8_2d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex8_2d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13444,8 +14677,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(inout) :: data(:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13455,9 +14688,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)))
                 deallocate(shape_manual)
             else
@@ -13473,13 +14706,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_2d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_2d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_2d(fname, vname, data)
         end if
     End Subroutine easyIP_complex8_2d
-    Subroutine easyOP_int4_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13487,9 +14720,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13505,13 +14739,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int4_3d
-    Subroutine easyIP_int4_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int4_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13519,8 +14761,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13530,9 +14772,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -13549,13 +14791,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_3d(fname, vname, data)
         end if
     End Subroutine easyIP_int4_3d
-    Subroutine easyOP_int8_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13563,9 +14805,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13581,13 +14824,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int8_3d
-    Subroutine easyIP_int8_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int8_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13595,8 +14846,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13606,9 +14857,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -13625,13 +14876,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_3d(fname, vname, data)
         end if
     End Subroutine easyIP_int8_3d
-    Subroutine easyOP_real4_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13639,9 +14890,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13657,13 +14909,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real4_3d
-    Subroutine easyIP_real4_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real4_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13671,8 +14931,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13682,9 +14942,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -13701,13 +14961,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_3d(fname, vname, data)
         end if
     End Subroutine easyIP_real4_3d
-    Subroutine easyOP_real8_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13715,9 +14975,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13733,13 +14994,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real8_3d
-    Subroutine easyIP_real8_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real8_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13747,8 +15016,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13758,9 +15027,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -13777,13 +15046,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_3d(fname, vname, data)
         end if
     End Subroutine easyIP_real8_3d
-    Subroutine easyOP_string_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13791,9 +15060,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13809,13 +15079,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_string_3d
-    Subroutine easyIP_string_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_string_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13823,8 +15101,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13834,9 +15112,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -13853,13 +15131,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_3d(fname, vname, data)
         end if
     End Subroutine easyIP_string_3d
-    Subroutine easyOP_logical_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13867,9 +15145,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13885,13 +15164,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_logical_3d
-    Subroutine easyIP_logical_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_logical_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13899,8 +15186,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13910,9 +15197,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -13929,13 +15216,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_3d(fname, vname, data)
         end if
     End Subroutine easyIP_logical_3d
-    Subroutine easyOP_complex4_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13943,9 +15230,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -13961,13 +15249,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex4_3d
-    Subroutine easyIP_complex4_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex4_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -13975,8 +15271,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -13986,9 +15282,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -14005,13 +15301,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_3d(fname, vname, data)
         end if
     End Subroutine easyIP_complex4_3d
-    Subroutine easyOP_complex8_3d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14019,9 +15315,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(in) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14037,13 +15334,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_3d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_3d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_3d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_3d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex8_3d
-    Subroutine easyIP_complex8_3d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex8_3d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14051,8 +15356,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(inout) :: data(:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14062,9 +15367,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)))
                 deallocate(shape_manual)
             else
@@ -14081,13 +15386,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_3d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_3d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_3d(fname, vname, data)
         end if
     End Subroutine easyIP_complex8_3d
-    Subroutine easyOP_int4_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14095,9 +15400,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14113,13 +15419,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int4_4d
-    Subroutine easyIP_int4_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int4_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14127,8 +15441,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14138,9 +15452,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14157,13 +15471,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_4d(fname, vname, data)
         end if
     End Subroutine easyIP_int4_4d
-    Subroutine easyOP_int8_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14171,9 +15485,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14189,13 +15504,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int8_4d
-    Subroutine easyIP_int8_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int8_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14203,8 +15526,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14214,9 +15537,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14233,13 +15556,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_4d(fname, vname, data)
         end if
     End Subroutine easyIP_int8_4d
-    Subroutine easyOP_real4_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14247,9 +15570,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14265,13 +15589,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real4_4d
-    Subroutine easyIP_real4_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real4_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14279,8 +15611,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14290,9 +15622,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14309,13 +15641,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_4d(fname, vname, data)
         end if
     End Subroutine easyIP_real4_4d
-    Subroutine easyOP_real8_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14323,9 +15655,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14341,13 +15674,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real8_4d
-    Subroutine easyIP_real8_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real8_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14355,8 +15696,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14366,9 +15707,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14385,13 +15726,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_4d(fname, vname, data)
         end if
     End Subroutine easyIP_real8_4d
-    Subroutine easyOP_string_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14399,9 +15740,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14417,13 +15759,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_string_4d
-    Subroutine easyIP_string_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_string_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14431,8 +15781,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14442,9 +15792,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14461,13 +15811,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_4d(fname, vname, data)
         end if
     End Subroutine easyIP_string_4d
-    Subroutine easyOP_logical_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14475,9 +15825,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14493,13 +15844,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_logical_4d
-    Subroutine easyIP_logical_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_logical_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14507,8 +15866,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14518,9 +15877,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14537,13 +15896,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_4d(fname, vname, data)
         end if
     End Subroutine easyIP_logical_4d
-    Subroutine easyOP_complex4_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14551,9 +15910,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14569,13 +15929,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex4_4d
-    Subroutine easyIP_complex4_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex4_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14583,8 +15951,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14594,9 +15962,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14613,13 +15981,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_4d(fname, vname, data)
         end if
     End Subroutine easyIP_complex4_4d
-    Subroutine easyOP_complex8_4d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14627,9 +15995,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(in) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14645,13 +16014,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_4d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_4d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_4d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_4d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex8_4d
-    Subroutine easyIP_complex8_4d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex8_4d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14659,8 +16036,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(inout) :: data(:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14670,9 +16047,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)))
                 deallocate(shape_manual)
             else
@@ -14689,13 +16066,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_4d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_4d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_4d(fname, vname, data)
         end if
     End Subroutine easyIP_complex8_4d
-    Subroutine easyOP_int4_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14703,9 +16080,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14721,13 +16099,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int4_5d
-    Subroutine easyIP_int4_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int4_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14735,8 +16121,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14746,9 +16132,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -14765,13 +16151,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_5d(fname, vname, data)
         end if
     End Subroutine easyIP_int4_5d
-    Subroutine easyOP_int8_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14779,9 +16165,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14797,13 +16184,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int8_5d
-    Subroutine easyIP_int8_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int8_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14811,8 +16206,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14822,9 +16217,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -14841,13 +16236,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_5d(fname, vname, data)
         end if
     End Subroutine easyIP_int8_5d
-    Subroutine easyOP_real4_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14855,9 +16250,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14873,13 +16269,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real4_5d
-    Subroutine easyIP_real4_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real4_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14887,8 +16291,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14898,9 +16302,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -14917,13 +16321,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_5d(fname, vname, data)
         end if
     End Subroutine easyIP_real4_5d
-    Subroutine easyOP_real8_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14931,9 +16335,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -14949,13 +16354,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real8_5d
-    Subroutine easyIP_real8_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real8_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -14963,8 +16376,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -14974,9 +16387,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -14993,13 +16406,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_5d(fname, vname, data)
         end if
     End Subroutine easyIP_real8_5d
-    Subroutine easyOP_string_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15007,9 +16420,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15025,13 +16439,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_string_5d
-    Subroutine easyIP_string_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_string_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15039,8 +16461,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15050,9 +16472,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -15069,13 +16491,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_5d(fname, vname, data)
         end if
     End Subroutine easyIP_string_5d
-    Subroutine easyOP_logical_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15083,9 +16505,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15101,13 +16524,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_logical_5d
-    Subroutine easyIP_logical_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_logical_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15115,8 +16546,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15126,9 +16557,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -15145,13 +16576,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_5d(fname, vname, data)
         end if
     End Subroutine easyIP_logical_5d
-    Subroutine easyOP_complex4_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15159,9 +16590,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15177,13 +16609,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex4_5d
-    Subroutine easyIP_complex4_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex4_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15191,8 +16631,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15202,9 +16642,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -15221,13 +16661,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_5d(fname, vname, data)
         end if
     End Subroutine easyIP_complex4_5d
-    Subroutine easyOP_complex8_5d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15235,9 +16675,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(in) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15253,13 +16694,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_5d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_5d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_5d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_5d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex8_5d
-    Subroutine easyIP_complex8_5d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex8_5d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15267,8 +16716,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(inout) :: data(:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15278,9 +16727,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)))
                 deallocate(shape_manual)
             else
@@ -15297,13 +16746,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_5d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_5d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_5d(fname, vname, data)
         end if
     End Subroutine easyIP_complex8_5d
-    Subroutine easyOP_int4_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15311,9 +16760,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15329,13 +16779,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int4_6d
-    Subroutine easyIP_int4_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int4_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15343,8 +16801,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15354,9 +16812,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15373,13 +16831,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_6d(fname, vname, data)
         end if
     End Subroutine easyIP_int4_6d
-    Subroutine easyOP_int8_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15387,9 +16845,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15405,13 +16864,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int8_6d
-    Subroutine easyIP_int8_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int8_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15419,8 +16886,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15430,9 +16897,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15449,13 +16916,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_6d(fname, vname, data)
         end if
     End Subroutine easyIP_int8_6d
-    Subroutine easyOP_real4_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15463,9 +16930,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15481,13 +16949,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real4_6d
-    Subroutine easyIP_real4_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real4_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15495,8 +16971,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15506,9 +16982,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15525,13 +17001,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_6d(fname, vname, data)
         end if
     End Subroutine easyIP_real4_6d
-    Subroutine easyOP_real8_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15539,9 +17015,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15557,13 +17034,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real8_6d
-    Subroutine easyIP_real8_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real8_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15571,8 +17056,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15582,9 +17067,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15601,13 +17086,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_6d(fname, vname, data)
         end if
     End Subroutine easyIP_real8_6d
-    Subroutine easyOP_string_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15615,9 +17100,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15633,13 +17119,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_string_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_string_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_string_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_string_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_string_6d
-    Subroutine easyIP_string_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_string_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15647,8 +17141,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         character(*),pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15658,9 +17152,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15677,13 +17171,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_string_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_string_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_string_6d(fname, vname, data)
         end if
     End Subroutine easyIP_string_6d
-    Subroutine easyOP_logical_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15691,9 +17185,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15709,13 +17204,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_logical_6d
-    Subroutine easyIP_logical_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_logical_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15723,8 +17226,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15734,9 +17237,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15753,13 +17256,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_6d(fname, vname, data)
         end if
     End Subroutine easyIP_logical_6d
-    Subroutine easyOP_complex4_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15767,9 +17270,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15785,13 +17289,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex4_6d
-    Subroutine easyIP_complex4_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex4_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15799,8 +17311,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15810,9 +17322,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15829,13 +17341,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_6d(fname, vname, data)
         end if
     End Subroutine easyIP_complex4_6d
-    Subroutine easyOP_complex8_6d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15843,9 +17355,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(in) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15861,13 +17374,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_6d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_6d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_6d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_6d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex8_6d
-    Subroutine easyIP_complex8_6d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex8_6d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15875,8 +17396,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(inout) :: data(:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15886,9 +17407,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6)))
                 deallocate(shape_manual)
             else
@@ -15905,13 +17426,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_6d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_6d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_6d(fname, vname, data)
         end if
     End Subroutine easyIP_complex8_6d
-    Subroutine easyOP_int4_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15919,9 +17440,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -15937,13 +17459,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int4_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int4_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int4_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int4_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int4_7d
-    Subroutine easyIP_int4_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int4_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15951,8 +17481,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=4),pointer,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -15962,9 +17492,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -15984,13 +17514,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int4_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int4_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int4_7d(fname, vname, data)
         end if
     End Subroutine easyIP_int4_7d
-    Subroutine easyOP_int8_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -15998,9 +17528,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -16016,13 +17547,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_int8_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_int8_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_int8_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_int8_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_int8_7d
-    Subroutine easyIP_int8_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_int8_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16030,8 +17569,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         integer(kind=8),pointer,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -16041,9 +17580,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -16063,13 +17602,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_int8_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_int8_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_int8_7d(fname, vname, data)
         end if
     End Subroutine easyIP_int8_7d
-    Subroutine easyOP_real4_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16077,9 +17616,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -16095,13 +17635,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real4_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real4_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real4_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real4_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real4_7d
-    Subroutine easyIP_real4_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real4_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16109,8 +17657,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=4),pointer,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -16120,9 +17668,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -16142,13 +17690,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real4_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real4_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real4_7d(fname, vname, data)
         end if
     End Subroutine easyIP_real4_7d
-    Subroutine easyOP_real8_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16156,9 +17704,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -16174,13 +17723,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_real8_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_real8_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_real8_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_real8_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_real8_7d
-    Subroutine easyIP_real8_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_real8_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16188,8 +17745,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         real(kind=8),pointer,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -16199,9 +17756,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -16221,13 +17778,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_real8_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_real8_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_real8_7d(fname, vname, data)
         end if
     End Subroutine easyIP_real8_7d
-    Subroutine easyOP_logical_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16235,9 +17792,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -16253,13 +17811,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_logical_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_logical_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_logical_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_logical_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_logical_7d
-    Subroutine easyIP_logical_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_logical_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16267,8 +17833,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         logical,pointer,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -16278,9 +17844,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -16300,13 +17866,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_logical_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_logical_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_logical_7d(fname, vname, data)
         end if
     End Subroutine easyIP_logical_7d
-    Subroutine easyOP_complex4_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16314,9 +17880,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -16332,13 +17899,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex4_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex4_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex4_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex4_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex4_7d
-    Subroutine easyIP_complex4_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex4_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16346,8 +17921,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=4),pointer,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -16357,9 +17932,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -16379,13 +17954,13 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex4_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex4_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex4_7d(fname, vname, data)
         end if
     End Subroutine easyIP_complex4_7d
-    Subroutine easyOP_complex8_7d(fname, vname, data, shape_total, position_, count_lens_)
+    Subroutine easyOP_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
         !!! #####################################
         ! This Subroutine wraps the easyO_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16393,9 +17968,10 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(in) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: shape_total(:)      ! total shape
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: shape_total(:)         ! total shape
+        integer, intent(in), optional :: positioin(:)           ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)          ! `count` in netcdf
+        character(*), intent(in), optional :: dimnames(:)       ! control dimnames_ for specific dimensions
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ============================= handle var-exist actions (not very strict, may need to check size or some what?)
         if (enc_var_exist(fname, vname)) then
@@ -16411,13 +17987,21 @@ end subroutine easyI_complex8_7d
                 call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
             end if
             if (present(shape_total)) then
-                call easyO_complex8_7d(fname, vname, data, shape_total, position_, count_lens_)
+                if (present(dimnames)) then
+                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
+                else
+                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens)
+                end if
             else
-                call easyO_complex8_7d(fname, vname, data)
+                if (present(dimnames)) then
+                    call easyO_complex8_7d(fname, vname, data, dimnames=dimnames)
+                else
+                    call easyO_complex8_7d(fname, vname, data)
+                end if
             end if
         end if
     End Subroutine easyOP_complex8_7d
-    Subroutine easyIP_complex8_7d(fname, vname, data, position_, count_lens_)
+    Subroutine easyIP_complex8_7d(fname, vname, data, positioin, count_lens)
         !!! #####################################
         ! This Subroutine wraps the easyI_* function except for ALLOCATABLE data
         !!! #####################################
@@ -16425,8 +18009,8 @@ end subroutine easyI_complex8_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Arguments
         complex(kind=8),pointer,intent(inout) :: data(:,:,:,:,:,:,:)
         character(*),intent(in) :: fname, vname
-        integer, intent(in), optional :: position_(:)         ! `start` in netcdf
-        integer, intent(in), optional :: count_lens_(:)       ! `count` in netcdf
+        integer, intent(in), optional :: positioin(:)         ! `start` in netcdf
+        integer, intent(in), optional :: count_lens(:)       ! `count` in netcdf
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
@@ -16436,9 +18020,9 @@ end subroutine easyI_complex8_7d
         end if
         
         if (.not. associated(data)) then
-            if (present(count_lens_)) then
-                call assert(any(count_lens_ .gt. 1), 'Error! count_lens_ should have at least 1 element beyond 1')
-                call remove_val(count_lens_, 1, shape_manual, -1)
+            if (present(count_lens)) then
+                call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
+                call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
     shape_manual(7))) ! 
                 deallocate(shape_manual)
@@ -16458,8 +18042,8 @@ end subroutine easyI_complex8_7d
                 deallocate(enc_iaaT_1d)
             end if
         end if
-        if (present(position_)) then
-            call easyI_complex8_7d(fname, vname, data, position_, count_lens_)
+        if (present(positioin)) then
+            call easyI_complex8_7d(fname, vname, data, positioin, count_lens)
         else
             call easyI_complex8_7d(fname, vname, data)
         end if
