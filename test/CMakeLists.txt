@@ -83,7 +83,7 @@ add_test(NAME test.dimnames
     COMMAND $<TARGET_FILE:test.dimnames>)
 
 add_test(NAME post-check.dimnames
-    COMMAND bash -c "cd ${CMAKE_BINARY_DIR}/test && ./post-check.dimnames.sh")
+    COMMAND bash -c "cd ${CMAKE_BINARY_DIR}/test && bash post-check.dimnames.sh")
 add_custom_command(TARGET test.dimnames POST_BUILD
     COMMAND bash -c "cp ${TEST}/post-check.dimnames.sh ${CMAKE_BINARY_DIR}/test/"
 )
