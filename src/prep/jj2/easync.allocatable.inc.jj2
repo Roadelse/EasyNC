@@ -39,22 +39,23 @@
             end if
         end if
 
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_{{ type }}_{{ nd }}d(fname, vname, data)
-                end if
+                call easyO_{{ type }}_{{ nd }}d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_{{ type }}_{{ nd }}d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_{{ type }}_{{ nd }}d(fname, vname, data)
             end if
         end if
 

@@ -8706,22 +8706,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_1d(fname, vname, data)
-                end if
+                call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int4_1d
@@ -8790,22 +8790,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_1d(fname, vname, data)
-                end if
+                call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int8_1d
@@ -8874,22 +8874,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_1d(fname, vname, data)
-                end if
+                call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real4_1d
@@ -8958,22 +8958,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_1d(fname, vname, data)
-                end if
+                call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real8_1d
@@ -9042,22 +9042,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_1d(fname, vname, data)
-                end if
+                call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_string_1d
@@ -9126,22 +9126,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_1d(fname, vname, data)
-                end if
+                call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_logical_1d
@@ -9210,22 +9210,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_1d(fname, vname, data)
-                end if
+                call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex4_1d
@@ -9294,22 +9294,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_1d(fname, vname, data)
-                end if
+                call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex8_1d
@@ -9378,22 +9378,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_2d(fname, vname, data)
-                end if
+                call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int4_2d
@@ -9462,22 +9462,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_2d(fname, vname, data)
-                end if
+                call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int8_2d
@@ -9546,22 +9546,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_2d(fname, vname, data)
-                end if
+                call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real4_2d
@@ -9630,22 +9630,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_2d(fname, vname, data)
-                end if
+                call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real8_2d
@@ -9714,22 +9714,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_2d(fname, vname, data)
-                end if
+                call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_string_2d
@@ -9798,22 +9798,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_2d(fname, vname, data)
-                end if
+                call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_logical_2d
@@ -9882,22 +9882,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_2d(fname, vname, data)
-                end if
+                call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex4_2d
@@ -9966,22 +9966,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_2d(fname, vname, data)
-                end if
+                call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex8_2d
@@ -10050,22 +10050,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_3d(fname, vname, data)
-                end if
+                call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int4_3d
@@ -10135,22 +10135,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_3d(fname, vname, data)
-                end if
+                call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int8_3d
@@ -10220,22 +10220,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_3d(fname, vname, data)
-                end if
+                call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real4_3d
@@ -10305,22 +10305,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_3d(fname, vname, data)
-                end if
+                call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real8_3d
@@ -10390,22 +10390,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_3d(fname, vname, data)
-                end if
+                call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_string_3d
@@ -10475,22 +10475,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_3d(fname, vname, data)
-                end if
+                call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_logical_3d
@@ -10560,22 +10560,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_3d(fname, vname, data)
-                end if
+                call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex4_3d
@@ -10645,22 +10645,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_3d(fname, vname, data)
-                end if
+                call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex8_3d
@@ -10730,22 +10730,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_4d(fname, vname, data)
-                end if
+                call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int4_4d
@@ -10815,22 +10815,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_4d(fname, vname, data)
-                end if
+                call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int8_4d
@@ -10900,22 +10900,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_4d(fname, vname, data)
-                end if
+                call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real4_4d
@@ -10985,22 +10985,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_4d(fname, vname, data)
-                end if
+                call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real8_4d
@@ -11070,22 +11070,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_4d(fname, vname, data)
-                end if
+                call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_string_4d
@@ -11155,22 +11155,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_4d(fname, vname, data)
-                end if
+                call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_logical_4d
@@ -11240,22 +11240,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_4d(fname, vname, data)
-                end if
+                call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex4_4d
@@ -11325,22 +11325,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_4d(fname, vname, data)
-                end if
+                call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex8_4d
@@ -11410,22 +11410,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_5d(fname, vname, data)
-                end if
+                call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int4_5d
@@ -11495,22 +11495,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_5d(fname, vname, data)
-                end if
+                call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int8_5d
@@ -11580,22 +11580,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_5d(fname, vname, data)
-                end if
+                call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real4_5d
@@ -11665,22 +11665,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_5d(fname, vname, data)
-                end if
+                call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real8_5d
@@ -11750,22 +11750,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_5d(fname, vname, data)
-                end if
+                call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_string_5d
@@ -11835,22 +11835,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_5d(fname, vname, data)
-                end if
+                call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_logical_5d
@@ -11920,22 +11920,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_5d(fname, vname, data)
-                end if
+                call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex4_5d
@@ -12005,22 +12005,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_5d(fname, vname, data)
-                end if
+                call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex8_5d
@@ -12090,22 +12090,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_6d(fname, vname, data)
-                end if
+                call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int4_6d
@@ -12175,22 +12175,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_6d(fname, vname, data)
-                end if
+                call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int8_6d
@@ -12260,22 +12260,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_6d(fname, vname, data)
-                end if
+                call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real4_6d
@@ -12345,22 +12345,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_6d(fname, vname, data)
-                end if
+                call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real8_6d
@@ -12430,22 +12430,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_6d(fname, vname, data)
-                end if
+                call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_string_6d
@@ -12515,22 +12515,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_6d(fname, vname, data)
-                end if
+                call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_logical_6d
@@ -12600,22 +12600,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_6d(fname, vname, data)
-                end if
+                call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex4_6d
@@ -12685,22 +12685,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_6d(fname, vname, data)
-                end if
+                call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex8_6d
@@ -12770,22 +12770,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_7d(fname, vname, data)
-                end if
+                call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int4_7d
@@ -12858,22 +12858,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_7d(fname, vname, data)
-                end if
+                call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_int8_7d
@@ -12946,22 +12946,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_7d(fname, vname, data)
-                end if
+                call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real4_7d
@@ -13034,22 +13034,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_7d(fname, vname, data)
-                end if
+                call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_real8_7d
@@ -13122,22 +13122,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_7d(fname, vname, data)
-                end if
+                call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_logical_7d
@@ -13210,22 +13210,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_7d(fname, vname, data)
-                end if
+                call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex4_7d
@@ -13298,22 +13298,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (allocated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.allocated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_7d(fname, vname, data)
-                end if
+                call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOA_complex8_7d
@@ -13390,22 +13390,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_1d(fname, vname, data)
-                end if
+                call easyO_int4_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int4_1d
@@ -13474,22 +13474,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_1d(fname, vname, data)
-                end if
+                call easyO_int8_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int8_1d
@@ -13558,22 +13558,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_1d(fname, vname, data)
-                end if
+                call easyO_real4_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real4_1d
@@ -13642,22 +13642,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_1d(fname, vname, data)
-                end if
+                call easyO_real8_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real8_1d
@@ -13726,22 +13726,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_1d(fname, vname, data)
-                end if
+                call easyO_string_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_string_1d
@@ -13810,22 +13810,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_1d(fname, vname, data)
-                end if
+                call easyO_logical_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_logical_1d
@@ -13894,22 +13894,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_1d(fname, vname, data)
-                end if
+                call easyO_complex4_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex4_1d
@@ -13978,22 +13978,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_1d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_1d(fname, vname, data)
-                end if
+                call easyO_complex8_1d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_1d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_1d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex8_1d
@@ -14062,22 +14062,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_2d(fname, vname, data)
-                end if
+                call easyO_int4_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int4_2d
@@ -14146,22 +14146,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_2d(fname, vname, data)
-                end if
+                call easyO_int8_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int8_2d
@@ -14230,22 +14230,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_2d(fname, vname, data)
-                end if
+                call easyO_real4_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real4_2d
@@ -14314,22 +14314,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_2d(fname, vname, data)
-                end if
+                call easyO_real8_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real8_2d
@@ -14398,22 +14398,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_2d(fname, vname, data)
-                end if
+                call easyO_string_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_string_2d
@@ -14482,22 +14482,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_2d(fname, vname, data)
-                end if
+                call easyO_logical_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_logical_2d
@@ -14566,22 +14566,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_2d(fname, vname, data)
-                end if
+                call easyO_complex4_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex4_2d
@@ -14650,22 +14650,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_2d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_2d(fname, vname, data)
-                end if
+                call easyO_complex8_2d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_2d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_2d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex8_2d
@@ -14734,22 +14734,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_3d(fname, vname, data)
-                end if
+                call easyO_int4_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int4_3d
@@ -14819,22 +14819,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_3d(fname, vname, data)
-                end if
+                call easyO_int8_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int8_3d
@@ -14904,22 +14904,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_3d(fname, vname, data)
-                end if
+                call easyO_real4_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real4_3d
@@ -14989,22 +14989,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_3d(fname, vname, data)
-                end if
+                call easyO_real8_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real8_3d
@@ -15074,22 +15074,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_3d(fname, vname, data)
-                end if
+                call easyO_string_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_string_3d
@@ -15159,22 +15159,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_3d(fname, vname, data)
-                end if
+                call easyO_logical_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_logical_3d
@@ -15244,22 +15244,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_3d(fname, vname, data)
-                end if
+                call easyO_complex4_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex4_3d
@@ -15329,22 +15329,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_3d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_3d(fname, vname, data)
-                end if
+                call easyO_complex8_3d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_3d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_3d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex8_3d
@@ -15414,22 +15414,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_4d(fname, vname, data)
-                end if
+                call easyO_int4_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int4_4d
@@ -15499,22 +15499,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_4d(fname, vname, data)
-                end if
+                call easyO_int8_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int8_4d
@@ -15584,22 +15584,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_4d(fname, vname, data)
-                end if
+                call easyO_real4_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real4_4d
@@ -15669,22 +15669,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_4d(fname, vname, data)
-                end if
+                call easyO_real8_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real8_4d
@@ -15754,22 +15754,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_4d(fname, vname, data)
-                end if
+                call easyO_string_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_string_4d
@@ -15839,22 +15839,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_4d(fname, vname, data)
-                end if
+                call easyO_logical_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_logical_4d
@@ -15924,22 +15924,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_4d(fname, vname, data)
-                end if
+                call easyO_complex4_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex4_4d
@@ -16009,22 +16009,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_4d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_4d(fname, vname, data)
-                end if
+                call easyO_complex8_4d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_4d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_4d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex8_4d
@@ -16094,22 +16094,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_5d(fname, vname, data)
-                end if
+                call easyO_int4_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int4_5d
@@ -16179,22 +16179,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_5d(fname, vname, data)
-                end if
+                call easyO_int8_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int8_5d
@@ -16264,22 +16264,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_5d(fname, vname, data)
-                end if
+                call easyO_real4_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real4_5d
@@ -16349,22 +16349,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_5d(fname, vname, data)
-                end if
+                call easyO_real8_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real8_5d
@@ -16434,22 +16434,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_5d(fname, vname, data)
-                end if
+                call easyO_string_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_string_5d
@@ -16519,22 +16519,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_5d(fname, vname, data)
-                end if
+                call easyO_logical_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_logical_5d
@@ -16604,22 +16604,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_5d(fname, vname, data)
-                end if
+                call easyO_complex4_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex4_5d
@@ -16689,22 +16689,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_5d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_5d(fname, vname, data)
-                end if
+                call easyO_complex8_5d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_5d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_5d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex8_5d
@@ -16774,22 +16774,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_6d(fname, vname, data)
-                end if
+                call easyO_int4_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int4_6d
@@ -16859,22 +16859,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_6d(fname, vname, data)
-                end if
+                call easyO_int8_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int8_6d
@@ -16944,22 +16944,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_6d(fname, vname, data)
-                end if
+                call easyO_real4_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real4_6d
@@ -17029,22 +17029,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_6d(fname, vname, data)
-                end if
+                call easyO_real8_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real8_6d
@@ -17114,22 +17114,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_string_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_string_6d(fname, vname, data)
-                end if
+                call easyO_string_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_string_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_string_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_string_6d
@@ -17199,22 +17199,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_6d(fname, vname, data)
-                end if
+                call easyO_logical_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_logical_6d
@@ -17284,22 +17284,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_6d(fname, vname, data)
-                end if
+                call easyO_complex4_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex4_6d
@@ -17369,22 +17369,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_6d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_6d(fname, vname, data)
-                end if
+                call easyO_complex8_6d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_6d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_6d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex8_6d
@@ -17454,22 +17454,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int4_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int4_7d(fname, vname, data)
-                end if
+                call easyO_int4_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int4_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int4_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int4_7d
@@ -17542,22 +17542,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_int8_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_int8_7d(fname, vname, data)
-                end if
+                call easyO_int8_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_int8_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_int8_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_int8_7d
@@ -17630,22 +17630,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real4_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real4_7d(fname, vname, data)
-                end if
+                call easyO_real4_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real4_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real4_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real4_7d
@@ -17718,22 +17718,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_real8_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_real8_7d(fname, vname, data)
-                end if
+                call easyO_real8_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_real8_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_real8_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_real8_7d
@@ -17806,22 +17806,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_logical_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_logical_7d(fname, vname, data)
-                end if
+                call easyO_logical_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_logical_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_logical_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_logical_7d
@@ -17894,22 +17894,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex4_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex4_7d(fname, vname, data)
-                end if
+                call easyO_complex4_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex4_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex4_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex4_7d
@@ -17982,22 +17982,22 @@ end subroutine easyI_complex8_7d
                 stop 1
             end if
         end if
-        if (associated(data) .and. size(data) .gt. 0) then
-            if (any(lbound(data) .ne. 1)) then
-                call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
-            end if
-            if (present(shape_total)) then
-                if (present(dimnames)) then
-                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
-                else
-                    call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens)
-                end if
+        if (.not.associated(data)) return
+        if (size(data) .eq. 0) return
+        if (any(lbound(data) .ne. 1)) then
+            call easyO(fname, trim(vname)//'.bounds', reshape([lbound(data), ubound(data)], [2, size(shape(data))],order=[2,1]))
+        end if
+        if (present(shape_total)) then
+            if (present(dimnames)) then
+                call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens, dimnames)
             else
-                if (present(dimnames)) then
-                    call easyO_complex8_7d(fname, vname, data, dimnames=dimnames)
-                else
-                    call easyO_complex8_7d(fname, vname, data)
-                end if
+                call easyO_complex8_7d(fname, vname, data, shape_total, positioin, count_lens)
+            end if
+        else
+            if (present(dimnames)) then
+                call easyO_complex8_7d(fname, vname, data, dimnames=dimnames)
+            else
+                call easyO_complex8_7d(fname, vname, data)
             end if
         end if
     End Subroutine easyOP_complex8_7d
