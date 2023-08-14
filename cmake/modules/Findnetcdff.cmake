@@ -13,6 +13,13 @@ find_path(
 
 if (netcdff_lib AND netcdff_include)
     set(netcdff_FOUND true)
+    message(STATUS "find netcdf-fortran in ${netcdff_lib}")
+    if (DEFINED ENV{NETCDFF_LINK_DIRECTORIES})
+        set(NETCDFF_LINK_DIRECTORIES $ENV{NETCDFF_LINK_DIRECTORIES})
+        set(NETCDFF_LINK_LIBS $ENV{NETCDFF_LINK_LIBS})
+        set(NETCDFF_INC_DIRECTORIES $ENV{NETCDFF_LINK_DIRECTORIES})
+        message(STATUS "find NETCDFF compilation information")
+    endif()
 else()
     message(FATAL_ERROR "cannot find netcdff!")
 endif()

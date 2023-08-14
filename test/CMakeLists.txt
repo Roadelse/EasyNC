@@ -3,84 +3,63 @@ add_test(NAME setup
     COMMAND bash -c "rm -f ${CMAKE_BINARY_DIR}/test/*.nc"
 )
 
+if (DEFINED NETCDFF_LINK_LIBS)
+    link_libraries(EasyNC rdee_fortran ${NETCDFF_LINK_LIBS})
+    link_directories(BEFORE ${rdee_fortran_lib} ${NETCDFF_LINK_DIRECTORIES})
+    include_directories(BEFORE ${rdee_fortran_include} ${NETCDFF_INC_DIRECTORIES})
+else()
+    link_libraries(EasyNC rdee_fortran netcdff)
+    link_directories(BEFORE ${rdee_fortran_lib} ${netcdff_lib})
+    include_directories(BEFORE ${rdee_fortran_include} ${netcdff_include})
+endif()
 
-link_directories(BEFORE ${rdee_fortran_lib} ${netcdff_lib})
-include_directories(BEFORE ${rdee_fortran_include} ${netcdff_include})
+# get_filename_component(BFC ${CMAKE_Fortran_COMPILER} NAME)
+# message(STATUS "COMPILER ID is ${CMAKE_Fortran_COMPILER_ID}")
 
-add_executable(test.numeric test.numeric.F90 )
-set_target_properties(test.numeric PROPERTIES OUTPUT_NAME test.numeric.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-target_link_libraries(test.numeric EasyNC rdee_fortran netcdff)
-#target_include_directories(test.numeric PRIVATE ${rdee_fortran_include})
-#target_link_directories(test.numeric PRIVATE ${rdee_fortran_lib})
-target_compile_options(test.numeric
-    PUBLIC -g)
-                
-add_executable(test.string test.string.F90 )
-set_target_properties(test.string PROPERTIES OUTPUT_NAME test.string.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-target_link_libraries(test.string EasyNC rdee_fortran netcdff)
-target_compile_options(test.string
-    PUBLIC -g)
+# if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU")
+#     execute_process(COMMAND bash -c "${CMAKE_Fortran_COMPILER} -v |& grep -Po '(?<=COLLECT_GCC=).*'"
+#         OUTPUT_VARIABLE COLLECT_GCC)
+#     message(STATUS "COLLECT_GCC = ${COLLECT_GCC}")
+#     if (${COLLECT_GCC} STREQUAL "swgfortran")
+#         set(inSW TRUE)
+#     endif()
+# endif()
 
-add_executable(test.logical test.logical.F90 )
-set_target_properties(test.logical PROPERTIES OUTPUT_NAME test.logical.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-target_link_libraries(test.logical EasyNC rdee_fortran netcdff)
-target_compile_options(test.logical
-    PUBLIC -g)
+function(ecsl_test testID)  # encapsulation of test
+    add_executable(test.${testID} test.${testID}.F90)
+    set_target_properties(test.${testID} PROPERTIES
+        OUTPUT_NAME test.${testID}.x
+        RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 
-add_executable(test.complex test.complex.F90 )
-set_target_properties(test.complex PROPERTIES OUTPUT_NAME test.complex.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-target_link_libraries(test.complex EasyNC rdee_fortran netcdff)
-target_compile_options(test.complex
-    PUBLIC -g)
+    target_compile_options(test.${testID} PUBLIC -g)
+    
+    if ($ENV{inSW})
+        add_test(
+            NAME test.${testID}
+            COMMAND bash -c "bsub -b -I -q q_sw_expr -n 1 -cgsp 64 -share_size 7000 -host_stack 512 $<TARGET_FILE:test.${testID}>"
+        )
+    else()
+        add_test(
+            NAME test.${testID}
+            COMMAND $<TARGET_FILE:test.${testID}>
+        )
+    endif()
 
+endfunction()
 
-add_executable(test.type.direct test.type.direct.F90 )
-set_target_properties(test.type.direct PROPERTIES OUTPUT_NAME test.type.direct.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-target_link_libraries(test.type.direct EasyNC rdee_fortran netcdff)
-target_compile_options(test.type.direct
-    PUBLIC -g)
-
-# add_executable(test.type.union test.type.union.F90 )
-# set_target_properties(test.type.union PROPERTIES OUTPUT_NAME test.type.union.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-# target_link_libraries(test.type.union EasyNC rdee_fortran netcdff)
-# target_compile_options(test.type.union
-#     PUBLIC -g)
-
-
-
-add_test(NAME test.numeric
-    COMMAND $<TARGET_FILE:test.numeric>)
-add_test(NAME test.string
-   COMMAND $<TARGET_FILE:test.string>)
-add_test(NAME test.logical
-   COMMAND $<TARGET_FILE:test.logical>)
-add_test(NAME test.type.direct
-   COMMAND $<TARGET_FILE:test.type.direct>)
-# add_test(NAME test.type.union
-    #   COMMAND $<TARGET_FILE:test.type.union>)
-add_test(NAME test.complex
-   COMMAND $<TARGET_FILE:test.complex>)
+ecsl_test(numeric)
+ecsl_test(string)
+ecsl_test(logical)
+ecsl_test(complex)
+ecsl_test(type.direct)
+ecsl_test(unlimited)
+ecsl_test(dimnames)
 
 
-set_tests_properties(test.numeric test.string test.logical test.complex test.type.direct PROPERTIES FIXTURES_REQUIRED setup)
+set_tests_properties(
+    test.numeric test.string test.logical test.complex test.type.direct test.unlimited test.dimnames
+    PROPERTIES FIXTURES_REQUIRED setup)
 
-
-add_executable(test.unlimited test.unlimited.F90 )
-set_target_properties(test.unlimited PROPERTIES OUTPUT_NAME test.unlimited.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-target_link_libraries(test.unlimited EasyNC rdee_fortran netcdff)
-target_compile_options(test.unlimited
-    PUBLIC -g)
-add_test(NAME test.unlimited
-    COMMAND $<TARGET_FILE:test.unlimited>)
-set_tests_properties(test.unlimited PROPERTIES FIXTURES_REQUIRED setup)
-
-add_executable(test.dimnames test.dimnames.F90 )
-set_target_properties(test.dimnames PROPERTIES OUTPUT_NAME test.dimnames.x RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-target_link_libraries(test.dimnames EasyNC rdee_fortran netcdff)
-target_compile_options(test.dimnames
-    PUBLIC -g)
-add_test(NAME test.dimnames
-    COMMAND $<TARGET_FILE:test.dimnames>)
 
 add_test(NAME post-check.dimnames
     COMMAND bash -c "cd ${CMAKE_BINARY_DIR}/test && bash post-check.dimnames.sh")
@@ -88,9 +67,7 @@ add_custom_command(TARGET test.dimnames POST_BUILD
     COMMAND bash -c "cp ${TEST}/post-check.dimnames.sh ${CMAKE_BINARY_DIR}/test/"
 )
 
-set_tests_properties(test.dimnames PROPERTIES FIXTURES_REQUIRED setup FIXTURES_CLEANUP post-check.dimnames)
-
-
-
+set_tests_properties(test.dimnames PROPERTIES FIXTURES_CLEANUP post-check.dimnames)
+set_tests_properties(post-check.dimnames PROPERTIES ENVIRONMENT "whichCMD=$ENV{ENCT_NC_VIEW_CMD}")
 
 add_subdirectory(test.type.union)

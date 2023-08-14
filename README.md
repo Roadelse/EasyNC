@@ -42,7 +42,7 @@ usually just build it in `./cbuild.gnu`, or `intel`
 
 ## How-to-use
 
-built with cmake:
+built with cmake directly:
 
 ```bash
 mkdir cbuild && cd $_
@@ -53,4 +53,17 @@ make test
 ls include
 ls lib
 ls bin
+```
+
+For specific machines, there are several environment variables which may need to be set, since it doesn't support getting compilation link & include information via `nf-config` by now.
+```bash
+export NETCDFF_INC_DIRECTORIES=
+export NETCDFF_LINK_DIRECTORIES=
+export NETCDFF_LINK_LIBS="netcdff;netcdf;hdf5_hl;hdf5;z"
+
+export inSW=TRUE
+export ENCT_NC_VIEW_CMD=ncl_filedump
+
+CC=... FC=... cmake ..
+
 ```

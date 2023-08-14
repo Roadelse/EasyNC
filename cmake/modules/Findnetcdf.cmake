@@ -13,6 +13,7 @@ find_path(
 
 if (netcdf_lib and netcdf_include)
     set(netcdf_FOUND true)
+    message(STATUS "find netcdf-c in ${netcdf_lib}")
 else()
     message(FATAL_ERROR "cannot find netcdf!")
 endif()

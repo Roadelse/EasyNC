@@ -5,14 +5,14 @@ if (${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
 find_path(
     rdee_fortran_lib
     NAMES librdee_fortran.a
-    HINTS ENV RDEE_FORTRAN /mnt/d/recRoot/GitRepos/rdee_fortran/cbuild.intel/lib ~/recRoot/GitRepos/rdee_fortran/cbuild.intel/lib 
+    HINTS $ENV{RDEE_FORTRAN}/lib ${CMAKE_SOURCE_DIR}/../rdee_fortran/cbuild.intel/lib
 )
 else()
 
 find_path(
     rdee_fortran_lib
     NAMES librdee_fortran.a
-    HINTS ENV RDEE_FORTRAN /mnt/d/recRoot/GitRepos/rdee_fortran/cbuild.gnu/lib /mnt/d/recRoot/GitRepos/rdee_fortran/cbuild/lib ~/recRoot/GitRepos/rdee_fortran/cbuild.gnu/lib ~/recRoot/GitRepos/rdee_fortran/cbuild/lib 
+    HINTS $ENV{RDEE_FORTRAN}/lib ${CMAKE_SOURCE_DIR}/../rdee_fortran/cbuild.sw/lib ${CMAKE_SOURCE_DIR}/../../rdee_fortran/cbuild.gnu/lib
 )
 
 endif()
