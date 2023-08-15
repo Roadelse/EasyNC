@@ -12,7 +12,7 @@ function(ecsl_test testID)  # encapsulation of test
     target_link_libraries(test.${testID} EasyNC)
     target_compile_options(test.${testID} PUBLIC -g)
     
-    if ($ENV{inSW})
+    if (inSW)
         add_test(
             NAME test.${testID}
             COMMAND bash -c "bsub -b -I -q q_sw_expr -n 1 -cgsp 64 -share_size 7000 -host_stack 512 $<TARGET_FILE:test.${testID}>"
