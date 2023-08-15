@@ -30,9 +30,9 @@ enable_testing()
 
 Message("¦ compiler id = ${CMAKE_Fortran_COMPILER_ID}")
 if (${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
-    add_compile_options(-O2 -g -fPIE -extend-source 132 "SHELL:-check all" "SHELL:-warn all" -std08 "SHELL:-warn nounused")
+    add_compile_options(-O3 -fPIE -extend-source 132 "SHELL:-check all" "SHELL:-warn all" -std08 "SHELL:-warn nounused")
 elseif(${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU")
-    add_compile_options(-O2 -g -fPIE -ffree-line-length-none -ffixed-line-length-132 -std=f2008 -Wall -fcheck=all -fall-intrinsics -Wno-unused -Wno-maybe-uninitialized)
+    add_compile_options(-O3 -fPIE -ffree-line-length-none -ffixed-line-length-132 -std=f2008 -Wall -fcheck=all -fall-intrinsics -Wno-unused -Wno-maybe-uninitialized)
 endif()
 
 add_subdirectory(src)
