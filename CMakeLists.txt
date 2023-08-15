@@ -8,6 +8,7 @@ enable_language(Fortran)
 message("compiler=${CMAKE_Fortran_COMPILER}")
 
 list(PREPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
+include(rdee.checksys)
 include(rdee.python)
 
 check_python_lib(jinja2)

@@ -5,6 +5,7 @@ if (DEFINED FIND_RDEE_FORTRAN_LOADED)
 endif()
 set(FIND_RDEE_FORTRAN_LOADED TRUE)
 
+include(rdee.checksys)
 include(rdee.colorful)
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~ get build_suffix
