@@ -1,16 +1,14 @@
-
-
-
-
 message("preparing source EasyNC.F90 ... ...")
 execute_process(COMMAND bash ${SRC}/prep/scripts/gen.sh)
 
 file(GLOB SRCS *.F90 *.f90 *.F *.f)
 message(STATUS "srcs = ${SRCS}")
 add_library(EasyNC STATIC ${SRCS})
+target_link_libraries(EasyNC
+    PUBLIC rdee_fortran
+    PUBLIC netcdff)
 
-
-target_include_directories(EasyNC PRIVATE ${netcdff_include} ${rdee_fortran_include})
+# target_include_directories(EasyNC PRIVATE ${netcdff_include} ${rdee_fortran_include})
 
 add_custom_command(TARGET EasyNC POST_BUILD
     COMMAND bash -c "mkdir -p ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/render-struct-io"

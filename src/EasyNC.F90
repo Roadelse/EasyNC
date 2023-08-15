@@ -572,7 +572,7 @@ Contains
             do i = 1, rank_ncv
                 if (present(dimnames)) then
                     call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_scalar, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                     if (len_trim(dimnames(i)) .gt. 0) then
                         dimnames_(i) = trim(dimnames(i))
                         cycle
@@ -723,7 +723,7 @@ Contains
             do i = 1, rank_ncv
                 if (present(dimnames)) then
                     call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_scalar, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                     if (len_trim(dimnames(i)) .gt. 0) then
                         dimnames_(i) = trim(dimnames(i))
                         cycle
@@ -869,7 +869,7 @@ Contains
             do i = 1, rank_ncv
                 if (present(dimnames)) then
                     call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_scalar, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                     if (len_trim(dimnames(i)) .gt. 0) then
                         dimnames_(i) = trim(dimnames(i))
                         cycle
@@ -1015,7 +1015,7 @@ Contains
             do i = 1, rank_ncv
                 if (present(dimnames)) then
                     call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_scalar, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                     if (len_trim(dimnames(i)) .gt. 0) then
                         dimnames_(i) = trim(dimnames(i))
                         cycle
@@ -1175,7 +1175,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_1d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -1342,7 +1342,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_1d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -1504,7 +1504,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_1d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -1666,7 +1666,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_1d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -1828,7 +1828,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_2d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -1995,7 +1995,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_2d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -2157,7 +2157,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_2d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -2319,7 +2319,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_2d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -2481,7 +2481,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_3d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -2648,7 +2648,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_3d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -2810,7 +2810,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_3d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -2972,7 +2972,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_3d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -3134,7 +3134,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_4d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -3301,7 +3301,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_4d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -3463,7 +3463,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_4d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -3625,7 +3625,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_4d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -3787,7 +3787,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_5d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -3954,7 +3954,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_5d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -4116,7 +4116,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_5d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -4278,7 +4278,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_5d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -4440,7 +4440,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_6d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -4607,7 +4607,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_6d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -4769,7 +4769,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_6d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -4931,7 +4931,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_6d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -5093,7 +5093,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int4_7d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -5260,7 +5260,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_int8_7d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -5422,7 +5422,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real4_7d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -5584,7 +5584,7 @@ Contains
         do i = 1, rank_ncv
             if (present(dimnames)) then
                 call assert(size(dimnames) .eq. rank_ncv, 'Error in easyO_real8_7d, &
-     argument<dimnames> should have the same size as rank_ncv') ! 
+    & argument<dimnames> should have the same size as rank_ncv')
                 if (len_trim(dimnames(i)) .gt. 0) then
                     dimnames_(i) = trim(dimnames(i))
                     cycle
@@ -5747,7 +5747,7 @@ Contains
             do i = 2, rank_ncv
                 if (present(dimnames)) then
                     call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_scalar, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
                     if (len_trim(dimnames(i+1)) .gt. 0) then
                         dimnames_(i) = trim(dimnames(i+1))
                         cycle
@@ -5901,7 +5901,7 @@ Subroutine easyO_string_1d(fname, vname, data, shape_total, position, count_lens
     do i = 2, rank_ncv
         if (present(dimnames)) then
             call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_1d, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
             if (len_trim(dimnames(i+1)) .gt. 0) then
                 dimnames_(i) = trim(dimnames(i+1))
                 cycle
@@ -6070,7 +6070,7 @@ Subroutine easyO_string_2d(fname, vname, data, shape_total, position, count_lens
     do i = 2, rank_ncv
         if (present(dimnames)) then
             call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_2d, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
             if (len_trim(dimnames(i+1)) .gt. 0) then
                 dimnames_(i) = trim(dimnames(i+1))
                 cycle
@@ -6239,7 +6239,7 @@ Subroutine easyO_string_3d(fname, vname, data, shape_total, position, count_lens
     do i = 2, rank_ncv
         if (present(dimnames)) then
             call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_3d, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
             if (len_trim(dimnames(i+1)) .gt. 0) then
                 dimnames_(i) = trim(dimnames(i+1))
                 cycle
@@ -6408,7 +6408,7 @@ Subroutine easyO_string_4d(fname, vname, data, shape_total, position, count_lens
     do i = 2, rank_ncv
         if (present(dimnames)) then
             call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_4d, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
             if (len_trim(dimnames(i+1)) .gt. 0) then
                 dimnames_(i) = trim(dimnames(i+1))
                 cycle
@@ -6577,7 +6577,7 @@ Subroutine easyO_string_5d(fname, vname, data, shape_total, position, count_lens
     do i = 2, rank_ncv
         if (present(dimnames)) then
             call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_5d, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
             if (len_trim(dimnames(i+1)) .gt. 0) then
                 dimnames_(i) = trim(dimnames(i+1))
                 cycle
@@ -6746,7 +6746,7 @@ Subroutine easyO_string_6d(fname, vname, data, shape_total, position, count_lens
     do i = 2, rank_ncv
         if (present(dimnames)) then
             call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_6d, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
             if (len_trim(dimnames(i+1)) .gt. 0) then
                 dimnames_(i) = trim(dimnames(i+1))
                 cycle
@@ -6915,7 +6915,7 @@ Subroutine easyO_string_7d(fname, vname, data, shape_total, position, count_lens
     do i = 2, rank_ncv
         if (present(dimnames)) then
             call assert(size(dimnames)+1 .eq. rank_ncv, 'Error in easyO_string_7d, &
-     argument<dimnames> should have the same size as rank_ncv (for string, needs +1)') ! 
+    & argument<dimnames> should have the same size as rank_ncv (for string, needs +1)')
             if (len_trim(dimnames(i+1)) .gt. 0) then
                 dimnames_(i) = trim(dimnames(i+1))
                 cycle
@@ -7427,8 +7427,8 @@ end subroutine easyI_string_7d
                 stop 1
             end if
         end if
-        allocate(b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1,1, &
-    1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
+        allocate(b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
@@ -7459,8 +7459,8 @@ end subroutine easyI_string_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:,:,:,:,:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-        allocate(b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1,1, &
-    1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
+        allocate(b(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
         if (present(position)) then
             call easyI_int4_6d(fname, vname, b, position, count_lens)
         else
@@ -7494,8 +7494,8 @@ end subroutine easyI_string_7d
                 stop 1
             end if
         end if
-        allocate(b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size( &
-    val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
+        allocate(b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
         b = 0
         where(val) b = 1
         if (present(shape_total)) then
@@ -7526,8 +7526,8 @@ end subroutine easyI_string_7d
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> local variables
         integer, allocatable :: b(:,:,:,:,:,:,:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-        allocate(b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), size( &
-    val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
+        allocate(b(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
         if (present(position)) then
             call easyI_int4_7d(fname, vname, b, position, count_lens)
         else
@@ -8398,10 +8398,10 @@ Subroutine easyO_complex4_6d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
-    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
@@ -8436,10 +8436,10 @@ Subroutine easyI_complex4_6d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     if (present(count_lens)) then
         call easyI_real4_6d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_6d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8474,10 +8474,10 @@ Subroutine easyO_complex8_6d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
-    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
@@ -8512,10 +8512,10 @@ Subroutine easyI_complex8_6d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1,1)), size(val(1, &
-    1,1,1,:,1)), size(val(1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
+    1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     if (present(count_lens)) then
         call easyI_real8_6d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_6d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8550,10 +8550,10 @@ Subroutine easyO_complex4_7d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
-    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
@@ -8588,10 +8588,10 @@ Subroutine easyI_complex4_7d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     if (present(count_lens)) then
         call easyI_real4_7d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_7d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8626,10 +8626,10 @@ Subroutine easyO_complex8_7d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
-    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
@@ -8664,10 +8664,10 @@ Subroutine easyI_complex8_7d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
-    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1,:,1,1,1)), &
-     size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:)))) ! 
+    allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
+    allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
+    :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     if (present(count_lens)) then
         call easyI_real8_7d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_7d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -10098,8 +10098,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10183,8 +10183,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10268,8 +10268,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10353,8 +10353,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10438,8 +10438,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10523,8 +10523,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10608,8 +10608,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10693,8 +10693,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -10778,8 +10778,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -10863,8 +10863,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -10948,8 +10948,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -11033,8 +11033,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -11118,8 +11118,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -11203,8 +11203,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -11288,8 +11288,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -11373,8 +11373,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -11458,8 +11458,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -11543,8 +11543,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -11628,8 +11628,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -11713,8 +11713,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -11798,8 +11798,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -11883,8 +11883,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -11968,8 +11968,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -12053,8 +12053,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -12138,8 +12138,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12223,8 +12224,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12308,8 +12310,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12393,8 +12396,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12478,8 +12482,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12563,8 +12568,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12648,8 +12654,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12733,8 +12740,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -12811,21 +12819,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12899,21 +12907,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12987,21 +12995,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13075,21 +13083,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13163,21 +13171,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13251,21 +13259,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13339,21 +13347,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14782,8 +14790,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -14867,8 +14875,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -14952,8 +14960,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -15037,8 +15045,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -15122,8 +15130,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -15207,8 +15215,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -15292,8 +15300,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -15377,8 +15385,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
@@ -15462,8 +15470,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -15547,8 +15555,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -15632,8 +15640,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -15717,8 +15725,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -15802,8 +15810,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -15887,8 +15895,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -15972,8 +15980,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -16057,8 +16065,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
@@ -16142,8 +16150,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16227,8 +16235,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16312,8 +16320,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16397,8 +16405,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16482,8 +16490,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16567,8 +16575,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16652,8 +16660,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16737,8 +16745,8 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
@@ -16822,8 +16830,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -16907,8 +16916,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -16992,8 +17002,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -17077,8 +17088,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -17162,8 +17174,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -17247,8 +17260,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -17332,8 +17346,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -17417,8 +17432,9 @@ end subroutine easyI_complex8_7d
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
@@ -17495,21 +17511,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17583,21 +17599,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17671,21 +17687,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17759,21 +17775,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17847,21 +17863,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17935,21 +17951,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18023,21 +18039,21 @@ end subroutine easyI_complex8_7d
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5),shape_manual(6), &
-    shape_manual(7))) ! 
+                allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
+    shape_manual(6),shape_manual(7)))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2),enc_iaaT_2d(1, &
-    3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5),enc_iaaT_2d(1,6):enc_iaaT_2d(2,6), &
-    enc_iaaT_2d(1,7):enc_iaaT_2d(2,7))) ! 
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6), &
-    enc_iaaT_1d(7))) ! 
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6),enc_iaaT_1d(7)))
                 end if
                 deallocate(enc_iaaT_1d)
             end if

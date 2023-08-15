@@ -3,34 +3,13 @@ add_test(NAME setup
     COMMAND bash -c "rm -f ${CMAKE_BINARY_DIR}/test/*.nc"
 )
 
-if (DEFINED NETCDFF_LINK_LIBS)
-    link_libraries(EasyNC rdee_fortran ${NETCDFF_LINK_LIBS})
-    link_directories(BEFORE ${rdee_fortran_lib} ${NETCDFF_LINK_DIRECTORIES})
-    include_directories(BEFORE ${rdee_fortran_include} ${NETCDFF_INC_DIRECTORIES})
-else()
-    link_libraries(EasyNC rdee_fortran netcdff)
-    link_directories(BEFORE ${rdee_fortran_lib} ${netcdff_lib})
-    include_directories(BEFORE ${rdee_fortran_include} ${netcdff_include})
-endif()
-
-# get_filename_component(BFC ${CMAKE_Fortran_COMPILER} NAME)
-# message(STATUS "COMPILER ID is ${CMAKE_Fortran_COMPILER_ID}")
-
-# if(${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU")
-#     execute_process(COMMAND bash -c "${CMAKE_Fortran_COMPILER} -v |& grep -Po '(?<=COLLECT_GCC=).*'"
-#         OUTPUT_VARIABLE COLLECT_GCC)
-#     message(STATUS "COLLECT_GCC = ${COLLECT_GCC}")
-#     if (${COLLECT_GCC} STREQUAL "swgfortran")
-#         set(inSW TRUE)
-#     endif()
-# endif()
 
 function(ecsl_test testID)  # encapsulation of test
     add_executable(test.${testID} test.${testID}.F90)
     set_target_properties(test.${testID} PROPERTIES
         OUTPUT_NAME test.${testID}.x
         RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
-
+    target_link_libraries(test.${testID} EasyNC)
     target_compile_options(test.${testID} PUBLIC -g)
     
     if ($ENV{inSW})

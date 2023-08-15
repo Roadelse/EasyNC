@@ -1,7 +1,6 @@
-
 cmake_minimum_required(VERSION 3.10)
 
-project(EasyNC VERSION 0.1 DESCRIPTION "This holds a Fortran module, supporting easily I/O for generic data type and polymorphic via f95")
+project(EasyNC VERSION 2.0.2 DESCRIPTION "This holds a Fortran module, supporting easily I/O for generic data type and polymorphic via f95")
 
 enable_language(Fortran)
 
@@ -10,9 +9,6 @@ message("compiler=${CMAKE_Fortran_COMPILER}")
 
 list(PREPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules)
 include(rdee.python)
-message("python3 is found ? : ${Python3_FOUND}")
-message("python3 interpreter : ${Python3_EXECUTABLE}")
-message(${Python3_Interpreter_FOUND})
 
 check_python_lib(jinja2)
 
@@ -32,7 +28,7 @@ find_package(netcdff)
 
 enable_testing()
 
-Message(STATUS "compiler id = ${CMAKE_Fortran_COMPILER_ID}")
+Message("¦ compiler id = ${CMAKE_Fortran_COMPILER_ID}")
 if (${CMAKE_Fortran_COMPILER_ID} STREQUAL "Intel")
     add_compile_options(-O2 -g -fPIE -extend-source 132 "SHELL:-check all" "SHELL:-warn all" -std08 "SHELL:-warn nounused")
 elseif(${CMAKE_Fortran_COMPILER_ID} STREQUAL "GNU")
