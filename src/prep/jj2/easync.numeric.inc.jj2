@@ -374,11 +374,11 @@
 
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_{{ nd }}d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_{{ nd }}d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_{{ nd }}d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_{{ nd }}d, nf90_get_var directly, "//trim(vname))
         end if
 
         call check_enc( nf90_close(ncid) , "nf90_close")

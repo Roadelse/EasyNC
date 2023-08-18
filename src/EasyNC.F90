@@ -1272,11 +1272,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_1d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_1d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -1439,11 +1439,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_1d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_1d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -1601,11 +1601,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_1d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_1d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -1763,11 +1763,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_1d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_1d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_1d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -1925,11 +1925,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_2d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_2d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -2092,11 +2092,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_2d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_2d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -2254,11 +2254,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_2d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_2d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -2416,11 +2416,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_2d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_2d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_2d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -2578,11 +2578,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_3d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_3d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -2745,11 +2745,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_3d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_3d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -2907,11 +2907,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_3d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_3d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -3069,11 +3069,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_3d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_3d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_3d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -3231,11 +3231,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_4d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_4d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -3398,11 +3398,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_4d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_4d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -3560,11 +3560,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_4d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_4d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -3722,11 +3722,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_4d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_4d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_4d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -3884,11 +3884,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_5d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_5d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -4051,11 +4051,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_5d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_5d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -4213,11 +4213,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_5d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_5d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -4375,11 +4375,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_5d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_5d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_5d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -4537,11 +4537,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_6d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_6d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -4704,11 +4704,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_6d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_6d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -4866,11 +4866,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_6d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_6d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -5028,11 +5028,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_6d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_6d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_6d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -5190,11 +5190,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_7d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_7d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -5357,11 +5357,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_7d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_7d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -5519,11 +5519,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_7d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_7d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
@@ -5681,11 +5681,11 @@ Contains
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
             ! ~~~~~~~~~~~~~~ write data
             call check_enc( nf90_get_var(ncid, vid, data, start=position, count=count_lens) , & 
-                "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+                "in easyI_real4_7d, nf90_get_var with start&count, "//trim(vname))
             
         else
             call check_enc( nf90_get_var(ncid, vid, data) , & 
-            "in easyI_real4_7d, nf90_get_var, "//trim(vname))
+            "in easyI_real4_7d, nf90_get_var directly, "//trim(vname))
         end if
         call check_enc( nf90_close(ncid) , "nf90_close")
         return
