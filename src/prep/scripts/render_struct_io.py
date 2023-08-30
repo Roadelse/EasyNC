@@ -33,7 +33,7 @@ def handle_1struct(fc, N: int = 7, outDir = '.'):
 
             if vt.startswith('type('):
                 vt_struct_name = vt[5:-1]
-                S += f"""        call easy{io}{apFlag}_{vt_struct_name}(fname, trim(vname)//{idx_val_str}//'%{vt_struct_name}', data{idx_str}%{vt_struct_name})\n"""
+                S += f"""        call easy{io}{apFlag}_{vt_struct_name}(fname, trim(vname)//{idx_val_str}//'%{vt_struct_name}', data{idx_str}%{v.name})\n"""
             elif vt.startswith('integer') or vt.startswith('real') or vt.startswith('double') or \
                vt.startswith('character') or vt.startswith('logical') or vt.startswith('complex'):
                 S += f"""        call easy{io}{apFlag}(fname, trim(vname)//{idx_val_str}//'%{v.name}', data{idx_str}%{v.name})\n"""
