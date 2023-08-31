@@ -33,6 +33,7 @@ ecsl_test(complex)
 ecsl_test(type.direct)
 ecsl_test(unlimited)
 ecsl_test(dimnames)
+ecsl_test(linked_list)
 
 
 set_tests_properties(
