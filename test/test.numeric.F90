@@ -12,6 +12,7 @@ character(*),parameter :: fname = "test.numeric.nc"
 call test_int4
 call test_basic
 call test_vea
+call test_pointer
 
 contains
     subroutine test_int4()
@@ -171,5 +172,19 @@ contains
 
     end subroutine
 
+    subroutine test_pointer()
+        implicit none
+        integer, target :: i
+        integer, pointer :: p=>null(), p2=>Null()
+
+        i = 3
+        p => i
+        call easyOP(fname, 'p_p', p)
+        call easyIP(fname, 'p_p', p2)
+
+        call assert(p2 .eq. 3, 'Error in test_pointer')
+    end subroutine
+
+        
 
 end program

@@ -26,9 +26,8 @@ def main():
     # for f in files:
         # modi1f(f)
 
-    modi1f('m1.F')
-    modi1f('inc.struct-io-interface.s1.F')
-    modi1f('inc.struct-io.s1.F')
+    modi1f('inc.struct-io-interface.t1.F90')
+    modi1f('inc.struct-io.t1.F90')
 
 
 def modi1f(file):

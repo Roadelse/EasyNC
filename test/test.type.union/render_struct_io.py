@@ -1,0 +1,1 @@
+../../src/prep/scripts/render_struct_io.py

@@ -48,7 +48,7 @@ Module EasyNC
     !#jj2 endif
         module procedure easyOA_{{ type }}_{{ nd }}d
     !#jj2 endfor
-        ! module procedure easyOA_{{ type }}_scalar
+        module procedure easyOA_{{ type }}_scalar
     !#jj2 endfor
     end interface
 
@@ -61,7 +61,7 @@ Module EasyNC
     !#jj2 endif
         module procedure easyIA_{{ type }}_{{ nd }}d
     !#jj2 endfor
-        ! module procedure easyIA_{{ type }}_scalar
+        module procedure easyIA_{{ type }}_scalar
     !#jj2 endfor
     end interface
 
@@ -74,7 +74,7 @@ Module EasyNC
     !#jj2 endif
         module procedure easyOP_{{ type }}_{{ nd }}d
     !#jj2 endfor
-        ! module procedure easyOP_{{ type }}_scalar
+        module procedure easyOP_{{ type }}_scalar
     !#jj2 endfor
     end interface
 
@@ -87,7 +87,7 @@ Module EasyNC
     !#jj2 endif
         module procedure easyIP_{{ type }}_{{ nd }}d
     !#jj2 endfor
-        ! module procedure easyIP_{{ type }}_scalar
+        module procedure easyIP_{{ type }}_scalar
     !#jj2 endfor
     end interface
 

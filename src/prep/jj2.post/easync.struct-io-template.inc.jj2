@@ -1,5 +1,5 @@
 
-        Subroutine easyO_{{ struct_name }}_scalar(fname, vname, data)
+        recursive Subroutine easyO_{{ struct_name }}_scalar(fname, vname, data)
             !!! #####################################
             ! This Subroutine aims to write a scalar int4 variable into a netcdf dataset
             !!! #####################################
@@ -12,6 +12,8 @@
             ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
             
             ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+            call easyO(fname, vname, 1)
+
             {{ calls_from_fctt('') }}
             ! call easyO(fname, trim(vname)//'%is1', data%is1)
             ! call easyO(fname, trim(vname)//'%ia1', data%ia1)
@@ -19,7 +21,7 @@
             
         End Subroutine easyO_{{ struct_name }}_scalar
 
-        Subroutine easyI_{{ struct_name }}_scalar(fname, vname, data)
+        recursive Subroutine easyI_{{ struct_name }}_scalar(fname, vname, data)
             !!! #####################################
             ! This Subroutine aims to write a scalar int4 variable into a netcdf dataset
             !!! #####################################
@@ -32,6 +34,8 @@
             ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
             
             ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+            if (.not. enc_var_exist(fname, vname)) return
+
             {{ calls_from_fctt('', 'I') }}
             ! call easyO(fname, trim(vname)//'%is1', data%is1)
             ! call easyO(fname, trim(vname)//'%ia1', data%ia1)
@@ -39,9 +43,69 @@
             
         End Subroutine easyI_{{ struct_name }}_scalar
 
+        recursive Subroutine easyOA_{{ struct_name }}_scalar(fname, vname, data)
+            implicit none
+            ! ............................................. Arguments
+            type({{ struct_name }}), allocatable, intent(in) :: data
+            character(*),intent(in) :: fname, vname
+
+            ! ............................................. main body
+            if (allocated(data)) then
+                call easyO_{{ struct_name }}_scalar(fname, vname, data)
+            end if
+
+        End Subroutine
+
+        recursive Subroutine easyIA_{{ struct_name }}_scalar(fname, vname, data)
+            implicit none
+            ! ............................................. Arguments
+            type({{ struct_name }}), allocatable, intent(inout) :: data
+            character(*),intent(in) :: fname, vname
+
+
+            if (.not. enc_var_exist(fname, vname)) return
+
+            if (.not. allocated(data)) then
+                allocate(data)
+            end if
+            ! ............................................. main body
+            
+            call easyI_{{ struct_name }}_scalar(fname, vname, data)
+
+        End Subroutine
+
+        recursive Subroutine easyOP_{{ struct_name }}_scalar(fname, vname, data)
+            implicit none
+            ! ............................................. Arguments
+            type({{ struct_name }}), pointer, intent(in) :: data
+            character(*),intent(in) :: fname, vname
+
+            ! ............................................. main body
+            if (associated(data)) then
+                call easyO_{{ struct_name }}_scalar(fname, vname, data)
+            end if
+
+        End Subroutine
+
+        recursive Subroutine easyIP_{{ struct_name }}_scalar(fname, vname, data)
+            implicit none
+            ! ............................................. Arguments
+            type({{ struct_name }}), pointer, intent(inout) :: data
+            character(*),intent(in) :: fname, vname
+            
+            if (.not. enc_var_exist(fname, vname)) return
+
+            if (.not. associated(data)) then
+                allocate(data)
+            end if
+            ! ............................................. main body
+            call easyI_{{ struct_name }}_scalar(fname, vname, data)
+
+        End Subroutine
+
         !#jj2 for nd in range(1, N+1):
         !#jj2 set nColons_bracket = get_rank_from_nd(nd)
-        Subroutine easyO_{{ struct_name }}_{{ nd }}d(fname, vname, data)
+        recursive Subroutine easyO_{{ struct_name }}_{{ nd }}d(fname, vname, data)
             !!! #####################################
             ! This Subroutine aims to write a scalar int4 variable into a netcdf dataset
             !!! #####################################
@@ -54,6 +118,8 @@
             integer :: i, j, k, l, m, n, s
 
             ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+            call easyO(fname, vname, 1)
+
             call easyO(fname, trim(vname)//'.shape', shape(data))
             !#jj2 if nd == 1:
             !#jj2 set index = "(i)"
@@ -108,7 +174,7 @@
 
         End Subroutine easyO_{{ struct_name }}_{{ nd }}d
 
-        Subroutine easyI_{{ struct_name }}_{{ nd }}d(fname, vname, data)
+        recursive Subroutine easyI_{{ struct_name }}_{{ nd }}d(fname, vname, data)
             !!! #####################################
             ! This Subroutine aims to write a scalar int4 variable into a netcdf dataset
             !!! #####################################
@@ -121,7 +187,7 @@
             integer :: i, j, k, l, m, n, s
 
             ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
-            ! call easyO(fname, trim(vname)//'.shape', shape(data))
+            if (.not. enc_var_exist(fname, vname)) return
 
             !#jj2 if nd == 1:
             !#jj2 set index = "(i)"
@@ -176,7 +242,7 @@
 
         End Subroutine easyI_{{ struct_name }}_{{ nd }}d
 
-        Subroutine easyOA_{{ struct_name }}_{{ nd }}d(fname, vname, data)
+        recursive Subroutine easyOA_{{ struct_name }}_{{ nd }}d(fname, vname, data)
             implicit none
             ! ............................................. Arguments
             type({{ struct_name }}), allocatable, intent(in) :: data{{ nColons_bracket }}
@@ -192,7 +258,7 @@
 
         End Subroutine
 
-        Subroutine easyOP_{{ struct_name }}_{{ nd }}d(fname, vname, data)
+        recursive Subroutine easyOP_{{ struct_name }}_{{ nd }}d(fname, vname, data)
             implicit none
             ! ............................................. Arguments
             type({{ struct_name }}), pointer, intent(in) :: data{{ nColons_bracket }}
@@ -208,7 +274,9 @@
 
         End Subroutine
 
-        Subroutine easyIA_{{ struct_name }}_{{ nd }}d(fname, vname, data)
+
+
+        recursive Subroutine easyIA_{{ struct_name }}_{{ nd }}d(fname, vname, data)
             implicit none
             ! ............................................. Arguments
             type({{ struct_name }}), allocatable, intent(inout) :: data{{ nColons_bracket }}
@@ -237,7 +305,7 @@
 
         End Subroutine
 
-        Subroutine easyIP_{{ struct_name }}_{{ nd }}d(fname, vname, data)
+        recursive Subroutine easyIP_{{ struct_name }}_{{ nd }}d(fname, vname, data)
             implicit none
             ! ............................................. Arguments
             type({{ struct_name }}), pointer, intent(inout) :: data{{ nColons_bracket }}

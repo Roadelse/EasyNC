@@ -33,7 +33,7 @@ def handle_1struct(fc, N: int = 7, outDir = '.'):
 
             if vt.startswith('type('):
                 vt_struct_name = vt[5:-1]
-                S += f"""        call easy{io}{apFlag}_{vt_struct_name}(fname, trim(vname)//{idx_val_str}//'%{vt_struct_name}', data{idx_str}%{v.name})\n"""
+                S += f"""        call easy{io}{apFlag}_{vt_struct_name}(fname, trim(vname)//{idx_val_str}//'%{v.name}', data{idx_str}%{v.name})\n"""
             elif vt.startswith('integer') or vt.startswith('real') or vt.startswith('double') or \
                vt.startswith('character') or vt.startswith('logical') or vt.startswith('complex'):
                 S += f"""        call easy{io}{apFlag}(fname, trim(vname)//{idx_val_str}//'%{v.name}', data{idx_str}%{v.name})\n"""
@@ -66,19 +66,19 @@ def handle_1struct(fc, N: int = 7, outDir = '.'):
 
 def test():
     # be like:
-    # python render_struct_io.py ..../cctm5402.run.pk .../froed.proj
+    # python render_struct_io.py ..../cctm5402.run.pk .../froed
     assert len(sys.argv) >= 2  # all arguments are target files
     inDat = sys.argv[1]
     assert os.path.exists(inDat), 'The command line argument must be the target fctts data file! Not existed now!'
 
     if len(sys.argv) >= 3:
         sys.path.append(sys.argv[2])
-    import FortranLogic
+    import froed
 
     fctts = pickle.load(open(inDat, 'rb'))
 
     for fcn, fc in fctts.items():
-        if isinstance(fc, FortranLogic.FType):
+        if isinstance(fc, froed.FortranLogic.FStruct):
             if not fc.isrun:
                 fc.run()
             handle_1struct(fc)

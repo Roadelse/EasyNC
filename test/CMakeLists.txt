@@ -33,7 +33,6 @@ ecsl_test(complex)
 ecsl_test(type.direct)
 ecsl_test(unlimited)
 ecsl_test(dimnames)
-ecsl_test(linked_list)
 
 
 set_tests_properties(
@@ -51,3 +50,4 @@ set_tests_properties(test.dimnames PROPERTIES FIXTURES_CLEANUP post-check.dimnam
 set_tests_properties(post-check.dimnames PROPERTIES ENVIRONMENT "whichCMD=$ENV{ENCT_NC_VIEW_CMD}")
 
 add_subdirectory(test.type.union)
+add_subdirectory(test.linked_list)

@@ -1,5 +1,41 @@
 
 
+! *********************************************************
+! easyIO for scalar generic numeric data type :
+!   int4. int8, real4, real8
+! *********************************************************
+!#jj2 for type in ['int4', 'int8', 'real4', 'real8', 'string', 'logical', 'complex4', 'complex8']:
+!#jj2 set ftype = ftypes[type]
+
+Subroutine easyOA_{{ type }}_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    {{ ftype }}, allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_{{ type }}_scalar(fname, vname, data)
+    end if
+
+End Subroutine
+
+Subroutine easyIA_{{ type }}_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    {{ ftype }}, allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_{{ type }}_scalar(fname, vname, data)
+
+End Subroutine
+!#jj2 endfor
+
+
 
 ! *********************************************************
 ! easyIO for n-dimensional generic numeric data type :

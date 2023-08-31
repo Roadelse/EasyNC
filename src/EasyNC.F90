@@ -147,7 +147,7 @@ Module EasyNC
         module procedure easyOA_int4_5d
         module procedure easyOA_int4_6d
         module procedure easyOA_int4_7d
-        ! module procedure easyOA_int4_scalar
+        module procedure easyOA_int4_scalar
         module procedure easyOA_int8_1d
         module procedure easyOA_int8_2d
         module procedure easyOA_int8_3d
@@ -155,7 +155,7 @@ Module EasyNC
         module procedure easyOA_int8_5d
         module procedure easyOA_int8_6d
         module procedure easyOA_int8_7d
-        ! module procedure easyOA_int8_scalar
+        module procedure easyOA_int8_scalar
         module procedure easyOA_real4_1d
         module procedure easyOA_real4_2d
         module procedure easyOA_real4_3d
@@ -163,7 +163,7 @@ Module EasyNC
         module procedure easyOA_real4_5d
         module procedure easyOA_real4_6d
         module procedure easyOA_real4_7d
-        ! module procedure easyOA_real4_scalar
+        module procedure easyOA_real4_scalar
         module procedure easyOA_real8_1d
         module procedure easyOA_real8_2d
         module procedure easyOA_real8_3d
@@ -171,14 +171,14 @@ Module EasyNC
         module procedure easyOA_real8_5d
         module procedure easyOA_real8_6d
         module procedure easyOA_real8_7d
-        ! module procedure easyOA_real8_scalar
+        module procedure easyOA_real8_scalar
         module procedure easyOA_string_1d
         module procedure easyOA_string_2d
         module procedure easyOA_string_3d
         module procedure easyOA_string_4d
         module procedure easyOA_string_5d
         module procedure easyOA_string_6d
-        ! module procedure easyOA_string_scalar
+        module procedure easyOA_string_scalar
         module procedure easyOA_logical_1d
         module procedure easyOA_logical_2d
         module procedure easyOA_logical_3d
@@ -186,7 +186,7 @@ Module EasyNC
         module procedure easyOA_logical_5d
         module procedure easyOA_logical_6d
         module procedure easyOA_logical_7d
-        ! module procedure easyOA_logical_scalar
+        module procedure easyOA_logical_scalar
         module procedure easyOA_complex4_1d
         module procedure easyOA_complex4_2d
         module procedure easyOA_complex4_3d
@@ -194,7 +194,7 @@ Module EasyNC
         module procedure easyOA_complex4_5d
         module procedure easyOA_complex4_6d
         module procedure easyOA_complex4_7d
-        ! module procedure easyOA_complex4_scalar
+        module procedure easyOA_complex4_scalar
         module procedure easyOA_complex8_1d
         module procedure easyOA_complex8_2d
         module procedure easyOA_complex8_3d
@@ -202,7 +202,7 @@ Module EasyNC
         module procedure easyOA_complex8_5d
         module procedure easyOA_complex8_6d
         module procedure easyOA_complex8_7d
-        ! module procedure easyOA_complex8_scalar
+        module procedure easyOA_complex8_scalar
     end interface
     interface easyIA
         module procedure easyIA_int4_1d
@@ -212,7 +212,7 @@ Module EasyNC
         module procedure easyIA_int4_5d
         module procedure easyIA_int4_6d
         module procedure easyIA_int4_7d
-        ! module procedure easyIA_int4_scalar
+        module procedure easyIA_int4_scalar
         module procedure easyIA_int8_1d
         module procedure easyIA_int8_2d
         module procedure easyIA_int8_3d
@@ -220,7 +220,7 @@ Module EasyNC
         module procedure easyIA_int8_5d
         module procedure easyIA_int8_6d
         module procedure easyIA_int8_7d
-        ! module procedure easyIA_int8_scalar
+        module procedure easyIA_int8_scalar
         module procedure easyIA_real4_1d
         module procedure easyIA_real4_2d
         module procedure easyIA_real4_3d
@@ -228,7 +228,7 @@ Module EasyNC
         module procedure easyIA_real4_5d
         module procedure easyIA_real4_6d
         module procedure easyIA_real4_7d
-        ! module procedure easyIA_real4_scalar
+        module procedure easyIA_real4_scalar
         module procedure easyIA_real8_1d
         module procedure easyIA_real8_2d
         module procedure easyIA_real8_3d
@@ -236,14 +236,14 @@ Module EasyNC
         module procedure easyIA_real8_5d
         module procedure easyIA_real8_6d
         module procedure easyIA_real8_7d
-        ! module procedure easyIA_real8_scalar
+        module procedure easyIA_real8_scalar
         module procedure easyIA_string_1d
         module procedure easyIA_string_2d
         module procedure easyIA_string_3d
         module procedure easyIA_string_4d
         module procedure easyIA_string_5d
         module procedure easyIA_string_6d
-        ! module procedure easyIA_string_scalar
+        module procedure easyIA_string_scalar
         module procedure easyIA_logical_1d
         module procedure easyIA_logical_2d
         module procedure easyIA_logical_3d
@@ -251,7 +251,7 @@ Module EasyNC
         module procedure easyIA_logical_5d
         module procedure easyIA_logical_6d
         module procedure easyIA_logical_7d
-        ! module procedure easyIA_logical_scalar
+        module procedure easyIA_logical_scalar
         module procedure easyIA_complex4_1d
         module procedure easyIA_complex4_2d
         module procedure easyIA_complex4_3d
@@ -259,7 +259,7 @@ Module EasyNC
         module procedure easyIA_complex4_5d
         module procedure easyIA_complex4_6d
         module procedure easyIA_complex4_7d
-        ! module procedure easyIA_complex4_scalar
+        module procedure easyIA_complex4_scalar
         module procedure easyIA_complex8_1d
         module procedure easyIA_complex8_2d
         module procedure easyIA_complex8_3d
@@ -267,7 +267,7 @@ Module EasyNC
         module procedure easyIA_complex8_5d
         module procedure easyIA_complex8_6d
         module procedure easyIA_complex8_7d
-        ! module procedure easyIA_complex8_scalar
+        module procedure easyIA_complex8_scalar
     end interface
     interface easyOP
         module procedure easyOP_int4_1d
@@ -277,7 +277,7 @@ Module EasyNC
         module procedure easyOP_int4_5d
         module procedure easyOP_int4_6d
         module procedure easyOP_int4_7d
-        ! module procedure easyOP_int4_scalar
+        module procedure easyOP_int4_scalar
         module procedure easyOP_int8_1d
         module procedure easyOP_int8_2d
         module procedure easyOP_int8_3d
@@ -285,7 +285,7 @@ Module EasyNC
         module procedure easyOP_int8_5d
         module procedure easyOP_int8_6d
         module procedure easyOP_int8_7d
-        ! module procedure easyOP_int8_scalar
+        module procedure easyOP_int8_scalar
         module procedure easyOP_real4_1d
         module procedure easyOP_real4_2d
         module procedure easyOP_real4_3d
@@ -293,7 +293,7 @@ Module EasyNC
         module procedure easyOP_real4_5d
         module procedure easyOP_real4_6d
         module procedure easyOP_real4_7d
-        ! module procedure easyOP_real4_scalar
+        module procedure easyOP_real4_scalar
         module procedure easyOP_real8_1d
         module procedure easyOP_real8_2d
         module procedure easyOP_real8_3d
@@ -301,14 +301,14 @@ Module EasyNC
         module procedure easyOP_real8_5d
         module procedure easyOP_real8_6d
         module procedure easyOP_real8_7d
-        ! module procedure easyOP_real8_scalar
+        module procedure easyOP_real8_scalar
         module procedure easyOP_string_1d
         module procedure easyOP_string_2d
         module procedure easyOP_string_3d
         module procedure easyOP_string_4d
         module procedure easyOP_string_5d
         module procedure easyOP_string_6d
-        ! module procedure easyOP_string_scalar
+        module procedure easyOP_string_scalar
         module procedure easyOP_logical_1d
         module procedure easyOP_logical_2d
         module procedure easyOP_logical_3d
@@ -316,7 +316,7 @@ Module EasyNC
         module procedure easyOP_logical_5d
         module procedure easyOP_logical_6d
         module procedure easyOP_logical_7d
-        ! module procedure easyOP_logical_scalar
+        module procedure easyOP_logical_scalar
         module procedure easyOP_complex4_1d
         module procedure easyOP_complex4_2d
         module procedure easyOP_complex4_3d
@@ -324,7 +324,7 @@ Module EasyNC
         module procedure easyOP_complex4_5d
         module procedure easyOP_complex4_6d
         module procedure easyOP_complex4_7d
-        ! module procedure easyOP_complex4_scalar
+        module procedure easyOP_complex4_scalar
         module procedure easyOP_complex8_1d
         module procedure easyOP_complex8_2d
         module procedure easyOP_complex8_3d
@@ -332,7 +332,7 @@ Module EasyNC
         module procedure easyOP_complex8_5d
         module procedure easyOP_complex8_6d
         module procedure easyOP_complex8_7d
-        ! module procedure easyOP_complex8_scalar
+        module procedure easyOP_complex8_scalar
     end interface
     interface easyIP
         module procedure easyIP_int4_1d
@@ -342,7 +342,7 @@ Module EasyNC
         module procedure easyIP_int4_5d
         module procedure easyIP_int4_6d
         module procedure easyIP_int4_7d
-        ! module procedure easyIP_int4_scalar
+        module procedure easyIP_int4_scalar
         module procedure easyIP_int8_1d
         module procedure easyIP_int8_2d
         module procedure easyIP_int8_3d
@@ -350,7 +350,7 @@ Module EasyNC
         module procedure easyIP_int8_5d
         module procedure easyIP_int8_6d
         module procedure easyIP_int8_7d
-        ! module procedure easyIP_int8_scalar
+        module procedure easyIP_int8_scalar
         module procedure easyIP_real4_1d
         module procedure easyIP_real4_2d
         module procedure easyIP_real4_3d
@@ -358,7 +358,7 @@ Module EasyNC
         module procedure easyIP_real4_5d
         module procedure easyIP_real4_6d
         module procedure easyIP_real4_7d
-        ! module procedure easyIP_real4_scalar
+        module procedure easyIP_real4_scalar
         module procedure easyIP_real8_1d
         module procedure easyIP_real8_2d
         module procedure easyIP_real8_3d
@@ -366,14 +366,14 @@ Module EasyNC
         module procedure easyIP_real8_5d
         module procedure easyIP_real8_6d
         module procedure easyIP_real8_7d
-        ! module procedure easyIP_real8_scalar
+        module procedure easyIP_real8_scalar
         module procedure easyIP_string_1d
         module procedure easyIP_string_2d
         module procedure easyIP_string_3d
         module procedure easyIP_string_4d
         module procedure easyIP_string_5d
         module procedure easyIP_string_6d
-        ! module procedure easyIP_string_scalar
+        module procedure easyIP_string_scalar
         module procedure easyIP_logical_1d
         module procedure easyIP_logical_2d
         module procedure easyIP_logical_3d
@@ -381,7 +381,7 @@ Module EasyNC
         module procedure easyIP_logical_5d
         module procedure easyIP_logical_6d
         module procedure easyIP_logical_7d
-        ! module procedure easyIP_logical_scalar
+        module procedure easyIP_logical_scalar
         module procedure easyIP_complex4_1d
         module procedure easyIP_complex4_2d
         module procedure easyIP_complex4_3d
@@ -389,7 +389,7 @@ Module EasyNC
         module procedure easyIP_complex4_5d
         module procedure easyIP_complex4_6d
         module procedure easyIP_complex4_7d
-        ! module procedure easyIP_complex4_scalar
+        module procedure easyIP_complex4_scalar
         module procedure easyIP_complex8_1d
         module procedure easyIP_complex8_2d
         module procedure easyIP_complex8_3d
@@ -397,7 +397,7 @@ Module EasyNC
         module procedure easyIP_complex8_5d
         module procedure easyIP_complex8_6d
         module procedure easyIP_complex8_7d
-        ! module procedure easyIP_complex8_scalar
+        module procedure easyIP_complex8_scalar
     end interface
 Contains
     function enc_var_exist(fname, vname) result(rst)
@@ -8681,6 +8681,178 @@ Subroutine easyI_complex8_7d(fname, vname, val, position, count_lens)
     return
 end subroutine easyI_complex8_7d
 ! *********************************************************
+! easyIO for scalar generic numeric data type :
+!   int4. int8, real4, real8
+! *********************************************************
+Subroutine easyOA_int4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=4), allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_int4_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_int4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=4), allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_int4_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOA_int8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=8), allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_int8_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_int8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=8), allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_int8_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOA_real4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=4), allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_real4_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_real4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=4), allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_real4_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOA_real8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=8), allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_real8_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_real8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=8), allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_real8_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOA_string_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    character(*), allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_string_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_string_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    character(*), allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_string_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOA_logical_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    logical, allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_logical_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_logical_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    logical, allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_logical_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOA_complex4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=4), allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_complex4_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_complex4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=4), allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_complex4_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOA_complex8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=8), allocatable, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (allocated(data)) then
+        call easyO_complex8_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIA_complex8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=8), allocatable, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. allocated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_complex8_scalar(fname, vname, data)
+End Subroutine
+! *********************************************************
 ! easyIO for n-dimensional generic numeric data type :
 !   int4. int8, real4, real8
 ! *********************************************************
@@ -13372,6 +13544,178 @@ end subroutine easyI_complex8_7d
             call easyI_complex8_7d(fname, vname, data)
         end if
     End Subroutine easyIA_complex8_7d
+! *********************************************************
+! easyIO for scalar generic numeric data type :
+!   int4. int8, real4, real8
+! *********************************************************
+Subroutine easyOP_int4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=4), pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_int4_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_int4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=4), pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_int4_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOP_int8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=8), pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_int8_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_int8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    integer(kind=8), pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_int8_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOP_real4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=4), pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_real4_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_real4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=4), pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_real4_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOP_real8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=8), pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_real8_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_real8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    real(kind=8), pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_real8_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOP_string_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    character(*), pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_string_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_string_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    character(*), pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_string_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOP_logical_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    logical, pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_logical_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_logical_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    logical, pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_logical_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOP_complex4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=4), pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_complex4_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_complex4_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=4), pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_complex4_scalar(fname, vname, data)
+End Subroutine
+Subroutine easyOP_complex8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=8), pointer, intent(in) :: data
+    character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    if (associated(data)) then
+        call easyO_complex8_scalar(fname, vname, data)
+    end if
+End Subroutine
+Subroutine easyIP_complex8_scalar(fname, vname, data)
+    implicit none
+    ! ............................................. Arguments
+    complex(kind=8), pointer, intent(inout) :: data
+    character(*),intent(in) :: fname, vname
+    if (.not. associated(data)) then
+        allocate(data)
+    end if
+    ! ............................................. main body
+    call easyI_complex8_scalar(fname, vname, data)
+End Subroutine
 ! *********************************************************
 ! easyIO for n-dimensional generic numeric data type :
 !   int4. int8, real4, real8
