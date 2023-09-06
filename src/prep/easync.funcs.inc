@@ -108,7 +108,9 @@
         end if
 
         ! ================== get variable and its dimensions
+        ! if (nf90_inq_varid(ncid, trim(vname)//'.real', vid) .ne. 0) then
         call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid in enc_get_dims: '//trim(vname))
+        ! end if
         call check_enc(nf90_inquire_variable(ncid, vid, ndims=ndims), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, dimids=dids(:ndims)), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, xtype=xt), 'in nf90_inquire_variable for xtype in enc_get_dims')

@@ -491,7 +491,9 @@ Contains
             stop 1
         end if
         ! ================== get variable and its dimensions
+        ! if (nf90_inq_varid(ncid, trim(vname)//'.real', vid) .ne. 0) then
         call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid in enc_get_dims: '//trim(vname))
+        ! end if
         call check_enc(nf90_inquire_variable(ncid, vid, ndims=ndims), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, dimids=dids(:ndims)), 'nf90_inquire_variable in enc_get_dims')
         call check_enc(nf90_inquire_variable(ncid, vid, xtype=xt), 'in nf90_inquire_variable for xtype in enc_get_dims')
@@ -10073,7 +10075,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -10167,7 +10169,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -10825,7 +10827,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -10919,7 +10921,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -11583,7 +11585,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -11678,7 +11680,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -12343,7 +12345,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -12438,7 +12440,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -13103,7 +13105,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -13198,7 +13200,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -13882,7 +13884,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -13980,7 +13982,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -14568,7 +14570,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -14666,7 +14668,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -15623,7 +15625,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -15717,7 +15719,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -16375,7 +16377,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -16469,7 +16471,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -17133,7 +17135,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -17228,7 +17230,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -17893,7 +17895,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -17988,7 +17990,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -18653,7 +18655,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -18748,7 +18750,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -19432,7 +19434,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -19530,7 +19532,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -20118,7 +20120,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
@@ -20216,7 +20218,7 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
-                call enc_get_dims(fname, vname, enc_iaaT_1d)
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))

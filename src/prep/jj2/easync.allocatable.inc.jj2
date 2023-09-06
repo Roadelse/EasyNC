@@ -145,7 +145,11 @@ End Subroutine
                 call check_enc(enc_i, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
+                !#jj2 if type.startswith("complex"):
+                call enc_get_dims(fname, trim(vname)//'.real', enc_iaaT_1d)
+                !#jj2 else:
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
+                !#jj2 endif
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
                     allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
                     call check_enc(enc_i, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate enc_iaaT_2d for '//trim(vname))
