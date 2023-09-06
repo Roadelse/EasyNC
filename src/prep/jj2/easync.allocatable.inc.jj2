@@ -40,6 +40,7 @@ Subroutine easyIA_{{ type }}_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_{{ type }}_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_{{ type }}_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -141,20 +142,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data({{ render_arrayShape_from_shape('shape_manual', nd) }}), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data({{ render_arrayShape_from_enc_iaaT_2d(nd) }}))
+                    allocate(data({{ render_arrayShape_from_enc_iaaT_2d(nd) }}), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data({{ render_arrayShape_from_shape('enc_iaaT_1d', nd) }}))
+                    allocate(data({{ render_arrayShape_from_shape('enc_iaaT_1d', nd) }}), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if

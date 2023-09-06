@@ -8026,11 +8026,9 @@ Subroutine easyI_complex4_1d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val)), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex4_1d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val)), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex4_1d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex4_1d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real4_1d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_1d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8111,11 +8109,9 @@ Subroutine easyI_complex8_1d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val)), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex8_1d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val)), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex8_1d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex8_1d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real8_1d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_1d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8196,11 +8192,9 @@ Subroutine easyI_complex4_2d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val(:,1)), size(val(1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex4_2d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1)), size(val(1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex4_2d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex4_2d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real4_2d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_2d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8281,11 +8275,9 @@ Subroutine easyI_complex8_2d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val(:,1)), size(val(1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex8_2d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1)), size(val(1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex8_2d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex8_2d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real8_2d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_2d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8366,11 +8358,9 @@ Subroutine easyI_complex4_3d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex4_3d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex4_3d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex4_3d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real4_3d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_3d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8451,11 +8441,9 @@ Subroutine easyI_complex8_3d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex8_3d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex8_3d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex8_3d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real8_3d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_3d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8536,11 +8524,9 @@ Subroutine easyI_complex4_4d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex4_4d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex4_4d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex4_4d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real4_4d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_4d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8621,11 +8607,9 @@ Subroutine easyI_complex8_4d(fname, vname, val, position, count_lens)
         end if
     end if
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex8_4d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex8_4d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex8_4d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real8_4d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_4d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8707,12 +8691,10 @@ Subroutine easyI_complex4_5d(fname, vname, val, position, count_lens)
     end if
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size( &
     val(1,1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex4_5d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size( &
     val(1,1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex4_5d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex4_5d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real4_5d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_5d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8794,12 +8776,10 @@ Subroutine easyI_complex8_5d(fname, vname, val, position, count_lens)
     end if
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size( &
     val(1,1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex8_5d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size( &
     val(1,1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex8_5d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex8_5d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real8_5d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_5d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8883,12 +8863,10 @@ Subroutine easyI_complex4_6d(fname, vname, val, position, count_lens)
     end if
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex4_6d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex4_6d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex4_6d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real4_6d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_6d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -8972,12 +8950,10 @@ Subroutine easyI_complex8_6d(fname, vname, val, position, count_lens)
     end if
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex8_6d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex8_6d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex8_6d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real8_6d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_6d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -9061,12 +9037,10 @@ Subroutine easyI_complex4_7d(fname, vname, val, position, count_lens)
     end if
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex4_7d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex4_7d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex4_7d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real4_7d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real4_7d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -9150,12 +9124,10 @@ Subroutine easyI_complex8_7d(fname, vname, val, position, count_lens)
     end if
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), STAT=enc_i)
+    call check_enc(enc_i, '[M::EasyNC/S::easyI_complex8_7d] Error in allocate data for: '//trim(vname))
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))), STAT=enc_j)
-    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
-        print *, '[M::EasyNC/S::easyI_complex8_7d] Error in allocate data for: '//trim(vname)
-        stop 1
-    end if
+    call check_enc(enc_j, '[M::EasyNC/S::easyI_complex8_7d] Error in allocate data for: '//trim(vname))
     if (present(count_lens)) then
         call easyI_real8_7d(fname, trim(vname)//'.real', val_re, position, count_lens)
         call easyI_real8_7d(fname, trim(vname)//'.imag', val_im, position, count_lens)
@@ -9200,6 +9172,7 @@ Subroutine easyIA_int4_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_int4_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9235,6 +9208,7 @@ Subroutine easyIA_int8_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_int8_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9270,6 +9244,7 @@ Subroutine easyIA_real4_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_real4_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9305,6 +9280,7 @@ Subroutine easyIA_real8_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_real8_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9340,6 +9316,7 @@ Subroutine easyIA_string_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_string_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9375,6 +9352,7 @@ Subroutine easyIA_logical_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_logical_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9410,6 +9388,7 @@ Subroutine easyIA_complex4_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_complex4_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9445,6 +9424,7 @@ Subroutine easyIA_complex8_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIA_complex8_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -9526,20 +9506,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int4_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -9620,20 +9600,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int8_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -9714,20 +9694,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real4_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -9808,20 +9788,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real8_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -9902,20 +9882,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_string_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -9996,20 +9976,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_logical_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10090,20 +10070,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex4_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10184,20 +10164,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex8_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10278,20 +10258,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int4_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10372,20 +10352,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int8_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10466,20 +10446,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real4_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10560,20 +10540,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real8_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10654,20 +10634,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_string_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10748,20 +10728,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_logical_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10842,20 +10822,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex4_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -10936,20 +10916,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex8_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11030,21 +11010,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int4_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11125,21 +11105,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int8_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11220,21 +11200,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real4_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11315,21 +11295,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real8_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11410,21 +11390,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_string_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11505,21 +11485,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_logical_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11600,21 +11580,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex4_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11695,21 +11675,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex8_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11790,21 +11770,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int4_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11885,21 +11865,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int8_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -11980,21 +11960,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real4_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12075,21 +12055,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real8_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12170,21 +12150,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_string_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12265,21 +12245,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_logical_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12360,21 +12340,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex4_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12455,21 +12435,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex8_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12550,21 +12530,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int4_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12645,21 +12625,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int8_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12740,21 +12720,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real4_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12835,21 +12815,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real8_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -12930,21 +12910,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_string_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13025,21 +13005,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_logical_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13120,21 +13100,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex4_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13215,21 +13195,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex8_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13311,22 +13291,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int4_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13408,22 +13389,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int8_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13505,22 +13487,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real4_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13602,22 +13585,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real8_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13699,22 +13683,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_string_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_string_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13796,22 +13781,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_logical_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13893,22 +13879,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex4_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -13990,22 +13977,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex8_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14087,23 +14075,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int4_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int4_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14185,23 +14173,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_int8_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_int8_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14283,23 +14271,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real4_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real4_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14381,23 +14369,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_real8_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_real8_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14479,23 +14467,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_logical_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_logical_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14577,23 +14565,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex4_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex4_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14675,23 +14663,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIA_complex8_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIA_complex8_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -14734,6 +14722,7 @@ Subroutine easyIP_int4_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_int4_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -14769,6 +14758,7 @@ Subroutine easyIP_int8_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_int8_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -14804,6 +14794,7 @@ Subroutine easyIP_real4_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_real4_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -14839,6 +14830,7 @@ Subroutine easyIP_real8_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_real8_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -14874,6 +14866,7 @@ Subroutine easyIP_string_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_string_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -14909,6 +14902,7 @@ Subroutine easyIP_logical_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_logical_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -14944,6 +14938,7 @@ Subroutine easyIP_complex4_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_complex4_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -14979,6 +14974,7 @@ Subroutine easyIP_complex8_scalar(fname, vname, data)
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data,  STAT=enc_i)
+        call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_scalar] Error in allocate data for: '//trim(vname))
         if (enc_i .ne. 0) then
             print *, '[M::EasyNC/S::easyIP_complex8_scalar] Error in allocate data for: '//trim(vname)
             stop 1
@@ -15060,20 +15056,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int4_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15154,20 +15150,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int8_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15248,20 +15244,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real4_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15342,20 +15338,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real8_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15436,20 +15432,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_string_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15530,20 +15526,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_logical_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15624,20 +15620,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex4_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15718,20 +15714,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex8_1d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_1d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_1d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_1d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1)))
+                    allocate(data(enc_iaaT_1d(1)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_1d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15812,20 +15808,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int4_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -15906,20 +15902,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int8_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16000,20 +15996,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real4_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16094,20 +16090,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real8_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16188,20 +16184,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_string_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16282,20 +16278,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_logical_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16376,20 +16372,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex4_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16470,20 +16466,20 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex8_2d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_2d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_2d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
-                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)))
+                    allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_2d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_2d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16564,21 +16560,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int4_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16659,21 +16655,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int8_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16754,21 +16750,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real4_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16849,21 +16845,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real8_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -16944,21 +16940,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_string_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17039,21 +17035,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_logical_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17134,21 +17130,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex4_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17229,21 +17225,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex8_3d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_3d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_3d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_3d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_3d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17324,21 +17320,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int4_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17419,21 +17415,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int8_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17514,21 +17510,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real4_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17609,21 +17605,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real8_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17704,21 +17700,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_string_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17799,21 +17795,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_logical_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17894,21 +17890,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex4_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -17989,21 +17985,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex8_4d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_4d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_4d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_4d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_4d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18084,21 +18080,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int4_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18179,21 +18175,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int8_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18274,21 +18270,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real4_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18369,21 +18365,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real8_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18464,21 +18460,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_string_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18559,21 +18555,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_logical_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18654,21 +18650,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex4_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18749,21 +18745,21 @@ End Subroutine
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex8_5d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_5d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_5d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
-    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)))
+    enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_5d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_5d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18845,22 +18841,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int4_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -18942,22 +18939,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int8_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19039,22 +19037,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real4_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19136,22 +19135,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real8_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19233,22 +19233,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_string_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_string_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19330,22 +19331,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_logical_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19427,22 +19429,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex4_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19524,22 +19527,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex8_6d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_6d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_6d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_6d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
-                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5),enc_iaaT_1d(6)))
+                    allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
+    enc_iaaT_1d(6)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_6d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19621,23 +19625,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int4_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int4_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19719,23 +19723,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_int8_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_int8_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19817,23 +19821,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real4_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real4_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -19915,23 +19919,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_real8_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_real8_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -20013,23 +20017,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_logical_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_logical_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -20111,23 +20115,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex4_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex4_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
@@ -20209,23 +20213,23 @@ End Subroutine
                 call remove_val(count_lens, 1, shape_manual, -1)
                 allocate(data(shape_manual(1),shape_manual(2),shape_manual(3),shape_manual(4),shape_manual(5), &
     shape_manual(6),shape_manual(7)), STAT=enc_i)
-                if (enc_i .ne. 0) then
-                    print *, '[M::EasyNC/S::easyIP_complex8_7d] Error in allocate data for: '//trim(vname)
-                    stop 1
-                end if
+                call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_7d] Error in allocate data (1st)  for: '//trim(vname))
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)
                 if (enc_var_exist(fname, trim(vname)//'.bounds')) then
-                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)))
+                    allocate(enc_iaaT_2d(2, size(enc_iaaT_1d)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_7d] Error in allocate enc_iaaT_2d for '//trim(vname))
                     call easyI(fname, trim(vname) // '.bounds', enc_iaaT_2d)
                     allocate(data(enc_iaaT_2d(1,1):enc_iaaT_2d(2,1),enc_iaaT_2d(1,2):enc_iaaT_2d(2,2), &
     enc_iaaT_2d(1,3):enc_iaaT_2d(2,3),enc_iaaT_2d(1,4):enc_iaaT_2d(2,4),enc_iaaT_2d(1,5):enc_iaaT_2d(2,5), &
-    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)))
+    enc_iaaT_2d(1,6):enc_iaaT_2d(2,6),enc_iaaT_2d(1,7):enc_iaaT_2d(2,7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_7d] Error in allocate data (2nd) for '//trim(vname))
                     deallocate(enc_iaaT_2d)
                 else
                     allocate(data(enc_iaaT_1d(1),enc_iaaT_1d(2),enc_iaaT_1d(3),enc_iaaT_1d(4),enc_iaaT_1d(5), &
-    enc_iaaT_1d(6),enc_iaaT_1d(7)))
+    enc_iaaT_1d(6),enc_iaaT_1d(7)), STAT=enc_i)
+                    call check_enc(enc_i, '[M::EasyNC/S::easyIP_complex8_7d] Error in allocate data (3rd) for '//trim(vname))
                 end if
                 deallocate(enc_iaaT_1d)
             end if
