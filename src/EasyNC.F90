@@ -7845,6 +7845,7 @@ Subroutine easyO_complex4_scalar(fname, vname, val, shape_total, position, dimna
     end if
     val_re = real(val)
     val_im = aimag(val)
+    call easyO(fname, vname, 1)
     if (present(shape_total)) then
         if (present(dimnames)) then
             call easyO_real4_scalar(fname, trim(vname)//'.real', val_re, shape_total, position, dimnames)
@@ -7871,7 +7872,14 @@ Subroutine easyI_complex4_scalar(fname, vname, val, position)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
     val_re = real(val)
     val_im = aimag(val)
-    ! !! may check var-exist here in future
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     if (present(position)) then
       call easyI_real4_scalar(fname, trim(vname)//'.real', val_re, position)
       call easyI_real4_scalar(fname, trim(vname)//'.imag', val_im, position)
@@ -7903,6 +7911,7 @@ Subroutine easyO_complex8_scalar(fname, vname, val, shape_total, position, dimna
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     val_re = real(val)
     val_im = aimag(val)
     if (present(shape_total)) then
@@ -7929,6 +7938,14 @@ Subroutine easyI_complex8_scalar(fname, vname, val, position)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) :: val_re, val_im
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     val_re = real(val)
     val_im = aimag(val)
     if (present(position)) then
@@ -7963,6 +7980,7 @@ Subroutine easyO_complex4_1d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val)))
     allocate(val_im(size(val)))
     val_re = real(val)
@@ -7999,6 +8017,14 @@ Subroutine easyI_complex4_1d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:), val_im(:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     allocate(val_re(size(val)))
     allocate(val_im(size(val)))
     if (present(count_lens)) then
@@ -8035,6 +8061,7 @@ Subroutine easyO_complex8_1d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val)))
     allocate(val_im(size(val)))
     val_re = real(val)
@@ -8071,6 +8098,15 @@ Subroutine easyI_complex8_1d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:), val_im(:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    
     allocate(val_re(size(val)))
     allocate(val_im(size(val)))
     if (present(count_lens)) then
@@ -8107,6 +8143,7 @@ Subroutine easyO_complex4_2d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1)), size(val(1,:))))
     allocate(val_im(size(val(:,1)), size(val(1,:))))
     val_re = real(val)
@@ -8143,6 +8180,14 @@ Subroutine easyI_complex4_2d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:), val_im(:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     allocate(val_re(size(val(:,1)), size(val(1,:))))
     allocate(val_im(size(val(:,1)), size(val(1,:))))
     if (present(count_lens)) then
@@ -8179,6 +8224,7 @@ Subroutine easyO_complex8_2d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1)), size(val(1,:))))
     allocate(val_im(size(val(:,1)), size(val(1,:))))
     val_re = real(val)
@@ -8215,6 +8261,15 @@ Subroutine easyI_complex8_2d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:), val_im(:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    
     allocate(val_re(size(val(:,1)), size(val(1,:))))
     allocate(val_im(size(val(:,1)), size(val(1,:))))
     if (present(count_lens)) then
@@ -8251,6 +8306,7 @@ Subroutine easyO_complex4_3d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     val_re = real(val)
@@ -8287,6 +8343,14 @@ Subroutine easyI_complex4_3d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:), val_im(:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     if (present(count_lens)) then
@@ -8323,6 +8387,7 @@ Subroutine easyO_complex8_3d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     val_re = real(val)
@@ -8359,6 +8424,15 @@ Subroutine easyI_complex8_3d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:), val_im(:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    
     allocate(val_re(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     allocate(val_im(size(val(:,1,1)), size(val(1,:,1)), size(val(1,1,:))))
     if (present(count_lens)) then
@@ -8395,6 +8469,7 @@ Subroutine easyO_complex4_4d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     val_re = real(val)
@@ -8431,6 +8506,14 @@ Subroutine easyI_complex4_4d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:), val_im(:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     if (present(count_lens)) then
@@ -8467,6 +8550,7 @@ Subroutine easyO_complex8_4d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     val_re = real(val)
@@ -8503,6 +8587,15 @@ Subroutine easyI_complex8_4d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:), val_im(:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    
     allocate(val_re(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1)), size(val(1,:,1,1)), size(val(1,1,:,1)), size(val(1,1,1,:))))
     if (present(count_lens)) then
@@ -8539,6 +8632,7 @@ Subroutine easyO_complex4_5d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     val_re = real(val)
@@ -8575,6 +8669,14 @@ Subroutine easyI_complex4_5d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:), val_im(:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     if (present(count_lens)) then
@@ -8611,6 +8713,7 @@ Subroutine easyO_complex8_5d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     val_re = real(val)
@@ -8647,6 +8750,15 @@ Subroutine easyI_complex8_5d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:), val_im(:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    
     allocate(val_re(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1)), size(val(1,:,1,1,1)), size(val(1,1,:,1,1)), size(val(1,1,1,:,1)), size(val(1,1,1,1,:))))
     if (present(count_lens)) then
@@ -8683,6 +8795,7 @@ Subroutine easyO_complex4_6d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
@@ -8721,6 +8834,14 @@ Subroutine easyI_complex4_6d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
@@ -8759,6 +8880,7 @@ Subroutine easyO_complex8_6d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
@@ -8797,6 +8919,15 @@ Subroutine easyI_complex8_6d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:), val_im(:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    
     allocate(val_re(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
     1)), size(val(1,1,1,1,:,1)), size(val(1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1)), size(val(1,:,1,1,1,1)), size(val(1,1,:,1,1,1)), size(val(1,1,1,:,1, &
@@ -8835,6 +8966,7 @@ Subroutine easyO_complex4_7d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
@@ -8873,6 +9005,14 @@ Subroutine easyI_complex4_7d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=4) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
@@ -8911,6 +9051,7 @@ Subroutine easyO_complex8_7d(fname, vname, val, shape_total, position, count_len
             stop 1
         end if
     end if
+    call easyO(fname, vname, 1)
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
@@ -8949,6 +9090,15 @@ Subroutine easyI_complex8_7d(fname, vname, val, position, count_lens)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Local variables
     real(kind=8) ,allocatable :: val_re(:,:,:,:,:,:,:), val_im(:,:,:,:,:,:,:)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    
     allocate(val_re(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
     :,1,1,1)), size(val(1,1,1,1,:,1,1)), size(val(1,1,1,1,1,:,1)), size(val(1,1,1,1,1,1,:))))
     allocate(val_im(size(val(:,1,1,1,1,1,1)), size(val(1,:,1,1,1,1,1)), size(val(1,1,:,1,1,1,1)), size(val(1,1,1, &
