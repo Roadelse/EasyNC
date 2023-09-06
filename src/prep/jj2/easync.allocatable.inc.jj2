@@ -39,7 +39,11 @@ Subroutine easyIA_{{ type }}_scalar(fname, vname, data)
 
     ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
-        allocate(data)
+        allocate(data,  STAT=enc_i)
+        if (enc_i .ne. 0) then
+            print *, '[M::EasyNC/S::easyIA_{{ type }}_scalar] Error in allocate data for: '//trim(vname)
+            stop 1
+        end if
     end if
     call easyI_{{ type }}_scalar(fname, vname, data)
 
@@ -136,7 +140,11 @@ End Subroutine
             if (present(count_lens)) then
                 call assert(any(count_lens .gt. 1), 'Error! count_lens should have at least 1 element beyond 1')
                 call remove_val(count_lens, 1, shape_manual, -1)
-                allocate(data({{ render_arrayShape_from_shape('shape_manual', nd) }}))
+                allocate(data({{ render_arrayShape_from_shape('shape_manual', nd) }}), STAT=enc_i)
+                if (enc_i .ne. 0) then
+                    print *, '[M::EasyNC/S::easyIA_{{ type }}_{{ nd }}d] Error in allocate data for: '//trim(vname)
+                    stop 1
+                end if
                 deallocate(shape_manual)
             else
                 call enc_get_dims(fname, vname, enc_iaaT_1d)

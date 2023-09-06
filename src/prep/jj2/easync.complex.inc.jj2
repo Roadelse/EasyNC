@@ -244,8 +244,12 @@ Subroutine easyI_complex4_{{ nd }}d(fname, vname, val, position, count_lens)
         end if
     end if
 
-    allocate(val_re{{ get_b_shape(nd) }})
-    allocate(val_im{{ get_b_shape(nd) }})
+    allocate(val_re{{ get_b_shape(nd) }}, STAT=enc_i)
+    allocate(val_im{{ get_b_shape(nd) }}, STAT=enc_j)
+    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
+        print *, '[M::EasyNC/S::easyI_complex4_{{ nd }}d] Error in allocate data for: '//trim(vname)
+        stop 1
+    end if
 
     if (present(count_lens)) then
         call easyI_real4_{{ nd }}d(fname, trim(vname)//'.real', val_re, position, count_lens)
@@ -338,9 +342,13 @@ Subroutine easyI_complex8_{{ nd }}d(fname, vname, val, position, count_lens)
             return
         end if
     end if
-    
-    allocate(val_re{{ get_b_shape(nd) }})
-    allocate(val_im{{ get_b_shape(nd) }})
+
+    allocate(val_re{{ get_b_shape(nd) }}, STAT=enc_i)
+    allocate(val_im{{ get_b_shape(nd) }}, STAT=enc_j)
+    if (enc_i .ne. 0 .or. enc_j .ne. 0) then
+        print *, '[M::EasyNC/S::easyI_complex8_{{ nd }}d] Error in allocate data for: '//trim(vname)
+        stop 1
+    end if
 
     if (present(count_lens)) then
         call easyI_real8_{{ nd }}d(fname, trim(vname)//'.real', val_re, position, count_lens)
