@@ -162,7 +162,16 @@
             stop 1
         end if
         ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
+
         ! ~~~~~~~~~~~~~~ read data
         if (present(position)) then
             call check_enc( nf90_get_var(ncid, vid, data, start=position) , & 
@@ -365,8 +374,15 @@
             stop 1
         end if
 
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
 
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then

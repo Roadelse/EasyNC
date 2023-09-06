@@ -165,6 +165,7 @@ contains
         call easyO(fname, 'aaq', 1)
         call easyO(fname, 'aaq', 2)
         call easyI(fname, 'aaq', iT)
+        call easyI(fname, 'caq', iT)
 
         enc_vea = 0
 

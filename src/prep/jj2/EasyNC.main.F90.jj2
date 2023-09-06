@@ -105,7 +105,7 @@ Contains
         integer, intent ( in) :: status
         character(*), intent(in) :: errInfo
         
-        if(status /= 0) then 
+        if(status .ne. 0) then 
             print *, trim(nf90_strerror(status))
             print *, errInfo
             stop 1

@@ -26,10 +26,21 @@ Subroutine easyIA_{{ type }}_scalar(fname, vname, data)
     {{ ftype }}, allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
 
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_{{ type }}_scalar(fname, vname, data)
 
 End Subroutine
@@ -111,8 +122,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then

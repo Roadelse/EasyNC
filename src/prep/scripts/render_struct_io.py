@@ -43,7 +43,7 @@ def handle_1struct(fc, N: int = 7, outDir = '.'):
         return S
 
     ctt['calls_from_fctt'] = calls_from_fctt
-    ctt['moduleOrNot'] = 'module' if fc.parent_context.context_type == 'module' else ''
+    ctt['moduleOrNot'] = 'module' if fc.parent_context.context_type == 'Module' else ''
     ctt['N'] = N
 
     content_body = open(inFile_body).read()

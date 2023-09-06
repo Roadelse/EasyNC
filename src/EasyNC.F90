@@ -659,7 +659,15 @@ Contains
             stop 1
         end if
         ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ read data
         if (present(position)) then
             call check_enc( nf90_get_var(ncid, vid, data, start=position) , & 
@@ -810,7 +818,15 @@ Contains
             stop 1
         end if
         ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ read data
         if (present(position)) then
             call check_enc( nf90_get_var(ncid, vid, data, start=position) , & 
@@ -956,7 +972,15 @@ Contains
             stop 1
         end if
         ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ read data
         if (present(position)) then
             call check_enc( nf90_get_var(ncid, vid, data, start=position) , & 
@@ -1102,7 +1126,15 @@ Contains
             stop 1
         end if
         ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ read data
         if (present(position)) then
             call check_enc( nf90_get_var(ncid, vid, data, start=position) , & 
@@ -1265,8 +1297,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -1432,8 +1471,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -1594,8 +1640,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -1756,8 +1809,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -1918,8 +1978,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -2085,8 +2152,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -2247,8 +2321,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -2409,8 +2490,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -2571,8 +2659,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -2738,8 +2833,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -2900,8 +3002,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -3062,8 +3171,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -3224,8 +3340,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -3391,8 +3514,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -3553,8 +3683,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -3715,8 +3852,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -3877,8 +4021,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -4044,8 +4195,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -4206,8 +4364,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -4368,8 +4533,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -4530,8 +4702,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -4697,8 +4876,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -4859,8 +5045,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -5021,8 +5214,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -5183,8 +5383,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -5350,8 +5557,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -5512,8 +5726,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -5674,8 +5895,15 @@ Contains
             print *, "Error, file doesn't exist."
             stop 1
         end if
-        ! ~~~~~~~~~~~~~~ get variable
-        call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+        if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
+        end if
         ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
         if (present(position)) then
             ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -5829,8 +6057,15 @@ Subroutine easyI_string_scalar(fname, vname, data, position)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ read data
     if (present(position)) then
         call check_enc( nf90_get_var(ncid, vid, data, start=union_arr1d([1], position)) , & 
@@ -5992,8 +6227,15 @@ Subroutine easyI_string_1d(fname, vname, data, position, count_lens)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(position)) then
         ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -6161,8 +6403,15 @@ Subroutine easyI_string_2d(fname, vname, data, position, count_lens)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(position)) then
         ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -6330,8 +6579,15 @@ Subroutine easyI_string_3d(fname, vname, data, position, count_lens)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(position)) then
         ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -6499,8 +6755,15 @@ Subroutine easyI_string_4d(fname, vname, data, position, count_lens)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(position)) then
         ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -6668,8 +6931,15 @@ Subroutine easyI_string_5d(fname, vname, data, position, count_lens)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(position)) then
         ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -6837,8 +7107,15 @@ Subroutine easyI_string_6d(fname, vname, data, position, count_lens)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(position)) then
         ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -7006,8 +7283,15 @@ Subroutine easyI_string_7d(fname, vname, data, position, count_lens)
         print *, "Error, file doesn't exist."
         stop 1
     end if
-    ! ~~~~~~~~~~~~~~ get variable
-    call check_enc(nf90_inq_varid(ncid, vname, vid), 'nf90_inq_varid for '//trim(vname))
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (nf90_inq_varid(ncid, vname, vid) .ne. NF90_NOERR) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
     ! ~~~~~~~~~~~~~~ handle position_ & count_lens_
     if (present(position)) then
         ! call check_enc(nf90_inquire_variable(ncid, vid, ndims=rank_ncv), 'nf90_inquire_variable for '//trim(vname))
@@ -7587,6 +7871,7 @@ Subroutine easyI_complex4_scalar(fname, vname, val, position)
     ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> main body
     val_re = real(val)
     val_im = aimag(val)
+    ! !! may check var-exist here in future
     if (present(position)) then
       call easyI_real4_scalar(fname, trim(vname)//'.real', val_re, position)
       call easyI_real4_scalar(fname, trim(vname)//'.imag', val_im, position)
@@ -8699,10 +8984,20 @@ Subroutine easyIA_int4_scalar(fname, vname, data)
     ! ............................................. Arguments
     integer(kind=4), allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_int4_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOA_int8_scalar(fname, vname, data)
@@ -8720,10 +9015,20 @@ Subroutine easyIA_int8_scalar(fname, vname, data)
     ! ............................................. Arguments
     integer(kind=8), allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_int8_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOA_real4_scalar(fname, vname, data)
@@ -8741,10 +9046,20 @@ Subroutine easyIA_real4_scalar(fname, vname, data)
     ! ............................................. Arguments
     real(kind=4), allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_real4_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOA_real8_scalar(fname, vname, data)
@@ -8762,10 +9077,20 @@ Subroutine easyIA_real8_scalar(fname, vname, data)
     ! ............................................. Arguments
     real(kind=8), allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_real8_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOA_string_scalar(fname, vname, data)
@@ -8783,10 +9108,20 @@ Subroutine easyIA_string_scalar(fname, vname, data)
     ! ............................................. Arguments
     character(*), allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_string_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOA_logical_scalar(fname, vname, data)
@@ -8804,10 +9139,20 @@ Subroutine easyIA_logical_scalar(fname, vname, data)
     ! ............................................. Arguments
     logical, allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_logical_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOA_complex4_scalar(fname, vname, data)
@@ -8825,10 +9170,20 @@ Subroutine easyIA_complex4_scalar(fname, vname, data)
     ! ............................................. Arguments
     complex(kind=4), allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_complex4_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOA_complex8_scalar(fname, vname, data)
@@ -8846,10 +9201,20 @@ Subroutine easyIA_complex8_scalar(fname, vname, data)
     ! ............................................. Arguments
     complex(kind=8), allocatable, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. allocated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_complex8_scalar(fname, vname, data)
 End Subroutine
 ! *********************************************************
@@ -8911,8 +9276,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -8995,8 +9366,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9079,8 +9456,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9163,8 +9546,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9247,8 +9636,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9331,8 +9726,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9415,8 +9816,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9499,8 +9906,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9583,8 +9996,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9667,8 +10086,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9751,8 +10176,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9835,8 +10266,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -9919,8 +10356,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10003,8 +10446,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10087,8 +10536,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10171,8 +10626,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10255,8 +10716,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10340,8 +10807,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10425,8 +10898,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10510,8 +10989,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10595,8 +11080,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10680,8 +11171,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10765,8 +11262,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10850,8 +11353,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -10935,8 +11444,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11020,8 +11535,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11105,8 +11626,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11190,8 +11717,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11275,8 +11808,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11360,8 +11899,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11445,8 +11990,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11530,8 +12081,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11615,8 +12172,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11700,8 +12263,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11785,8 +12354,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11870,8 +12445,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -11955,8 +12536,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12040,8 +12627,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12125,8 +12718,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12210,8 +12809,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12295,8 +12900,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12381,8 +12992,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12467,8 +13084,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12553,8 +13176,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12639,8 +13268,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12725,8 +13360,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12811,8 +13452,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12897,8 +13544,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -12983,8 +13636,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -13071,8 +13730,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -13159,8 +13824,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -13247,8 +13918,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -13335,8 +14012,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -13423,8 +14106,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -13511,8 +14200,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. allocated(data)) then
@@ -13563,10 +14258,20 @@ Subroutine easyIP_int4_scalar(fname, vname, data)
     ! ............................................. Arguments
     integer(kind=4), pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_int4_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOP_int8_scalar(fname, vname, data)
@@ -13584,10 +14289,20 @@ Subroutine easyIP_int8_scalar(fname, vname, data)
     ! ............................................. Arguments
     integer(kind=8), pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_int8_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOP_real4_scalar(fname, vname, data)
@@ -13605,10 +14320,20 @@ Subroutine easyIP_real4_scalar(fname, vname, data)
     ! ............................................. Arguments
     real(kind=4), pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_real4_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOP_real8_scalar(fname, vname, data)
@@ -13626,10 +14351,20 @@ Subroutine easyIP_real8_scalar(fname, vname, data)
     ! ............................................. Arguments
     real(kind=8), pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_real8_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOP_string_scalar(fname, vname, data)
@@ -13647,10 +14382,20 @@ Subroutine easyIP_string_scalar(fname, vname, data)
     ! ............................................. Arguments
     character(*), pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_string_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOP_logical_scalar(fname, vname, data)
@@ -13668,10 +14413,20 @@ Subroutine easyIP_logical_scalar(fname, vname, data)
     ! ............................................. Arguments
     logical, pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_logical_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOP_complex4_scalar(fname, vname, data)
@@ -13689,10 +14444,20 @@ Subroutine easyIP_complex4_scalar(fname, vname, data)
     ! ............................................. Arguments
     complex(kind=4), pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_complex4_scalar(fname, vname, data)
 End Subroutine
 Subroutine easyOP_complex8_scalar(fname, vname, data)
@@ -13710,10 +14475,20 @@ Subroutine easyIP_complex8_scalar(fname, vname, data)
     ! ............................................. Arguments
     complex(kind=8), pointer, intent(inout) :: data
     character(*),intent(in) :: fname, vname
+    ! ............................................. main body
+    ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
+    if (.not. enc_var_exist(fname, vname)) then
+        if (enc_vea .eq. -1) then
+            print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+            stop 1
+        else
+            return
+        end if
+    end if
+    ! ~~~~~~~~~~~~~~~~~~ allocate and get it
     if (.not. associated(data)) then
         allocate(data)
     end if
-    ! ............................................. main body
     call easyI_complex8_scalar(fname, vname, data)
 End Subroutine
 ! *********************************************************
@@ -13775,8 +14550,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -13859,8 +14640,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -13943,8 +14730,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14027,8 +14820,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14111,8 +14910,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14195,8 +15000,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14279,8 +15090,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14363,8 +15180,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14447,8 +15270,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14531,8 +15360,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14615,8 +15450,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14699,8 +15540,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14783,8 +15630,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14867,8 +15720,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -14951,8 +15810,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15035,8 +15900,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15119,8 +15990,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15204,8 +16081,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15289,8 +16172,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15374,8 +16263,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15459,8 +16354,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15544,8 +16445,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15629,8 +16536,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15714,8 +16627,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15799,8 +16718,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15884,8 +16809,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -15969,8 +16900,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16054,8 +16991,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16139,8 +17082,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16224,8 +17173,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16309,8 +17264,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16394,8 +17355,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16479,8 +17446,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16564,8 +17537,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16649,8 +17628,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16734,8 +17719,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16819,8 +17810,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16904,8 +17901,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -16989,8 +17992,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17074,8 +18083,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17159,8 +18174,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17245,8 +18266,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17331,8 +18358,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17417,8 +18450,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17503,8 +18542,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17589,8 +18634,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17675,8 +18726,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17761,8 +18818,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17847,8 +18910,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -17935,8 +19004,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -18023,8 +19098,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -18111,8 +19192,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -18199,8 +19286,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -18287,8 +19380,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -18375,8 +19474,14 @@ End Subroutine
         integer, allocatable :: shape_manual(:)
         ! >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Main body
         ! ========================= return if ncv doesn't exist in file
+        ! ~~~~~~~~~~~~~~ handle var-exist actions (not very strict, may need to check size or some what?)
         if (.not. enc_var_exist(fname, vname)) then
-            return
+            if (enc_vea .eq. -1) then
+                print *, 'Error in easyI with enc_vea = -1, variable does not exist: '//trim(vname)
+                stop 1
+            else
+                return
+            end if
         end if
         
         if (.not. associated(data)) then
@@ -18412,7 +19517,7 @@ End Subroutine
         integer, intent ( in) :: status
         character(*), intent(in) :: errInfo
         
-        if(status /= 0) then 
+        if(status .ne. 0) then 
             print *, trim(nf90_strerror(status))
             print *, errInfo
             stop 1

@@ -57,6 +57,8 @@ Subroutine easyI_complex4_scalar(fname, vname, val, position)
     val_re = real(val)
     val_im = aimag(val)
 
+    ! !! may check var-exist here in future
+
     if (present(position)) then
       call easyI_real4_scalar(fname, trim(vname)//'.real', val_re, position)
       call easyI_real4_scalar(fname, trim(vname)//'.imag', val_im, position)
