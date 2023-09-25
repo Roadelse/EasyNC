@@ -4,6 +4,8 @@ program main
 
     character(*), parameter :: fname = 'test.complex.nc'
 
+    call test_basic()
+
 contains
     subroutine test_basic()
         Complex(kind=4) :: x1 = (1, 2), x1_
